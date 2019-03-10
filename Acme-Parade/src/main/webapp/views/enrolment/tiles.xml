@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- * tiles.xml * * Copyright (C) 2018 Universidad de Sevilla * * The use 
+	of this project is hereby constrained to the conditions of the * TDG Licence, 
+	a copy of which you may download from * http://www.tdg-seville.info/License.html -->
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+	<definition name="enrolment/list" extends="master.page">
+		<put-attribute name="title" value="Members list and enrolments" />
+		<put-attribute name="body" value="/views/enrolment/list.jsp" />
+	</definition>
+
+	<definition name="enrolment/list2" extends="master.page">
+		<put-attribute name="title" value="My enrolments" />
+		<put-attribute name="body" value="/views/enrolment/list2.jsp" />
+	</definition>
+
+	<definition name="enrolment/enrol" extends="master.page">
+		<put-attribute name="title" value="Enrol member" />
+		<put-attribute name="body" value="/views/enrolment/enrol.jsp" />
+	</definition>
+
+	<definition name="enrolment/dropout" extends="master.page">
+		<put-attribute name="title" value="Drop out member" />
+		<put-attribute name="body" value="/views/enrolment/dropOut.jsp" />
+	</definition>
+
+</tiles-definitions>

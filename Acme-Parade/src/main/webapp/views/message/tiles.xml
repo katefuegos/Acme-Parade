@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- * tiles.xml * * Copyright (C) 2018 Universidad de Sevilla * * The use 
+	of this project is hereby constrained to the conditions of the * TDG Licence, 
+	a copy of which you may download from * http://www.tdg-seville.info/License.html -->
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+	<definition name="message/actor/exchangeMessage" extends="master.page">
+		<put-attribute name="title" value="Exchange a new message" />
+		<put-attribute name="body" value="/views/message/exchangeMessage.jsp" />
+	</definition>
+
+	<definition name="message/actor/exchangeMessageMembers"
+		extends="master.page">
+		<put-attribute name="title" value="Exchange a new message" />
+		<put-attribute name="body" value="/views/message/exchangeMessage.jsp" />
+	</definition>
+
+	<definition name="message/actor/exchangeMessageBrotherhoods"
+		extends="master.page">
+		<put-attribute name="title" value="Exchange a new message" />
+		<put-attribute name="body" value="/views/message/exchangeMessage.jsp" />
+	</definition>
+
+	<definition name="message/actor/list" extends="master.page">
+		<put-attribute name="title" value="List of messages" />
+		<put-attribute name="body" value="/views/message/list.jsp" />
+	</definition>
+
+
+	<definition name="message/actor/move" extends="master.page">
+		<put-attribute name="title" value="Edit message" />
+		<put-attribute name="body" value="/views/message/exchangeMessage.jsp" />
+	</definition>
+
+	<definition name="message/administrator/broadcastMessage"
+		extends="master.page">
+		<put-attribute name="title" value="Send a broadcast message" />
+		<put-attribute name="body"
+			value="/views/message/broadcastMessage.jsp" />
+	</definition>
+
+	<definition name="message/administrator/broadcastMessageMembers"
+		extends="master.page">
+		<put-attribute name="title"
+			value="Notify breach of security to members" />
+		<put-attribute name="body"
+			value="/views/message/broadcastMessage.jsp" />
+	</definition>
+
+	<definition name="message/administrator/broadcastMessageBrotherhoods"
+		extends="master.page">
+		<put-attribute name="title"
+			value="Notify breach of security to brotherhoods" />
+		<put-attribute name="body"
+			value="/views/message/broadcastMessage.jsp" />
+	</definition>
+
+	<definition name="message/actor/show" extends="master.page">
+		<put-attribute name="title" value="Show message" />
+		<put-attribute name="body" value="/views/message/exchangeMessage.jsp" />
+	</definition>
+
+</tiles-definitions>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- * security.xml * * Copyright (C) 2019 Universidad de Sevilla * * The 
+	use of this project is hereby constrained to the conditions of the * TDG 
+	Licence, a copy of which you may download from * http://www.tdg-seville.info/License.html -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd		
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+    ">
+
+	<!-- Security infrastructure -->
+
+	<bean id="loginService" class="security.LoginService" />
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+
+	<!-- Access control -->
+
+	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/" access="permitAll" />
+
+		<security:intercept-url pattern="/favicon.ico"
+			access="permitAll" />
+		<security:intercept-url pattern="/images/**"
+			access="permitAll" />
+		<security:intercept-url pattern="/scripts/**"
+			access="permitAll" />
+		<security:intercept-url pattern="/styles/**"
+			access="permitAll" />
+
+		<security:intercept-url pattern="/views/misc/index.jsp"
+			access="permitAll" />
+
+		<security:intercept-url pattern="/security/login.do"
+			access="permitAll" />
+		<security:intercept-url pattern="/security/loginFailure.do"
+			access="permitAll" />
+
+		<security:intercept-url pattern="/welcome/index.do"
+			access="permitAll" />
+
+		<!-- ADMINISTRATOR -->
+		<security:intercept-url pattern="/administrator/action-1.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/administrator/action-2.do"
+			access="hasRole('ADMIN')" />
+
+	<!-- Finder -->
+		<security:intercept-url pattern="/finder/member/update.do"
+			access="hasRole('MEMBER')" />
+		<security:intercept-url pattern="/finder/member/listProcessions.do"
+			access="hasRole('MEMBER')" />
+
+		<!-- CUSTOMER -->
+		<security:intercept-url pattern="/customer/action-1.do"
+			access="hasRole('CUSTOMER')" />
+		<security:intercept-url pattern="/customer/action-2.do"
+			access="hasRole('CUSTOMER')" />
+
+		<!-- PROFILE -->
+		<security:intercept-url pattern="/profile/action-1.do"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/profile/action-2.do"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/profile/action-3.do"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/profile/edit.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/profile/list.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/profile/show.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/profile/create.do"
+			access="isAuthenticated()" />
+
+		<!-- SOCIALPROFILE -->
+
+		<security:intercept-url pattern="/socialProfile/create.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/socialProfile/list.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/socialProfile/edit.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/socialProfile/show.do"
+			access="isAuthenticated()" />
+
+		<!-- BROTHERHOOD -->
+		<security:intercept-url pattern="/brotherhood/list.do"
+			access="permitAll" />
+
+		<!-- PROCESSION -->
+		<security:intercept-url pattern="/procession/brotherhood/list.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/procession/brotherhood/edit.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/procession/brotherhood/create.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/procession/brotherhood/show.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/procession/list.do"
+			access="permitAll" />
+
+		<!-- FLOAT -->
+		<security:intercept-url pattern="/float/brotherhood/create.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/float/brotherhood/list.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/float/brotherhood/edit.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/float/brotherhood/display.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/float/list.do"
+			access="permitAll" />
+
+		<!-- MEMBER -->
+
+		<security:intercept-url pattern="/member/list.do"
+			access="permitAll" />
+
+		<!-- REQUEST -->
+		<security:intercept-url pattern="/request/brotherhood/decline.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/request/brotherhood/list.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/request/brotherhood/accept.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/request/member/listMember.do"
+			access="hasRole('MEMBER')" />
+		<security:intercept-url pattern="/request/member/request.do"
+			access="hasRole('MEMBER')" />
+		<security:intercept-url pattern="/request/member/delete.do"
+			access="hasRole('MEMBER')" />
+
+		<!-- ENROLMENT -->
+		<security:intercept-url pattern="/enrolment/brotherhood/list.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/enrolment/brotherhood/enrol.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/enrolment/brotherhood/dropout.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/enrolment/member/list.do"
+			access="hasRole('MEMBER')" />
+		<security:intercept-url pattern="/enrolment/member/dropout.do"
+			access="hasRole('MEMBER')" />
+		<security:intercept-url pattern="/enrolment/member/cancel.do"
+			access="hasRole('MEMBER')" />
+		<security:intercept-url pattern="/enrolment/member/join.do"
+			access="hasRole('MEMBER')" />
+
+
+
+		<!-- AREA -->
+
+		<security:intercept-url pattern="/area/list.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/area/create.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/area/edit.do"
+			access="hasRole('ADMIN')" />
+
+		<!-- MESSAGE -->
+
+		<security:intercept-url pattern="/message/actor/exchangeMessage.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/message/administrator/broadcastMessage.do"
+			access="hasRole('ADMIN')" />
+
+		<security:intercept-url
+			pattern="/message/administrator/broadcastMessageMembers.do" access="hasRole('ADMIN')" />
+
+		<security:intercept-url
+			pattern="/message/administrator/broadcastMessageBrotherhoods.do"
+			access="hasRole('ADMIN')" />
+
+		<security:intercept-url pattern="/message/actor/list.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/message/actor/show.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/message/actor/move.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/message/actor/edit.do"
+			access="isAuthenticated()" />
+
+		<!-- BOX -->
+		<security:intercept-url pattern="/box/actor/list.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/box/actor/edit.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/box/actor/create.do"
+			access="isAuthenticated()" />
+
+
+
+		<!-- DASHBOARD -->
+		<security:intercept-url pattern="/dashboard/administrator/dashboard.do"
+			access="hasRole('ADMIN')" />
+
+		<!-- ACTOR -->
+		
+		
+		<security:intercept-url pattern="/actor/showMember.do"
+			access="hasRole('BROTHERHOOD')"  />
+		
+		<security:intercept-url pattern="/actor/edit.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/actor/list.do"
+			access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/actor/register.do"
+			access="isAnonymous()" />
+
+		<security:intercept-url pattern="/register/actor.do"
+			access="isAnonymous()" />
+		<security:intercept-url pattern="/register/administrator/newActor.do"
+			access="hasRole('ADMIN')" />
+
+		<security:intercept-url pattern="/actor/registerBrotherhood.do"
+			access="isAnonymous()" />
+
+		<security:intercept-url pattern="/actor/registerMember.do"
+			access="isAnonymous()" />
+
+		<security:intercept-url pattern="/actor/registerAdmin.do"
+			access="hasRole('ADMIN')" />
+
+		<security:intercept-url pattern="/actor/administrator/list.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/actor/administrator/listSpammers.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/actor/administrator/listBanneds.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/actor/administrator/findSpammers.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/actor/administrator/calculatePolarity.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/actor/administrator/ban.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/actor/administrator/unban.do"
+			access="hasRole('ADMIN')" />
+
+		<!-- POSITION ADMIN -->
+
+		<security:intercept-url pattern="/position/administrator/list.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/position/administrator/edit.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/position/administrator/create.do"
+			access="hasRole('ADMIN')" />
+
+		<!-- CONFIGURATION -->
+
+		<security:intercept-url pattern="/configuration/administrator/list.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/configuration/administrator/create.do"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/configuration/administrator/edit.do"
+			access="hasRole('ADMIN')" />
+			<security:intercept-url pattern="/configuration/administrator/show.do"
+			access="hasRole('ADMIN')" />
+
+		<!-- OTHERS -->
+		<security:intercept-url pattern="/welcome/terms.do"
+			access="permitAll" />
+
+		<security:intercept-url pattern="/**"
+			access="hasRole('NONE')" />
+
+
+
+
+		<security:form-login login-page="/security/login.do"
+			password-parameter="password" username-parameter="username"
+			authentication-failure-url="/security/loginFailure.do" />
+
+		<security:logout logout-success-url="/"
+			invalidate-session="true" />
+	</security:http>
+
+</beans>
