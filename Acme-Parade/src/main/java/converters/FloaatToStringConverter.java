@@ -14,20 +14,20 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import domain.Procession;
+import domain.Floaat;
 
 @Component
 @Transactional
-public class FloaatToStringConverter implements Converter<Procession, String> {
+public class FloaatToStringConverter implements Converter<Floaat, String> {
 
 	@Override
-	public String convert(final Procession procession) {
+	public String convert(final Floaat floaat) {
 		String result;
 
-		if (procession == null)
+		if (floaat == null)
 			result = null;
 		else
-			result = String.valueOf(procession.getId());
+			result = String.valueOf(floaat.getId());
 
 		return result;
 	}

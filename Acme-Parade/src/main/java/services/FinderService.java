@@ -22,7 +22,7 @@ import domain.Actor;
 import domain.Configuration;
 import domain.Finder;
 import domain.Member;
-import domain.Procession;
+import domain.Parade;
 
 @Service
 @Transactional
@@ -42,7 +42,7 @@ public class FinderService {
 	private MemberService			memberService;
 
 	@Autowired
-	private ProcessionService		processionService;
+	private ParadeService		paradeService;
 
 
 	// Constructor----------------------------------------------
@@ -64,12 +64,12 @@ public class FinderService {
 		final Finder res = new Finder();
 		// final Date lastUpdate = new Date();
 
-		final Collection<Procession> processions = new ArrayList<Procession>();
+		final Collection<Parade> parades = new ArrayList<Parade>();
 
 		res.setKeyword("");
 		res.setNameArea("");
 		res.setLastUpdate(null);
-		res.setProcessions(processions);
+		res.setParades(parades);
 
 		final Date current = new Date();
 		res.setDateMin(current);
@@ -113,8 +113,8 @@ public class FinderService {
 		f.setDateMin(currentDate);
 		f.setDateMax(new Date(currentDate.getTime() + 315360000000L * 2));
 		f.setLastUpdate(new Date(currentDate.getTime() - 1000));
-		final Collection<Procession> processions = new ArrayList<>(this.processionService.findAll());
-		f.setProcessions(processions);
+		final Collection<Parade> parades = new ArrayList<>(this.paradeService.findAll());
+		f.setParades(parades);
 
 		this.save(f);
 
@@ -144,7 +144,7 @@ public class FinderService {
 		final Date lastUpdate = new Date(currentDate.getTime() - 1000);
 
 		if (!finder.getLastUpdate().after(updateFinder) || finder.getId() == 0) {
-			result.setProcessions(this.searchProcession(finder, configuration.getFinderMaxResults()));
+			result.setParades(this.searchParade(finder, configuration.getFinderMaxResults()));
 			result.setLastUpdate(lastUpdate);
 			// result = this.finderRepository.save(result);
 		}
@@ -190,12 +190,12 @@ public class FinderService {
 		return result;
 	}
 
-	public Collection<Procession> searchProcession(final Finder f, final int maxResult) {
-		List<Procession> result = new ArrayList<>();
+	public Collection<Parade> searchParade(final Finder f, final int maxResult) {
+		List<Parade> result = new ArrayList<>();
 		final Finder finder = this.checkPrincipal(f);
 
-		final Page<Procession> p;
-		p = this.finderRepository.searchProcessions(finder.getKeyword(), finder.getDateMin(), finder.getDateMax(), finder.getNameArea(), new PageRequest(0, maxResult));
+		final Page<Parade> p;
+		p = this.finderRepository.searchParades(finder.getKeyword(), finder.getDateMin(), finder.getDateMax(), finder.getNameArea(), new PageRequest(0, maxResult));
 
 		if (p.getContent() != null)
 			result = new ArrayList<>(p.getContent());

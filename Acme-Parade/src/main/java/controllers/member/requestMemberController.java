@@ -14,11 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import security.LoginService;
 import services.ConfigurationService;
 import services.MemberService;
-import services.ProcessionService;
+import services.ParadeService;
 import services.RequestService;
 import controllers.AbstractController;
 import domain.Member;
-import domain.Procession;
+import domain.Parade;
 import domain.Request;
 
 @Controller
@@ -33,7 +33,7 @@ public class requestMemberController extends AbstractController {
 	private MemberService memberService;
 
 	@Autowired
-	private ProcessionService processionService;
+	private ParadeService paradeService;
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -70,23 +70,23 @@ public class requestMemberController extends AbstractController {
 					else
 						requestsRejected.add(r);
 
-			final Collection<Procession> processions = this.processionService
+			final Collection<Parade> parades = this.paradeService
 					.findAll();
 			if (!requestsPending.isEmpty())
 				for (final Request r : requestsPending)
-					processions.remove(r.getProcession());
+					parades.remove(r.getParade());
 			if (!requestsRejected.isEmpty())
 				for (final Request r : requestsRejected)
-					processions.remove(r.getProcession());
+					parades.remove(r.getParade());
 			if (!requestsApproved.isEmpty())
 				for (final Request r : requestsApproved)
-					processions.remove(r.getProcession());
+					parades.remove(r.getParade());
 
 			result = new ModelAndView("request/listMember");
 			result.addObject("requestsApproved", requestsApproved);
 			result.addObject("requestsRejected", requestsRejected);
 			result.addObject("requestsPending", requestsPending);
-			result.addObject("processions", processions);
+			result.addObject("parades", parades);
 			result.addObject("requestURI", "request/member/listMember.do");
 			result.addObject("banner", this.configurationService.findAll()
 					.iterator().next().getBanner());
@@ -101,16 +101,16 @@ public class requestMemberController extends AbstractController {
 
 	// REQUEST
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
-	public ModelAndView request(final int processionId,
+	public ModelAndView request(final int paradeId,
 			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final Procession procession = this.processionService
-				.findOne(processionId);
+		final Parade parade = this.paradeService
+				.findOne(paradeId);
 		Member member = null;
 		final Request request = this.requestService.create();
-		final Collection<Procession> processions = new ArrayList<Procession>();
+		final Collection<Parade> parades = new ArrayList<Parade>();
 		try {
-			Assert.notNull(procession);
+			Assert.notNull(parade);
 			member = this.memberService.findByUserAccountId(LoginService
 					.getPrincipal().getId());
 			Assert.notNull(member);
@@ -119,9 +119,9 @@ public class requestMemberController extends AbstractController {
 
 			if (!requests.isEmpty())
 				for (final Request r : requests)
-					processions.add(r.getProcession());
-			Assert.isTrue(!processions.contains(procession));
-			request.setProcession(procession);
+					parades.add(r.getParade());
+			Assert.isTrue(!parades.contains(parade));
+			request.setParade(parade);
 			this.requestService.save(request);
 
 			result = new ModelAndView("redirect:/request/member/listMember.do");
@@ -129,13 +129,13 @@ public class requestMemberController extends AbstractController {
 		} catch (final Throwable e) {
 
 			result = new ModelAndView("redirect:/request/member/listMember.do");
-			if (procession == null)
+			if (parade == null)
 				redirectAttrs.addFlashAttribute("message",
-						"request.error.processionUnexists");
+						"request.error.paradeUnexists");
 			else if (!request.getMember().equals(member)) {
 				redirectAttrs.addFlashAttribute("message",
 						"request.error.nobrotherhood");
-			} else if (processions.contains(procession)) {
+			} else if (parades.contains(parade)) {
 				redirectAttrs.addFlashAttribute("message",
 						"request.error.alreadyRequest");
 			} else

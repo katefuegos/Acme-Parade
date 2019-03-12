@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
 import domain.Finder;
-import domain.Procession;
+import domain.Parade;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -93,9 +93,9 @@ public class FinderServiceTest extends AbstractTest {
 
 			final Finder finder = this.finderService.findFinderByMemberId(this.getEntityId("member1"));
 			Assert.notNull(finder);
-			final Collection<Procession> processions = new ArrayList<>();
+			final Collection<Parade> parades = new ArrayList<>();
 			finder.setKeyword("new Finder");
-			finder.setProcessions(processions);
+			finder.setParades(parades);
 
 			final Finder saved = this.finderService.save(finder);
 
@@ -119,7 +119,7 @@ public class FinderServiceTest extends AbstractTest {
 		try {
 
 			final Finder finder = this.finderService.findOne(this.getEntityId("finder2"));
-			Assert.notNull(finder.getProcessions(), "Procession must be not null");
+			Assert.notNull(finder.getParades(), "Parade must be not null");
 			Assert.notNull(finder);
 			this.finderService.clear(finder);
 			System.out.println("¡Exito!");

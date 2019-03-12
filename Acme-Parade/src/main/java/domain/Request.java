@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Access(AccessType.PROPERTY)
 @Table(indexes = {
-	@Index(name = "ID1Request", columnList = "roow,coluumn,procession")
+	@Index(name = "ID1Request", columnList = "roow,coluumn,parade")
 
 })
 public class Request extends DomainEntity {
@@ -68,7 +68,7 @@ public class Request extends DomainEntity {
 
 	// Relationships ---------------------------------------------------------
 	private Member		member;
-	private Procession	procession;
+	private Parade	parade;
 
 
 	@NotNull
@@ -85,11 +85,11 @@ public class Request extends DomainEntity {
 	@NotNull
 	@Valid
 	@ManyToOne(optional = false)
-	public Procession getProcession() {
-		return this.procession;
+	public Parade getParade() {
+		return this.parade;
 	}
 
-	public void setProcession(final Procession procession) {
-		this.procession = procession;
+	public void setParade(final Parade parade) {
+		this.parade = parade;
 	}
 }

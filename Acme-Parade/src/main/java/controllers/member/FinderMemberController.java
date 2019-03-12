@@ -32,7 +32,7 @@ import controllers.AbstractController;
 import domain.Area;
 import domain.Finder;
 import domain.Member;
-import domain.Procession;
+import domain.Parade;
 
 @Controller
 @RequestMapping("/finder/member")
@@ -96,7 +96,7 @@ public class FinderMemberController extends AbstractController {
 		} else
 			try {
 				this.finderService.save(finder);
-				result = new ModelAndView("redirect:listProcessions.do");
+				result = new ModelAndView("redirect:listParades.do");
 			} catch (final Exception e) {
 				final Collection<Area> areas = this.areaService.findAll();
 
@@ -109,21 +109,21 @@ public class FinderMemberController extends AbstractController {
 	}
 	// List result finder ---------------------------------------------------------------		
 
-	@RequestMapping("/listProcessions")
-	public ModelAndView listProcessions() {
+	@RequestMapping("/listParades")
+	public ModelAndView listParades() {
 		ModelAndView result;
 		Finder finder = this.finderService.findFinder();
 		//Comprobar fecha ultima actualización
 		finder = this.finderService.updateFinder(finder);
 		//Obtener resultados fixuptasks de finder
-		final Collection<Procession> processions = finder.getProcessions();
+		final Collection<Parade> parades = finder.getParades();
 		final String lang = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 		final Member member = this.memberService.findByUserAccountId(LoginService.getPrincipal().getId());
-		result = new ModelAndView("finder/member/listProcessions");
-		result.addObject("processions", processions);
+		result = new ModelAndView("finder/member/listParades");
+		result.addObject("parades", parades);
 		result.addObject("lang", lang);
 		result.addObject("memberId", member.getId());
-		result.addObject("requestURI", "finder/member/listProcessions.do");
+		result.addObject("requestURI", "finder/member/listParades.do");
 		result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
 		result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
 		return result;

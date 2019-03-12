@@ -12,16 +12,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import services.BrotherhoodService;
 import services.ConfigurationService;
-import services.ProcessionService;
-import domain.Procession;
+import services.ParadeService;
+import domain.Parade;
 
 @Controller
-@RequestMapping("/procession")
-public class ProcessionController extends AbstractController {
+@RequestMapping("/parade")
+public class ParadeController extends AbstractController {
 
 	// Services-----------------------------------------------------------
 	@Autowired
-	private ProcessionService processionService;
+	private ParadeService paradeService;
 
 	@Autowired
 	private BrotherhoodService brotherhoodService;
@@ -31,7 +31,7 @@ public class ProcessionController extends AbstractController {
 
 	// Constructor---------------------------------------------------------
 
-	public ProcessionController() {
+	public ParadeController() {
 		super();
 	}
 
@@ -43,11 +43,11 @@ public class ProcessionController extends AbstractController {
 
 		try {
 			Assert.notNull(brotherhoodService.findOne(brotherhoodId));
-			final Collection<Procession> processions = processionService
+			final Collection<Parade> parades = paradeService
 					.findByBrotherhoodIdAndNotDraft(brotherhoodId);
-			result = new ModelAndView("procession/list");
-			result.addObject("processions", processions);
-			result.addObject("requestURI", "procession/list.do?brotherhoodId="
+			result = new ModelAndView("parade/list");
+			result.addObject("parades", parades);
+			result.addObject("requestURI", "parade/list.do?brotherhoodId="
 					+ brotherhoodId);
 			result.addObject("banner", this.configurationService.findAll()
 					.iterator().next().getBanner());
@@ -57,7 +57,7 @@ public class ProcessionController extends AbstractController {
 			result = new ModelAndView("redirect:/brotherhood/list.do");
 			if (brotherhoodService.findOne(brotherhoodId) == null)
 				redirectAttrs.addFlashAttribute("message",
-						"procession.error.unexist");
+						"parade.error.unexist");
 		}
 
 		return result;

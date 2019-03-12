@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import domain.Administrator;
 import domain.Member;
-import domain.Procession;
+import domain.Parade;
 
 @Repository
 public interface AdministratorRepository extends JpaRepository<Administrator, Integer> {
@@ -37,12 +37,12 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	//C3 - The smallest brotherhood, minimum 1
 	@Query("select e.brotherhood.id,e.brotherhood.title, count(e) from Enrolment e group by e.brotherhood order by 1")
 	Collection<Object[]> queryC3();
-	//C4 - The ratio of requests to march in a procession, grouped by their status.
+	//C4 - The ratio of requests to march in a parade, grouped by their status.
 	@Query("select a.status,(count(a)*1.0)/(select count(aa) from Request aa) from Request a group by a.status")
 	Collection<Object[]> queryC4();
-	//C5 - The processions that are going to be organised in 30 days or less.
-	@Query("select p from Procession p where p.moment BETWEEN current_timestamp and :currentDayPlus30Days")
-	Collection<Procession> queryC5(@Param("currentDayPlus30Days") Date date);
+	//C5 - The parades that are going to be organised in 30 days or less.
+	@Query("select p from Parade p where p.moment BETWEEN current_timestamp and :currentDayPlus30Days")
+	Collection<Parade> queryC5(@Param("currentDayPlus30Days") Date date);
 	//C7 - The listing of members who have got at least 10% the maximum number request to march accepted. 
 	@Query("select m from Member m where 0.1<=(select count(q)*1/(select count(qq) from Request qq)	from Request q where q.status = 'APPROVED' and q.member.id=m.id)")
 	Collection<Member> queryC7();
@@ -57,13 +57,13 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	@Query("select avg(1.0 * (select count(e) from Brotherhood e where e.area.id = b.id)),min(1.0 * (select count(e) from Brotherhood e where e.area.id = b.id)),max(1.0 * (select count(e) from Brotherhood e where e.area.id = b.id)),stddev(1.0 * (select count(e) from Brotherhood e where e.area.id = b.id)) from Area b")
 	Object[] queryB1B();
 	//B2
-	@Query("select avg(1.0*f.processions.size),min(1.0*f.processions.size),max(1.0*f.processions.size),stddev(1.0*f.processions.size) from Finder f")
+	@Query("select avg(1.0*f.parades.size),min(1.0*f.parades.size),max(1.0*f.parades.size),stddev(1.0*f.parades.size) from Finder f")
 	Object[] queryB2();
 	//	//B3
-	@Query("select (select count(f1) from Finder f1 where f1.processions.size = (select count(p) from Procession p))*1.0/count(f) from Finder f")
+	@Query("select (select count(f1) from Finder f1 where f1.parades.size = (select count(p) from Parade p))*1.0/count(f) from Finder f")
 	Double queryB3Empty();
 
-	@Query("select (select count(f1) from Finder f1 where f1.processions.size != (select count(p) from Procession p))*1.0/count(f) from Finder f")
+	@Query("select (select count(f1) from Finder f1 where f1.parades.size != (select count(p) from Parade p))*1.0/count(f) from Finder f")
 	Double queryB3NotEmpty();
 
 }

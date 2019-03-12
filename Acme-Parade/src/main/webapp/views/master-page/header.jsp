@@ -123,8 +123,8 @@
 		</security:authorize>
 
 		<security:authorize access="hasRole('BROTHERHOOD')">
-			<li><a class="fNiv" href="procession/brotherhood/list.do"><spring:message
-						code="master.page.myProcessions" /></a></li>
+			<li><a class="fNiv" href="parade/brotherhood/list.do"><spring:message
+						code="master.page.myParades" /></a></li>
 			<li><a class="fNiv" href="float/brotherhood/list.do"><spring:message
 						code="master.page.floats" /></a></li>
 			<li><a class="fNiv" href="request/brotherhood/list.do"><spring:message
@@ -138,7 +138,7 @@
 						code="master.page.myRequest" /></a></li>
 			<li><a class="fNiv" href="enrolment/member/list.do"><spring:message
 						code="master.page.brotherhood.member" /></a></li>
-			<li><a class="fNiv" href="finder/member/listProcessions.do"><spring:message
+			<li><a class="fNiv" href="finder/member/listParades.do"><spring:message
 						code="master.page.finder" /></a></li>
 		</security:authorize>
 

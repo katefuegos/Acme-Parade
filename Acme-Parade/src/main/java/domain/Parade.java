@@ -1,35 +1,45 @@
-package forms;
+package domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Entity
 @Access(AccessType.PROPERTY)
-public class ProcessionForm {
+public class Parade extends DomainEntity {
 
-	// Attributes------------------------------------------------------------------
-
-	private int id;
+	// Identification ---------------------------------------------------------
+	// ATRIBUTOS
+	private String ticker;
 	private String title;
 	private String description;
 	private Date moment;
 	private boolean draftMode;
 
-	// Constructor------------------------------------------------------------------
-
-	public ProcessionForm() {
-		super();
+	@Column(unique = true)
+	@NotBlank
+	@Pattern(regexp = "^\\d{6}-(\\d?\\w){5}$")
+	public String getTicker() {
+		return this.ticker;
 	}
 
-	// Getter and
-	// Setters------------------------------------------------------------
+	public void setTicker(final String ticker) {
+		this.ticker = ticker;
+	}
 
 	@NotBlank
 	public String getTitle() {
@@ -69,12 +79,29 @@ public class ProcessionForm {
 		this.draftMode = draftMode;
 	}
 
+	// Relationships ---------------------------------------------------------
+	private Collection<Floaat> floats;
+	private Brotherhood brotherhood;
+
 	@NotNull
-	public int getId() {
-		return id;
+	@Valid
+	@ManyToOne(optional = false)
+	public Brotherhood getBrotherhood() {
+		return brotherhood;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setBrotherhood(Brotherhood brotherhood) {
+		this.brotherhood = brotherhood;
+	}
+
+	@NotNull
+	@Valid
+	@ManyToMany
+	public Collection<Floaat> getFloats() {
+		return this.floats;
+	}
+
+	public void setFloats(final Collection<Floaat> floats) {
+		this.floats = floats;
 	}
 }

@@ -12,19 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import repositories.ProcessionRepository;
+import repositories.ParadeRepository;
 import security.LoginService;
 import domain.Floaat;
-import domain.Procession;
+import domain.Parade;
 
 @Service
 @Transactional
-public class ProcessionService {
+public class ParadeService {
 
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private ProcessionRepository processionRepository;
+	private ParadeRepository paradeRepository;
 
 	// Services-------------------------------------------------
 	@Autowired
@@ -32,14 +32,14 @@ public class ProcessionService {
 
 	// Constructor----------------------------------------------
 
-	public ProcessionService() {
+	public ParadeService() {
 		super();
 	}
 
 	// Simple CRUD----------------------------------------------
 
-	public Procession create() {
-		final Procession res = new Procession();
+	public Parade create() {
+		final Parade res = new Parade();
 		String ticker = generateTicker();
 		final Collection<Floaat> floaats = new ArrayList<>();
 		res.setTicker(ticker);
@@ -50,25 +50,25 @@ public class ProcessionService {
 		return res;
 	}
 
-	public List<Procession> findAll() {
-		return this.processionRepository.findAll();
+	public List<Parade> findAll() {
+		return this.paradeRepository.findAll();
 	}
 
-	public Procession findOne(final Integer processionId) {
-		return this.processionRepository.findOne(processionId);
+	public Parade findOne(final Integer paradeId) {
+		return this.paradeRepository.findOne(paradeId);
 	}
 
-	public Procession save(final Procession procession) {
-		Assert.notNull(procession);
+	public Parade save(final Parade parade) {
+		Assert.notNull(parade);
 		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
 				.contains("BROTHERHOOD"),
 				"SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PROCESSION");
-		final Procession saved = this.processionRepository.save(procession);
+		final Parade saved = this.paradeRepository.save(parade);
 		return saved;
 	}
 
-	public void delete(final Procession procession) {
-		this.processionRepository.delete(procession);
+	public void delete(final Parade parade) {
+		this.paradeRepository.delete(parade);
 	}
 
 	// Other Methods--------------------------------------------
@@ -100,20 +100,20 @@ public class ProcessionService {
 		return new String(text);
 	}
 
-	public Collection<Procession> findByBrotherhoodIdAndNotDraft(
+	public Collection<Parade> findByBrotherhoodIdAndNotDraft(
 			int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return processionRepository
+		return paradeRepository
 				.findByBrotherhoodIdAndNotDraft(brotherhoodId);
 	}
 
-	public Collection<Procession> findByBrotherhoodId(int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodId(int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return processionRepository.findByBrotherhoodId(brotherhoodId);
+		return paradeRepository.findByBrotherhoodId(brotherhoodId);
 	}
 
-	public Collection<Procession> findByFloaat(Floaat floaat) {
+	public Collection<Parade> findByFloaat(Floaat floaat) {
 		Assert.notNull(floaat);
-		return processionRepository.findByFloaat(floaat);
+		return paradeRepository.findByFloaat(floaat);
 	}
 }

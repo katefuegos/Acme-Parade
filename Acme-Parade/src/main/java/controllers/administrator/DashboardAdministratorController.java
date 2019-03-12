@@ -16,7 +16,7 @@ import services.AdministratorService;
 import services.ConfigurationService;
 import controllers.AbstractController;
 import domain.Member;
-import domain.Procession;
+import domain.Parade;
 import forms.AreaQueryB1Form;
 import forms.PositionCountForm;
 
@@ -117,7 +117,7 @@ public class DashboardAdministratorController extends AbstractController {
 			modelAndView.addObject("countSmallest", countSmallest);
 		}
 
-		// QueryC4 - The ratio of requests to march in a procession, grouped by
+		// QueryC4 - The ratio of requests to march in a parade, grouped by
 		// their status.
 		try {
 			final Map<String, String> statusCount = new TreeMap<>();
@@ -130,13 +130,13 @@ public class DashboardAdministratorController extends AbstractController {
 		} catch (final Exception e) {
 			modelAndView.addObject("sizeC4", 0);
 		}
-		// QueryC5 - The processions that are going to be organised in 30 days
+		// QueryC5 - The parades that are going to be organised in 30 days
 		// or less.
 		try {
-			final Collection<Procession> processions = this.administratorService
+			final Collection<Parade> parades = this.administratorService
 					.queryC5();
 
-			modelAndView.addObject("processionsC5", processions);
+			modelAndView.addObject("paradesC5", parades);
 		} catch (final Exception e) {
 			modelAndView.addObject("message", "message.commit.error");
 			modelAndView.addObject("excP", e.getMessage());

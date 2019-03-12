@@ -10,13 +10,13 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 
-<display:table name="processions" id="row" requestURI="${requestURI}"
+<display:table name="parades" id="row" requestURI="${requestURI}"
 	pagesize="5" class="displaytag">
 
-	<display:column property="ticker" titleKey="procession.ticker" />
+	<display:column property="ticker" titleKey="parade.ticker" />
 	
-	<display:column property="title" titleKey="procession.title" />
+	<display:column property="title" titleKey="parade.title" />
 	
-	<display:column property="moment" titleKey="procession.moment" />
+	<display:column property="moment" titleKey="parade.moment" />
 	
 </display:table>

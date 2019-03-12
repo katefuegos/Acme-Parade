@@ -64,7 +64,7 @@ public class RequestService {
 					"SI SE ACEPTA UN REQUEST SE DEBE INTRODUCIR ROOW Y COLUUMN");
 			Assert.isTrue(
 					this.findRequestByPosition(request.getRoow(), request
-							.getColuumn(), request.getProcession().getId()) == null,
+							.getColuumn(), request.getParade().getId()) == null,
 					"ESTA POSICION YA ESTÁ OCUPADA EN ESA PROCESION");
 		}
 		final Request saved = this.requestRepository.save(request);
@@ -76,14 +76,14 @@ public class RequestService {
 	}
 
 	// Other Methods--------------------------------------------
-	public Request findRequestByPosition(int roow, int coluumn, int processionId) {
+	public Request findRequestByPosition(int roow, int coluumn, int paradeId) {
 		return requestRepository.findRequestByPosition(roow, coluumn,
-				processionId);
+				paradeId);
 	}
 
-	public Collection<Request> findRequestByProcessionId(int processionId) {
-		Assert.notNull(processionId);
-		return requestRepository.findRequestByProcessionId(processionId);
+	public Collection<Request> findRequestByParadeId(int paradeId) {
+		Assert.notNull(paradeId);
+		return requestRepository.findRequestByParadeId(paradeId);
 	}
 
 	public Collection<Request> findRequestByMemberId(int memberId) {

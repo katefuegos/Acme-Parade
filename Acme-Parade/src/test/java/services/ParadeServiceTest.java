@@ -10,16 +10,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
-import domain.Procession;
+import domain.Parade;
 
 @ContextConfiguration(locations = {"classpath:spring/junit.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class ProcessionServiceTest extends AbstractTest {
+public class ParadeServiceTest extends AbstractTest {
 
 	// Service----------------------------------------------------------
 	@Autowired
-	private ProcessionService processionService;
+	private ParadeService paradeService;
 
 	// Test-------------------------------------------------------------
 
@@ -29,27 +29,27 @@ public class ProcessionServiceTest extends AbstractTest {
 		authenticate("brotherhood1");
 
 		// CREO REQUEST Y SETEO VALORES
-		final Procession procession = processionService.create();
-		procession.setDescription("description1");
-		procession.setTitle("title1");
+		final Parade parade = paradeService.create();
+		parade.setDescription("description1");
+		parade.setTitle("title1");
 
 		// GUARDO REQUEST
-		Procession saved = processionService.save(procession);
+		Parade saved = paradeService.save(parade);
 
 		// CHECK FINDALL
-		Assert.isTrue(processionService.findAll().contains(saved));
+		Assert.isTrue(paradeService.findAll().contains(saved));
 
 		// CHECK FINDONE
-		Assert.isTrue(processionService.findOne(saved.getId()) == saved);
+		Assert.isTrue(paradeService.findOne(saved.getId()) == saved);
 
 		//EDITO PROCESSION
 		saved.setDescription("description1 edited");
-		Procession saved2 = processionService.save(saved);
-		Assert.isTrue(processionService.findOne(saved2.getId()).getDescription().equals("description1 edited"));
+		Parade saved2 = paradeService.save(saved);
+		Assert.isTrue(paradeService.findOne(saved2.getId()).getDescription().equals("description1 edited"));
 		
 		// BORRO PROCESSION
-		processionService.delete(saved2);
-		Assert.isTrue(!processionService.findAll().contains(saved2));
+		paradeService.delete(saved2);
+		Assert.isTrue(!paradeService.findAll().contains(saved2));
 
 		unauthenticate();
 	}

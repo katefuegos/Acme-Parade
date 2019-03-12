@@ -21,8 +21,8 @@ import domain.Actor;
 import domain.Administrator;
 import domain.Brotherhood;
 import domain.Member;
+import domain.Parade;
 import domain.Position;
-import domain.Procession;
 import forms.AreaQueryB1Form;
 import forms.PositionCountForm;
 
@@ -163,8 +163,8 @@ public class AdministratorService {
 		return result;
 	}
 
-	public Collection<Procession> queryC5() {
-		Collection<Procession> result = null;
+	public Collection<Parade> queryC5() {
+		Collection<Parade> result = null;
 
 		result = this.administratorRepository.queryC5(new Date(new Date().getTime() + 2592000000L));
 

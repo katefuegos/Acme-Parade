@@ -260,6 +260,12 @@ Blocking all cookies will have a negative impact upon the usability of many webs
 4.Deleting cookies will have a negative impact on the usability of many websites.
 <br>
 	<br>
+<h2>N. Additional note</h2>
+	<br>
+	<br>
+	Acme Madrugá, Inc. is the company that provides the service and Acme Parade is the name of the service.
+	<br>
+	<br>
 </jstl:if>
 
 <jstl:if test="${lang=='ES'}">
@@ -493,5 +499,11 @@ Nuestro sitio web usa cookies. Una cookie es un fichero que contiene un identifi
 	<br>
 4.Eliminar las cookies tendrá un impacto negativo en la usabilidad de muchos sitios web.
 <br>
+	<br>
+	<h2>N. Nota adicional</h2>
+	<br>
+	<br>
+	Acme Madrugá, Inc. es la empresa proveedora del servicio y Acme Parade es el nombre del servicio mismo.
+	<br>
 	<br>
 </jstl:if>

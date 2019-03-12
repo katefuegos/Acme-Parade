@@ -21,7 +21,7 @@ public class RequestServiceTest extends AbstractTest {
 	@Autowired
 	private RequestService requestService;
 	@Autowired
-	private ProcessionService processionService;
+	private ParadeService paradeService;
 
 	// Test-------------------------------------------------------------
 
@@ -31,9 +31,9 @@ public class RequestServiceTest extends AbstractTest {
 		authenticate("member1");
 
 		// CREO REQUEST Y SETEO VALORES
-		final int processionId = this.getEntityId("procession1");
+		final int paradeId = this.getEntityId("parade1");
 		final Request request = requestService.create();
-		request.setProcession(processionService.findOne(processionId));
+		request.setParade(paradeService.findOne(paradeId));
 
 		// GUARDO REQUEST
 		Request saved = requestService.save(request);

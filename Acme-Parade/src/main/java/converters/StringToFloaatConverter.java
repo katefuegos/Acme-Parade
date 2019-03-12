@@ -15,19 +15,19 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import repositories.ProcessionRepository;
-import domain.Procession;
+import repositories.FloaatRepository;
+import domain.Floaat;
 @Component
 @Transactional
-public class StringToFloaatConverter implements Converter<String, Procession> {
+public class StringToFloaatConverter implements Converter<String, Floaat> {
 
 	@Autowired
-	ProcessionRepository	processionRepository;
+	FloaatRepository	floaatRepository;
 
 
 	@Override
-	public Procession convert(final String text) {
-		Procession result;
+	public Floaat convert(final String text) {
+		Floaat result;
 		int id;
 
 		try {
@@ -35,7 +35,7 @@ public class StringToFloaatConverter implements Converter<String, Procession> {
 				result = null;
 			else {
 				id = Integer.valueOf(text);
-				result = this.processionRepository.findOne(id);
+				result = this.floaatRepository.findOne(id);
 			}
 		} catch (final Exception oops) {
 			throw new IllegalArgumentException(oops);

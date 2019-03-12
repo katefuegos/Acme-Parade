@@ -17,10 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import security.LoginService;
 import services.BrotherhoodService;
 import services.ConfigurationService;
-import services.ProcessionService;
+import services.ParadeService;
 import services.RequestService;
 import controllers.AbstractController;
-import domain.Procession;
+import domain.Parade;
 import domain.Request;
 import forms.RequestForm;
 
@@ -30,7 +30,7 @@ public class RequestBrotherhoodController extends AbstractController {
 
 	// Services-----------------------------------------------------------
 	@Autowired
-	private ProcessionService processionService;
+	private ParadeService paradeService;
 
 	@Autowired
 	private BrotherhoodService brotherhoodService;
@@ -56,12 +56,12 @@ public class RequestBrotherhoodController extends AbstractController {
 			int brotherhoodId = brotherhoodService.findByUserAccountId(
 					LoginService.getPrincipal().getId()).getId();
 			Assert.notNull(brotherhoodService.findOne(brotherhoodId));
-			Collection<Procession> processions = processionService
+			Collection<Parade> parades = paradeService
 					.findByBrotherhoodId(brotherhoodId);
 			Collection<Request> requests = new ArrayList<Request>();
-			if (!processions.isEmpty()) {
-				for (Procession p : processions) {
-					requests.addAll(requestService.findRequestByProcessionId(p
+			if (!parades.isEmpty()) {
+				for (Parade p : parades) {
+					requests.addAll(requestService.findRequestByParadeId(p
 							.getId()));
 				}
 			}
@@ -106,12 +106,12 @@ public class RequestBrotherhoodController extends AbstractController {
 		try {
 			Assert.notNull(brotherhoodId);
 			Assert.isTrue(request != null);
-			Assert.isTrue(request.getProcession().getBrotherhood().getId() == brotherhoodId);
+			Assert.isTrue(request.getParade().getBrotherhood().getId() == brotherhoodId);
 			Assert.isTrue(request.getStatus().equals("PENDING"));
 			int roow = 1;
 			int coluumn = 1;
 			while (requestService.findRequestByPosition(roow, coluumn, request
-					.getProcession().getId()) != null) {
+					.getParade().getId()) != null) {
 				if (roow >= coluumn) {
 					roow = roow + 1;
 				} else {
@@ -130,7 +130,7 @@ public class RequestBrotherhoodController extends AbstractController {
 			if (request == null)
 				redirectAttrs.addFlashAttribute("message",
 						"request.error.unexist");
-			else if (!(request.getProcession().getBrotherhood().getId() == brotherhoodId))
+			else if (!(request.getParade().getBrotherhood().getId() == brotherhoodId))
 				redirectAttrs.addFlashAttribute("message",
 						"request.error.nobrotherhood");
 			else if (request.getStatus() != "PENDING")
@@ -156,10 +156,10 @@ public class RequestBrotherhoodController extends AbstractController {
 				Assert.notNull(brotherhoodId);
 				Assert.isTrue(requestForm != null);
 				Assert.isTrue(requestService.findOne(requestForm.getId())
-						.getProcession().getBrotherhood().getId() == brotherhoodId);
+						.getParade().getBrotherhood().getId() == brotherhoodId);
 				Assert.isTrue(requestService.findRequestByPosition(
 						requestForm.getRoow(), requestForm.getColuumn(),
-						request.getProcession().getId()) == null);
+						request.getParade().getId()) == null);
 
 				request.setColuumn(requestForm.getColuumn());
 				request.setRoow(requestForm.getRoow());
@@ -178,12 +178,12 @@ public class RequestBrotherhoodController extends AbstractController {
 					redirectAttrs.addFlashAttribute("message",
 							"request.error.unexist");
 				else if (!(requestService.findOne(requestForm.getId())
-						.getProcession().getBrotherhood().getId() == brotherhoodId))
+						.getParade().getBrotherhood().getId() == brotherhoodId))
 					redirectAttrs.addFlashAttribute("message",
 							"request.error.nobrotherhood");
 				else if (!(requestService.findRequestByPosition(
 						requestForm.getRoow(), requestForm.getColuumn(),
-						request.getProcession().getId()) == null))
+						request.getParade().getId()) == null))
 					result = this.acceptModelAndView(requestForm,
 							"request.error.positionTaken");
 				else
@@ -205,7 +205,7 @@ public class RequestBrotherhoodController extends AbstractController {
 		try {
 			Assert.notNull(brotherhoodId);
 			Assert.isTrue(request != null);
-			Assert.isTrue(request.getProcession().getBrotherhood().getId() == brotherhoodId);
+			Assert.isTrue(request.getParade().getBrotherhood().getId() == brotherhoodId);
 			Assert.isTrue(request.getStatus().equals("PENDING"));
 			requestForm.setId(request.getId());
 			requestForm.setColuumn(1);
@@ -219,7 +219,7 @@ public class RequestBrotherhoodController extends AbstractController {
 			if (request == null)
 				redirectAttrs.addFlashAttribute("message",
 						"request.error.unexist");
-			else if (!(request.getProcession().getBrotherhood().getId() == brotherhoodId))
+			else if (!(request.getParade().getBrotherhood().getId() == brotherhoodId))
 				redirectAttrs.addFlashAttribute("message",
 						"request.error.nobrotherhood");
 			else if (request.getStatus() != "PENDING")
@@ -247,7 +247,7 @@ public class RequestBrotherhoodController extends AbstractController {
 
 				Assert.notNull(brotherhoodId);
 				Assert.isTrue(request != null);
-				Assert.isTrue(request.getProcession().getBrotherhood().getId() == brotherhoodId);
+				Assert.isTrue(request.getParade().getBrotherhood().getId() == brotherhoodId);
 				Assert.isTrue(!request.getReasonReject().equals(""));
 				request.setStatus("REJECTED");
 				this.requestService.save(request);
@@ -263,7 +263,7 @@ public class RequestBrotherhoodController extends AbstractController {
 					redirectAttrs.addFlashAttribute("message",
 							"request.error.unexist");
 				else if (!(requestService.findOne(requestForm.getId())
-						.getProcession().getBrotherhood().getId() == brotherhoodId))
+						.getParade().getBrotherhood().getId() == brotherhoodId))
 					redirectAttrs.addFlashAttribute("message",
 							"request.error.nobrotherhood");
 				else if (requestForm.getReasonReject().equals(""))

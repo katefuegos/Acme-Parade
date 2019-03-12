@@ -52,7 +52,7 @@
 	<!-- Finder -->
 		<security:intercept-url pattern="/finder/member/update.do"
 			access="hasRole('MEMBER')" />
-		<security:intercept-url pattern="/finder/member/listProcessions.do"
+		<security:intercept-url pattern="/finder/member/listParades.do"
 			access="hasRole('MEMBER')" />
 
 		<!-- CUSTOMER -->
@@ -99,15 +99,15 @@
 			access="permitAll" />
 
 		<!-- PROCESSION -->
-		<security:intercept-url pattern="/procession/brotherhood/list.do"
+		<security:intercept-url pattern="/parade/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
-		<security:intercept-url pattern="/procession/brotherhood/edit.do"
+		<security:intercept-url pattern="/parade/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />
-		<security:intercept-url pattern="/procession/brotherhood/create.do"
+		<security:intercept-url pattern="/parade/brotherhood/create.do"
 			access="hasRole('BROTHERHOOD')" />
-		<security:intercept-url pattern="/procession/brotherhood/show.do"
+		<security:intercept-url pattern="/parade/brotherhood/show.do"
 			access="hasRole('BROTHERHOOD')" />
-		<security:intercept-url pattern="/procession/list.do"
+		<security:intercept-url pattern="/parade/list.do"
 			access="permitAll" />
 
 		<!-- FLOAT -->

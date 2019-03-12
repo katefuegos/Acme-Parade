@@ -18,11 +18,11 @@ import security.LoginService;
 import services.BrotherhoodService;
 import services.ConfigurationService;
 import services.FloaatService;
-import services.ProcessionService;
+import services.ParadeService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Floaat;
-import domain.Procession;
+import domain.Parade;
 import forms.FloaatForm;
 
 @Controller
@@ -37,7 +37,7 @@ public class FloaatBrotherhoodController extends AbstractController {
 	private BrotherhoodService		brotherhoodService;
 
 	@Autowired
-	private ProcessionService		processionService;
+	private ParadeService		paradeService;
 
 	@Autowired
 	private ConfigurationService	configurationService;
@@ -167,11 +167,11 @@ public class FloaatBrotherhoodController extends AbstractController {
 				Assert.notNull(floaatForm);
 				final Floaat floaat = this.floaatService.findOne(floaatForm.getId());
 				Assert.isTrue(floaat.getBrotherhood().equals(b));
-				final Collection<Procession> processions = this.processionService.findByFloaat(floaat);
-				if (!processions.isEmpty())
-					for (final Procession p : processions) {
+				final Collection<Parade> parades = this.paradeService.findByFloaat(floaat);
+				if (!parades.isEmpty())
+					for (final Parade p : parades) {
 						p.getFloats().remove(floaat);
-						this.processionService.save(p);
+						this.paradeService.save(p);
 					}
 
 				this.floaatService.delete(this.floaatService.findOne(floaatForm.getId()));

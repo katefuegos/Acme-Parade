@@ -34,8 +34,8 @@
 		<bean class="converters.MemberToStringConverter" />
 		<bean class="converters.StringToMemberConverter" />
 		
-		<bean class="converters.ProcessionToStringConverter" />
-		<bean class="converters.StringToProcessionConverter" />
+		<bean class="converters.ParadeToStringConverter" />
+		<bean class="converters.StringToParadeConverter" />
 		
 		<bean class="converters.FloaatToStringConverter" />
 		<bean class="converters.StringToFloaatConverter" />

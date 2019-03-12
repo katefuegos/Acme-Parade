@@ -11,14 +11,14 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form action="${requestURI}" modelAttribute="processionForm">
+<form:form action="${requestURI}" modelAttribute="paradeForm">
 	<form:hidden path="id" />
 	
-	<acme:textbox code="procession.title" path="title"/>
-	<acme:textbox code="procession.description" path="description"/>
+	<acme:textbox code="parade.title" path="title"/>
+	<acme:textbox code="parade.description" path="description"/>
 
 	<form:label path="moment">
-		<spring:message code="procession.moment" />:
+		<spring:message code="parade.moment" />:
 	</form:label>
 	<form:input path="moment" readonly="${isRead}"
 		placeholder="yyyy/mm/dd HH:mm" />
@@ -26,24 +26,24 @@
 	<br />
 
 	<form:label path="draftMode">
-		<spring:message code="procession.draftMode" />
+		<spring:message code="parade.draftMode" />
 	</form:label>
 	<form:checkbox path="draftMode" />
 	<form:errors path="draftMode" cssClass="error" />
 	<br />
 
 	<jstl:if test="${isRead == false}">
-			<acme:submit name="save" code="procession.save"/>
+			<acme:submit name="save" code="parade.save"/>
 		<jstl:if test="${id != 0}">
-			<acme:delete confirmDelete="procession.confirmDelete" name="delete" code="procession.delete"/>
+			<acme:delete confirmDelete="parade.confirmDelete" name="delete" code="parade.delete"/>
 		
 		</jstl:if>
-		<acme:cancel url="procession/brotherhood/list.do" code="procession.cancel"/>
+		<acme:cancel url="parade/brotherhood/list.do" code="parade.cancel"/>
 	</jstl:if>
 
 
 	<jstl:if test="${isRead == true}">
-		<acme:cancel url="procession/brotherhood/list.do" code="procession.cancel"/>
+		<acme:cancel url="parade/brotherhood/list.do" code="parade.cancel"/>
 
 	</jstl:if>
 
