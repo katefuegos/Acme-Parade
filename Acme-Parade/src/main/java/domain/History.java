@@ -1,8 +1,6 @@
 
 package domain;
 
-import java.util.Collection;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
@@ -18,9 +16,9 @@ public class History extends DomainEntity {
 
 	// -------------------ATRIBUTOS---------------------
 
-	private String				title;
-	private String				description;
-	private Collection<String>	photos;
+	private String	title;
+	private String	description;
+	private String	photos;
 
 
 	@NotBlank
@@ -42,37 +40,27 @@ public class History extends DomainEntity {
 	}
 
 	@URL
-	public Collection<String> getPhotos() {
+	public String getPhotos() {
 		return this.photos;
 	}
 
-	public void setPhotos(final Collection<String> photos) {
+	public void setPhotos(final String photos) {
 		this.photos = photos;
 	}
 
 
 	// Relationships ---------------------------------------------------------
-	private Brotherhood				brotherhood;
-	private Collection<EveryRecord>	everyRecords;
+	private Brotherhood	brotherhood;
 
 
 	@Valid
-	@OneToOne()
+	@OneToOne
 	public Brotherhood getBrotherhood() {
 		return this.brotherhood;
 	}
 
 	public void setBrotherhood(final Brotherhood brotherhood) {
 		this.brotherhood = brotherhood;
-	}
-
-	@URL
-	public Collection<EveryRecord> getEveryRecords() {
-		return this.everyRecords;
-	}
-
-	public void setEveryRecords(final Collection<EveryRecord> everyRecords) {
-		this.everyRecords = everyRecords;
 	}
 
 }

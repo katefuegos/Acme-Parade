@@ -148,6 +148,45 @@
 			</list>
 		</property>
 	</bean>
+	
+		<bean id="userAccount12" class="security.UserAccount">
+		<property name="username" value="chapter1" />
+		<property name="password" value="178494d73a41f7d68e80f685324d3662" />
+		<property name="enabled" value="true" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CHAPTER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+		<bean id="userAccount13" class="security.UserAccount">
+		<property name="username" value="chapter2" />
+		<property name="password" value="07a29f2348d728fad16c5260823f93ef" />
+		<property name="enabled" value="true" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CHAPTER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+		<bean id="userAccount14" class="security.UserAccount">
+		<property name="username" value="chapter3" />
+		<property name="password" value="4cf7b4e4bb6d429f0f08bc498e397d81" />
+		<property name="enabled" value="true" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CHAPTER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
 
 
 	<!-- Other domain beans come here -->
@@ -329,6 +368,63 @@
 		<property name="pictures" value="https://profile.es/" />
 		<property name="area" ref="area1" />
 	</bean>
+
+
+<!-- CHAPTER -->
+
+	<bean id="chapter1" class="domain.Chapter">
+
+		<property name="name" value="Arturo" />
+		<property name="middleName" value="Diva" />
+		<property name="surname" value="Sa" />
+		<property name="photo"
+			value="https://cdn.pixabay.com/photo/2017/12/31/15/56/portrait-3052641_960_720.jpg" />
+		<property name="email" value="arturo@gmail.com" />
+		<property name="phone" value="+34(456)675336789" />
+		<property name="address" value="C/Calle Sierpes, 5" />
+		<property name="isSpammer" value="false" />
+		<property name="isBanned" value="false" />
+		<property name="polarityScore" value="0.0" />
+		<property name="userAccount" ref="userAccount12" />
+		<property name="title" value="San Arturo" />
+	</bean>
+	
+		<bean id="chapter2" class="domain.Chapter">
+
+		<property name="name" value="Maria" />
+		<property name="middleName" value="Debla" />
+		<property name="surname" value="Se" />
+		<property name="photo"
+			value="https://cdn.pixabay.com/photo/2019/02/11/20/20/woman-3990680_960_720.jpg" />
+		<property name="email" value="maria@gmail.com" />
+		<property name="phone" value="+34(456)675987789" />
+		<property name="address" value="C/Calle Arroyo, 5" />
+		<property name="isSpammer" value="false" />
+		<property name="isBanned" value="false" />
+		<property name="polarityScore" value="0.0" />
+		<property name="userAccount" ref="userAccount13" />
+		<property name="title" value="Eudaimonia" />
+	</bean>
+	
+		<bean id="chapter3" class="domain.Chapter">
+
+		<property name="name" value="Patricia" />
+		<property name="middleName" value="Sacais" />
+		<property name="surname" value="Sa" />
+		<property name="photo"
+			value="https://pixabay.com/es/photos/hijab-pa%C3%B1uelo-retrato-velo-mujer-3064633/" />
+		<property name="email" value="patricia@gmail.com" />
+		<property name="phone" value="+34(456)675330089" />
+		<property name="address" value="C/Calle Rafael Laffon, 35" />
+		<property name="isSpammer" value="false" />
+		<property name="isBanned" value="false" />
+		<property name="polarityScore" value="0.0" />
+		<property name="userAccount" ref="userAccount14" />
+		<property name="title" value="San Arturo" />
+	</bean>
+	
+	
+
 
 	<!-- SocialProfile -->
 	<bean id="socialProfile1" class="domain.SocialProfile">
@@ -1590,4 +1686,144 @@
 		</property>
 		<property name="systemName" value="Acme Madrugá" />
 	</bean>
+	
+	<bean id="history1" class="domain.History">
+		<property name="title" value="titlehistory" />
+		<property name="description" value="posmubien" />
+		<property name="photos" value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
+		<property name="brotherhood" ref="brotherhood1" />
+	</bean>
+	
+	<bean id="history2" class="domain.History">
+		<property name="title" value="titlehistory2" />
+		<property name="description" value="posmubieen" />
+		<property name="photos" value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
+		<property name="brotherhood" ref="brotherhood2" />
+	</bean>
+	
+	<bean id="history3" class="domain.History">
+		<property name="title" value="titlehistory3" />
+		<property name="description" value="posmubiien" />
+		<property name="photos" value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
+		<property name="brotherhood" ref="brotherhood3" />
+	</bean>
+	
+	
+	<bean id="miscellaneousRecord1" class="domain.MiscellaneousRecord">
+		<property name="title" value="titleevery" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+	</bean>
+	
+	<bean id="miscellaneousRecord2" class="domain.MiscellaneousRecord">
+		<property name="title" value="titleevery2" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+	</bean>
+	
+	<bean id="miscellaneousRecord3" class="domain.MiscellaneousRecord">
+		<property name="title" value="titleevery3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+	</bean>
+	
+	<bean id="inceptionRecord1" class="domain.InceptionRecord">
+		<property name="title" value="titleinception1" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+		<property name="photos" value="http:\\photo.com" />	
+	</bean>
+	
+	<bean id="inceptionRecord2" class="domain.InceptionRecord">
+		<property name="title" value="titleinception2" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+		<property name="photos" value="http:\\photo2.com" />	
+	</bean>
+	
+	<bean id="inceptionRecord3" class="domain.InceptionRecord">
+		<property name="title" value="titleinception3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+		<property name="photos" value="http:\\photo3.com" />	
+	</bean>
+	
+	<bean id="periodRecord1" class="domain.PeriodRecord">
+		<property name="title" value="titleinception3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+		<property name="startYear" value="2011" />
+		<property name="endYear" value="2019" />
+		<property name="photos" value="http:\\photo3.com" />	
+	</bean>
+	
+	<bean id="periodRecord2" class="domain.PeriodRecord">
+		<property name="title" value="titleperiod1" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+		<property name="startYear" value="2001" />
+		<property name="endYear" value="2012" />
+		<property name="photos" value="http:\\photo3.com" />	
+	</bean>
+	
+	<bean id="periodRecord3" class="domain.PeriodRecord">
+		<property name="title" value="titleperiod3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+		<property name="startYear" value="2003" />
+		<property name="endYear" value="2018" />
+		<property name="photos" value="http:\\photo3.com" />	
+	</bean>
+	
+	<bean id="legalRecord1" class="domain.LegalRecord">
+		<property name="title" value="titleperiod3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+		<property name="legalName" value="superlegal" />
+		<property name="VATnumber" value="12345" />
+		<property name="applicableLaws" value="superley1" />
+			
+	</bean>
+	
+	<bean id="legalRecord2" class="domain.LegalRecord">
+		<property name="title" value="titleplegal3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+		<property name="legalName" value="superlegall" />
+		<property name="VATnumber" value="12555" />
+		<property name="applicableLaws" value="superley2" />
+			
+	</bean>
+	
+	<bean id="legalRecord3" class="domain.LegalRecord">
+		<property name="title" value="titleplegal9" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+		<property name="legalName" value="superlegall" />
+		<property name="VATnumber" value="12055" />
+		<property name="applicableLaws" value="superley3" />
+			
+	</bean>
+	
+	<bean id="linkRecord1" class="domain.LinkRecord">
+		<property name="title" value="link9" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+		<property name="brotherhood" ref="brotherhood2" />		
+	</bean>
+	
+	<bean id="linkRecord2" class="domain.LinkRecord">
+		<property name="title" value="link2" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+		<property name="brotherhood" ref="brotherhood3" />		
+	</bean>
+	
+	<bean id="linkRecord3" class="domain.LinkRecord">
+		<property name="title" value="link3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+		<property name="brotherhood" ref="brotherhood1" />		
+	</bean>
+		
 </beans>

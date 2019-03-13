@@ -1686,4 +1686,144 @@
 		</property>
 		<property name="systemName" value="Acme Madrugá" />
 	</bean>
+	
+	<bean id="history1" class="domain.History">
+		<property name="title" value="titlehistory" />
+		<property name="description" value="posmubien" />
+		<property name="photos" value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
+		<property name="brotherhood" ref="brotherhood1" />
+	</bean>
+	
+	<bean id="history2" class="domain.History">
+		<property name="title" value="titlehistory2" />
+		<property name="description" value="posmubieen" />
+		<property name="photos" value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
+		<property name="brotherhood" ref="brotherhood2" />
+	</bean>
+	
+	<bean id="history3" class="domain.History">
+		<property name="title" value="titlehistory3" />
+		<property name="description" value="posmubiien" />
+		<property name="photos" value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
+		<property name="brotherhood" ref="brotherhood3" />
+	</bean>
+	
+	
+	<bean id="miscellaneousRecord1" class="domain.MiscellaneousRecord">
+		<property name="title" value="titleevery" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+	</bean>
+	
+	<bean id="miscellaneousRecord2" class="domain.MiscellaneousRecord">
+		<property name="title" value="titleevery2" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+	</bean>
+	
+	<bean id="miscellaneousRecord3" class="domain.MiscellaneousRecord">
+		<property name="title" value="titleevery3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+	</bean>
+	
+	<bean id="inceptionRecord1" class="domain.InceptionRecord">
+		<property name="title" value="titleinception1" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+		<property name="photos" value="http:\\photo.com" />	
+	</bean>
+	
+	<bean id="inceptionRecord2" class="domain.InceptionRecord">
+		<property name="title" value="titleinception2" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+		<property name="photos" value="http:\\photo2.com" />	
+	</bean>
+	
+	<bean id="inceptionRecord3" class="domain.InceptionRecord">
+		<property name="title" value="titleinception3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+		<property name="photos" value="http:\\photo3.com" />	
+	</bean>
+	
+	<bean id="periodRecord1" class="domain.PeriodRecord">
+		<property name="title" value="titleinception3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+		<property name="startYear" value="2011" />
+		<property name="endYear" value="2019" />
+		<property name="photos" value="http:\\photo3.com" />	
+	</bean>
+	
+	<bean id="periodRecord2" class="domain.PeriodRecord">
+		<property name="title" value="titleperiod1" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+		<property name="startYear" value="2001" />
+		<property name="endYear" value="2012" />
+		<property name="photos" value="http:\\photo3.com" />	
+	</bean>
+	
+	<bean id="periodRecord3" class="domain.PeriodRecord">
+		<property name="title" value="titleperiod3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+		<property name="startYear" value="2003" />
+		<property name="endYear" value="2018" />
+		<property name="photos" value="http:\\photo3.com" />	
+	</bean>
+	
+	<bean id="legalRecord1" class="domain.LegalRecord">
+		<property name="title" value="titleperiod3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+		<property name="legalName" value="superlegal" />
+		<property name="VATnumber" value="12345" />
+		<property name="applicableLaws" value="superley1" />
+			
+	</bean>
+	
+	<bean id="legalRecord2" class="domain.LegalRecord">
+		<property name="title" value="titleplegal3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+		<property name="legalName" value="superlegall" />
+		<property name="VATnumber" value="12555" />
+		<property name="applicableLaws" value="superley2" />
+			
+	</bean>
+	
+	<bean id="legalRecord3" class="domain.LegalRecord">
+		<property name="title" value="titleplegal9" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+		<property name="legalName" value="superlegall" />
+		<property name="VATnumber" value="12055" />
+		<property name="applicableLaws" value="superley3" />
+			
+	</bean>
+	
+	<bean id="linkRecord1" class="domain.LinkRecord">
+		<property name="title" value="link9" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history2" />
+		<property name="brotherhood" ref="brotherhood2" />		
+	</bean>
+	
+	<bean id="linkRecord2" class="domain.LinkRecord">
+		<property name="title" value="link2" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history1" />
+		<property name="brotherhood" ref="brotherhood3" />		
+	</bean>
+	
+	<bean id="linkRecord3" class="domain.LinkRecord">
+		<property name="title" value="link3" />
+		<property name="description" value="posmubien" />
+		<property name="history" ref="history3" />
+		<property name="brotherhood" ref="brotherhood1" />		
+	</bean>
+		
 </beans>

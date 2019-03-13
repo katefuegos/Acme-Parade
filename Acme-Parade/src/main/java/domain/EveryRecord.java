@@ -4,7 +4,7 @@ package domain;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -37,15 +37,11 @@ public class EveryRecord extends DomainEntity {
 
 
 	// Relationships ---------------------------------------------------------
-	private History				history;
-	private PeriodRecord		periodRecord;
-	private MiscellaneousRecord	miscellaneousRecord;
-	private LegalRecord			legalRecord;
-	private LinkRecord			linkRecord;
+	private History	history;
 
 
 	@Valid
-	@OneToOne()
+	@ManyToOne(optional = false)
 	public History getHistory() {
 		return this.history;
 	}
@@ -54,43 +50,4 @@ public class EveryRecord extends DomainEntity {
 		this.history = history;
 	}
 
-	@Valid
-	@OneToOne()
-	public PeriodRecord getPeriodRecord() {
-		return this.periodRecord;
-	}
-
-	public void setPeriodRecord(final PeriodRecord periodRecord) {
-		this.periodRecord = periodRecord;
-	}
-
-	@Valid
-	@OneToOne()
-	public MiscellaneousRecord getMiscellaneousRecord() {
-		return this.miscellaneousRecord;
-	}
-
-	public void setMiscellaneousRecord(final MiscellaneousRecord miscellaneousRecord) {
-		this.miscellaneousRecord = miscellaneousRecord;
-	}
-
-	@Valid
-	@OneToOne()
-	public LegalRecord getLegalRecord() {
-		return this.legalRecord;
-	}
-
-	public void setLegalRecord(final LegalRecord legalRecord) {
-		this.legalRecord = legalRecord;
-	}
-
-	@Valid
-	@OneToOne()
-	public LinkRecord getLinkRecord() {
-		return this.linkRecord;
-	}
-
-	public void setLinkRecord(final LinkRecord linkRecord) {
-		this.linkRecord = linkRecord;
-	}
 }
