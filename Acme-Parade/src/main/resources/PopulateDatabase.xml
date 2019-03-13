@@ -148,6 +148,45 @@
 			</list>
 		</property>
 	</bean>
+	
+		<bean id="userAccount12" class="security.UserAccount">
+		<property name="username" value="chapter1" />
+		<property name="password" value="178494d73a41f7d68e80f685324d3662" />
+		<property name="enabled" value="true" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CHAPTER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+		<bean id="userAccount13" class="security.UserAccount">
+		<property name="username" value="chapter2" />
+		<property name="password" value="07a29f2348d728fad16c5260823f93ef" />
+		<property name="enabled" value="true" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CHAPTER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+		<bean id="userAccount14" class="security.UserAccount">
+		<property name="username" value="chapter3" />
+		<property name="password" value="4cf7b4e4bb6d429f0f08bc498e397d81" />
+		<property name="enabled" value="true" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CHAPTER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
 
 
 	<!-- Other domain beans come here -->
@@ -329,6 +368,63 @@
 		<property name="pictures" value="https://profile.es/" />
 		<property name="area" ref="area1" />
 	</bean>
+
+
+<!-- CHAPTER -->
+
+	<bean id="chapter1" class="domain.Chapter">
+
+		<property name="name" value="Arturo" />
+		<property name="middleName" value="Diva" />
+		<property name="surname" value="Sa" />
+		<property name="photo"
+			value="https://cdn.pixabay.com/photo/2017/12/31/15/56/portrait-3052641_960_720.jpg" />
+		<property name="email" value="arturo@gmail.com" />
+		<property name="phone" value="+34(456)675336789" />
+		<property name="address" value="C/Calle Sierpes, 5" />
+		<property name="isSpammer" value="false" />
+		<property name="isBanned" value="false" />
+		<property name="polarityScore" value="0.0" />
+		<property name="userAccount" ref="userAccount12" />
+		<property name="title" value="San Arturo" />
+	</bean>
+	
+		<bean id="chapter2" class="domain.Chapter">
+
+		<property name="name" value="Maria" />
+		<property name="middleName" value="Debla" />
+		<property name="surname" value="Se" />
+		<property name="photo"
+			value="https://cdn.pixabay.com/photo/2019/02/11/20/20/woman-3990680_960_720.jpg" />
+		<property name="email" value="maria@gmail.com" />
+		<property name="phone" value="+34(456)675987789" />
+		<property name="address" value="C/Calle Arroyo, 5" />
+		<property name="isSpammer" value="false" />
+		<property name="isBanned" value="false" />
+		<property name="polarityScore" value="0.0" />
+		<property name="userAccount" ref="userAccount13" />
+		<property name="title" value="Eudaimonia" />
+	</bean>
+	
+		<bean id="chapter3" class="domain.Chapter">
+
+		<property name="name" value="Patricia" />
+		<property name="middleName" value="Sacais" />
+		<property name="surname" value="Sa" />
+		<property name="photo"
+			value="https://pixabay.com/es/photos/hijab-pa%C3%B1uelo-retrato-velo-mujer-3064633/" />
+		<property name="email" value="patricia@gmail.com" />
+		<property name="phone" value="+34(456)675330089" />
+		<property name="address" value="C/Calle Rafael Laffon, 35" />
+		<property name="isSpammer" value="false" />
+		<property name="isBanned" value="false" />
+		<property name="polarityScore" value="0.0" />
+		<property name="userAccount" ref="userAccount14" />
+		<property name="title" value="San Arturo" />
+	</bean>
+	
+	
+
 
 	<!-- SocialProfile -->
 	<bean id="socialProfile1" class="domain.SocialProfile">
