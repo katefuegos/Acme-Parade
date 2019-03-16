@@ -14,8 +14,8 @@
 <display:table name="requestsApproved" id="row"
 	requestURI="${requestURI}" pagesize="5" class="displaytag">
 
-	<display:column property="procession.title" class="${'GREEN'}"
-		titleKey="request.procession" />
+	<display:column property="parade.title" class="${'GREEN'}"
+		titleKey="request.parade" />
 
 	<display:column property="roow" titleKey="request.row" />
 
@@ -29,8 +29,8 @@
 <display:table name="requestsRejected" id="row"
 	requestURI="${requestURI}" pagesize="5" class="displaytag">
 
-	<display:column property="procession.title" class="${'ORANGE'}"
-		titleKey="request.procession" />
+	<display:column property="parade.title" class="${'ORANGE'}"
+		titleKey="request.parade" />
 
 	<display:column property="reasonReject" titleKey="request.reasonReject" />
 
@@ -42,8 +42,8 @@
 <display:table name="requestsPending" id="row"
 	requestURI="${requestURI}" pagesize="5" class="displaytag">
 
-	<display:column property="procession.title" class="${'GREY'}"
-		titleKey="request.procession" />
+	<display:column property="parade.title" class="${'GREY'}"
+		titleKey="request.parade" />
 
 	<display:column>
 		<a href="request/member/delete.do?requestId=${row.id}"> <spring:message
@@ -53,16 +53,16 @@
 </display:table>
 <br>
 <br>
-<spring:message code="request.processionsNot" />:
+<spring:message code="request.paradesNot" />:
 <br>
-<display:table name="processions" id="row" requestURI="${requestURI}"
+<display:table name="parades" id="row" requestURI="${requestURI}"
 	pagesize="5" class="displaytag">
 
 	<display:column property="title"
-		titleKey="request.procession" />
+		titleKey="request.parade" />
 
 	<display:column>
-		<a href="request/member/request.do?processionId=${row.id}"> <spring:message
+		<a href="request/member/request.do?paradeId=${row.id}"> <spring:message
 				code="request.request" />
 		</a>
 	</display:column>

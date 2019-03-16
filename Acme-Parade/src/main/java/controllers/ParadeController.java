@@ -44,7 +44,7 @@ public class ParadeController extends AbstractController {
 		try {
 			Assert.notNull(brotherhoodService.findOne(brotherhoodId));
 			final Collection<Parade> parades = paradeService
-					.findByBrotherhoodIdAndNotDraft(brotherhoodId);
+					.findByBrotherhoodIdAndNotDraftAndAccepted(brotherhoodId);
 			result = new ModelAndView("parade/list");
 			result.addObject("parades", parades);
 			result.addObject("requestURI", "parade/list.do?brotherhoodId="

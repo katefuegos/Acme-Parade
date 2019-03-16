@@ -16,7 +16,7 @@
 	<form:hidden path="id" />
 	<form:hidden path="version" />
 	<form:hidden path="lastUpdate" />
-	<form:hidden path="processions" />
+	<form:hidden path="parades" />
 
 
 	<acme:textbox code="finder.keyword" path="keyword"/>

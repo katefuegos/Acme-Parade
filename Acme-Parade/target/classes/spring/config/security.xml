@@ -236,6 +236,9 @@
 
 		<security:intercept-url pattern="/actor/registerMember.do"
 			access="isAnonymous()" />
+			
+		<security:intercept-url pattern="/actor/registerChapter.do"
+			access="isAnonymous()" />
 
 		<security:intercept-url pattern="/actor/registerAdmin.do"
 			access="hasRole('ADMIN')" />

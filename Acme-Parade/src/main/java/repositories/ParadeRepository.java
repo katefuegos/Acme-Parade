@@ -20,6 +20,12 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 	
 	@Query("select p from Parade p where ?1 member of p.floats")
 	Collection<Parade> findByFloaat(Floaat floaat);
-
+	
+	@Query("select p from Parade p where p.draftMode = false and p.brotherhood.id =?1 and p.status='ACCEPTED'")
+	Collection<Parade> findByBrotherhoodIdAndNotDraftAndAccepted(int brotherhoodId);
+	
+	@Query("select p from Parade p where p.draftMode = false and p.status='ACCEPTED'")
+	Collection<Parade> findAccepted();
+	
 
 }

@@ -100,11 +100,9 @@ public class ParadeService {
 		return new String(text);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndNotDraft(
-			int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndNotDraft(int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository
-				.findByBrotherhoodIdAndNotDraft(brotherhoodId);
+		return paradeRepository.findByBrotherhoodIdAndNotDraft(brotherhoodId);
 	}
 
 	public Collection<Parade> findByBrotherhoodId(int brotherhoodId) {
@@ -116,4 +114,16 @@ public class ParadeService {
 		Assert.notNull(floaat);
 		return paradeRepository.findByFloaat(floaat);
 	}
+
+	public Collection<Parade> findByBrotherhoodIdAndNotDraftAndAccepted(
+			int brotherhoodId) {
+		Assert.notNull(brotherhoodId);
+		return paradeRepository
+				.findByBrotherhoodIdAndNotDraftAndAccepted(brotherhoodId);
+	}
+
+	public Collection<Parade> findAccepted() {
+		return paradeRepository.findAccepted();
+	}
+
 }
