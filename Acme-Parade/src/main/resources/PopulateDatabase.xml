@@ -1363,12 +1363,14 @@
 		<property name="name" value="Sevilla Este" />
 		<property name="pictures"
 			value="http://2.bp.blogspot.com/--QxfoXHpdJg/UU3QwoXUSxI/AAAAAAAABDg/zOn8azdv-ik/s1600/mapa+cautivo.jpg" />
+		<property name="chapter" ref="chapter3" />
 	</bean>
 
 	<bean id="area2" class="domain.Area">
 		<property name="name" value="La Palmera" />
 		<property name="pictures"
 			value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
+			<property name="chapter" ref="chapter2" />
 	</bean>
 
 
@@ -1376,6 +1378,7 @@
 		<property name="name" value="Parque alcosa" />
 		<property name="pictures"
 			value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
+			
 	</bean>
 
 

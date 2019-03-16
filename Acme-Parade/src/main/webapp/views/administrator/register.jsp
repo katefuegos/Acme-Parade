@@ -62,6 +62,6 @@
 	<br />
 
 	<acme:submit name="save" code="actor.save"/>
-	<acme:cancel url="welcom/index.do" code="message.cancel"/>
+	<acme:cancel url="welcome/index.do" code="message.cancel"/>
 
 </form:form>

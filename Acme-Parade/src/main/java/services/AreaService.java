@@ -76,4 +76,10 @@ public class AreaService {
 	}
 	// Other Methods--------------------------------------------
 
+	public Collection<domain.Area> findAreasNotAssigned() {
+		final Collection<domain.Area> areas = this.areaRepository.findAreasNotAssigned();
+
+		return areas;
+	}
+
 }

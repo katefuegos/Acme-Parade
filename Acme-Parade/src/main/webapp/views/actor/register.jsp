@@ -28,26 +28,32 @@
 	<form:hidden path="auth" />
 
 
-	<acme:textbox code="actor.userAccount.username" path="userAccount.username"/>
-	<acme:password code="actor.userAccount.password" path="userAccount.password"/>
-	<acme:textbox code="actor.name" path="name"/>
-	<acme:textbox code="actor.middleName" path="middleName"/>
-	<acme:textbox code="actor.surname" path="surname"/>
-	<acme:textbox code="actor.photo" path="photo"/>
-	<acme:textbox code="actor.email" path="email"/>
-	<acme:textbox code="actor.phone" path="phone"/>
-	<acme:textbox code="actor.address" path="address"/>
-	
-	<jstl:if test="${actorForm.auth != 'BROTHERHOOD'}">
+	<acme:textbox code="actor.userAccount.username"
+		path="userAccount.username" />
+	<acme:password code="actor.userAccount.password"
+		path="userAccount.password" />
+	<acme:textbox code="actor.name" path="name" />
+	<acme:textbox code="actor.middleName" path="middleName" />
+	<acme:textbox code="actor.surname" path="surname" />
+	<acme:textbox code="actor.photo" path="photo" />
+	<acme:textbox code="actor.email" path="email" />
+	<acme:textbox code="actor.phone" path="phone" />
+	<acme:textbox code="actor.address" path="address" />
+
+	<jstl:if
+		test="${actorForm.auth != 'BROTHERHOOD' && actorForm.auth != 'CHAPTER'}">
 		<form:hidden path="title" />
 		<form:hidden path="pictures" />
 		<form:hidden path="area" />
 	</jstl:if>
-	<jstl:if test="${actorForm.auth == 'BROTHERHOOD'}">
 
-		
-		<acme:textbox code="actor.title" path="title"/>
-		<acme:textarea code="actor.pictures" path="pictures"/>
+	<jstl:if test="${actorForm.auth == 'CHAPTER' }">
+		<form:hidden path="pictures" />
+	</jstl:if>
+	<jstl:if
+		test="${actorForm.auth == 'BROTHERHOOD' || actorForm.auth == 'CHAPTER' }">
+
+		<acme:textbox code="actor.title" path="title" />
 		<form:label path="area">
 			<spring:message code="actor.area" />:
 			</form:label>
@@ -57,6 +63,10 @@
 		<form:errors cssClass="error" path="area" />
 		<br>
 	</jstl:if>
+	<jstl:if test="${actorForm.auth == 'BROTHERHOOD' }">
+		<acme:textarea code="actor.pictures" path="pictures" />
+	</jstl:if>
+
 
 	<form:label path="checkTerms">
 		<spring:message code="actor.check" />
@@ -82,7 +92,14 @@
 		}
 	</script>
 
-	<acme:submit name="save" code="actor.save"/>
-	<acme:cancel url="welcom/index.do" code="message.cancel"/>
+<jstl:if test="${ !(empty areas)}">
+	<acme:submit name="save" code="actor.save" />
+
+</jstl:if>
+
+	<acme:cancel url="welcome/index.do" code="message.cancel" />
 
 </form:form>
+<jstl:if test="${ (empty areas)}">
+<span class="message"><spring:message code="actor.chapter.error.area" /></span>
+</jstl:if>

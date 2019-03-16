@@ -110,6 +110,10 @@
 
 					<li><a href="register/actor.do?authority=BROTHERHOOD"><spring:message
 								code="master.page.register.brotherhood" /></a></li>
+					
+					<li><a href="register/actor.do?authority=CHAPTER"><spring:message
+								code="master.page.register" /></a></li>			
+								
 					<security:authorize access="hasRole('ADMIN')">
 						<li><a
 							href="register/administrator/newActor.do?authority=ADMIN"><spring:message

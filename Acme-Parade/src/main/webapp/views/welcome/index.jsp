@@ -26,3 +26,7 @@
 		<spring:message code="welcome.greeting.current.time" />
 	${moment}</jstl:if>
 </p>
+<jstl:if test="${message != null}">
+	<br />
+	<span class="message"><spring:message code="${oops}" /></span>
+</jstl:if>

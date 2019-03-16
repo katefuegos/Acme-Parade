@@ -1,8 +1,11 @@
+
 package domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
@@ -12,26 +15,42 @@ import org.hibernate.validator.constraints.URL;
 public class Area extends DomainEntity {
 
 	// ATRIBUTOS
-	private String name;
-	private String pictures;
+	private String	name;
+	private String	pictures;
+
 
 	@NotBlank
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
 	@URL
 	public String getPictures() {
-		return pictures;
+		return this.pictures;
 	}
 
-	public void setPictures(String pictures) {
+	public void setPictures(final String pictures) {
 		this.pictures = pictures;
 	}
 
+
 	// Relationships ---------------------------------------------------------
+
+	private Chapter	chapter;
+
+
+	@Valid
+	@OneToOne()
+	public Chapter getChapter() {
+		return this.chapter;
+	}
+
+	public void setChapter(final Chapter chapter) {
+		this.chapter = chapter;
+	}
+
 }

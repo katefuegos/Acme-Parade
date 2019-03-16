@@ -31,13 +31,14 @@ public class RegisterController extends AbstractController {
 	// Services-----------------------------------------------------------
 
 	@Autowired
-	private ActorService	actorService;
+	private ActorService			actorService;
 
 	@Autowired
-	private AreaService		areaService;
+	private AreaService				areaService;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ConfigurationService	configurationService;
+
 
 	// Constructor---------------------------------------------------------
 
@@ -67,12 +68,18 @@ public class RegisterController extends AbstractController {
 				actorForm.setArea(this.areaService.findAll().iterator().next());
 
 				break;
-			//			case "ADMIN":
-			//				actor = this.actorService.create("ADMIN");
-			//				break;
+
+			case "CHAPTER":
+				//actor = this.actorService.create("MEMBER");
+				a.setAuthority(Authority.CHAPTER);
+				actorForm.setAuth("CHAPTER");
+				actorForm.setPictures("http://www.pictures.com");
+
+				break;
 			default:
 				throw new NullPointerException();
 			}
+
 			authorities.add(a);
 			userAccount.setAuthorities(authorities);
 			userAccount.setEnabled(true);
@@ -95,6 +102,11 @@ public class RegisterController extends AbstractController {
 			result = this.createEditModelAndView(actorForm);
 		else
 			try {
+				final Collection<domain.Area> areas = this.areaService.findAreasNotAssigned();
+
+				Assert.notNull(areas, "actor.chapter.error.area");
+				Assert.isTrue(!areas.isEmpty(), "actor.chapter.error.area");
+
 				Assert.isTrue(actorForm.getCheckTerms(), "actor.check.true");
 				if (actorForm.getAuth() == "BROTHERHOOD")
 					Assert.notNull(actorForm.getArea(), "actor.area.notNull");
@@ -112,6 +124,8 @@ public class RegisterController extends AbstractController {
 					result = this.createEditModelAndView(actorForm, oops.getMessage());
 				else if (oops.getMessage() == "actor.area.notNull")
 					result = this.createEditModelAndView(actorForm, oops.getMessage());
+				else if (oops.getMessage() == "actor.chapter.error.area")
+					result = this.createEditModelAndView(actorForm, "actor.chapter.error.area");
 				else
 					result = this.createEditModelAndView(actorForm, "message.commit.error");
 
@@ -137,20 +151,25 @@ public class RegisterController extends AbstractController {
 		brotherhood.setAuthority("BROTHERHOOD");
 		final Authority member = new Authority();
 		member.setAuthority("MEMBER");
+		final Authority chapter = new Authority();
+		chapter.setAuthority("CHAPTER");
 		//		final Authority admin = new Authority();
 		//		admin.setAuthority("ADMIN");
 
-		if (authorities.contains(brotherhood))
+		if (authorities.contains(brotherhood)) {
 			result = new ModelAndView("register/brotherhood");
-		else if (authorities.contains(member))
+			result.addObject("areas", this.areaService.findAll());
+		} else if (authorities.contains(member))
 			result = new ModelAndView("register/member");
-		//		else if (authorities.contains(admin))
-		//			result = new ModelAndView("register/admin");
-		else
+		else if (authorities.contains(chapter)) {
+			result = new ModelAndView("register/chapter");
+			result.addObject("areas", this.areaService.findAreasNotAssigned());
+
+		} else
 			throw new NullPointerException();
 
 		result.addObject("actorForm", actorForm);
-		result.addObject("areas", this.areaService.findAll());
+
 		result.addObject("message", message);
 		result.addObject("isRead", false);
 		result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());

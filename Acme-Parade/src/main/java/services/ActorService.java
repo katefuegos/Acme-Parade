@@ -50,6 +50,12 @@ public class ActorService {
 	private BrotherhoodService		brotherhoodService;
 
 	@Autowired
+	private ChapterService			chapterService;
+
+	@Autowired
+	private AreaService				areaService;
+
+	@Autowired
 	private AdministratorService	administratorService;
 
 
@@ -238,6 +244,8 @@ public class ActorService {
 		member.setAuthority(Authority.MEMBER);
 		final Authority brotherhood = new Authority();
 		brotherhood.setAuthority(Authority.BROTHERHOOD);
+		final Authority chapter = new Authority();
+		chapter.setAuthority(Authority.CHAPTER);
 
 		final Authority admin = new Authority();
 		admin.setAuthority(Authority.ADMIN);
@@ -290,6 +298,34 @@ public class ActorService {
 
 			final Actor actor1 = this.brotherhoodService.save(brother);
 			this.boxService.addSystemBox(actor1);
+
+		} else if (authorities.contains(chapter)) {
+			domain.Chapter chapterr = null;
+			if (actorform.getId() != 0)
+				chapterr = this.chapterService.findOne(actorform.getId());
+			else {
+				chapterr = this.chapterService.create();
+				chapterr.setUserAccount(actorform.getUserAccount());
+
+			}
+
+			chapterr.setId(actorform.getId());
+			chapterr.setVersion(actorform.getVersion());
+			chapterr.setName(actorform.getName());
+			chapterr.setSurname(actorform.getSurname());
+			chapterr.setMiddleName(actorform.getMiddleName());
+			chapterr.setAddress(actorform.getAddress());
+			chapterr.setEmail(actorform.getEmail());
+			chapterr.setPhone(actorform.getPhone());
+			chapterr.setPhoto(actorform.getPhoto());
+
+			chapterr.setTitle(actorform.getTitle());
+
+			final domain.Chapter actor1 = this.chapterService.save(chapterr);
+			this.boxService.addSystemBox(actor1);
+			final domain.Area area = actorform.getArea();
+			area.setChapter(actor1);
+			this.areaService.save(area);
 
 		} else if (authorities.contains(admin)) {
 			Administrator administrator = null;
