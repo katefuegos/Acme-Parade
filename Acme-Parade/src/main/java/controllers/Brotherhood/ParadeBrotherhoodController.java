@@ -51,10 +51,20 @@ public class ParadeBrotherhoodController extends AbstractController {
 			Integer brotherhoodId = brotherhoodService.findByUserAccountId(
 					LoginService.getPrincipal().getId()).getId();
 			Assert.notNull(brotherhoodService.findOne(brotherhoodId));
-			final Collection<Parade> parades = paradeService
-					.findByBrotherhoodId(brotherhoodId);
+			final Collection<Parade> paradesAccepted = paradeService
+					.findByBrotherhoodIdAndAccepted(brotherhoodId);
+			final Collection<Parade> paradesRejected = paradeService
+					.findByBrotherhoodIdAndRejected(brotherhoodId);
+			final Collection<Parade> paradesSubmitted = paradeService
+					.findByBrotherhoodIdAndSubmitted(brotherhoodId);
+			final Collection<Parade> paradesPending = paradeService
+					.findByBrotherhoodIdAndPending(brotherhoodId);
+			
 			result = new ModelAndView("parade/list2");
-			result.addObject("parades", parades);
+			result.addObject("paradesAccepted", paradesAccepted);
+			result.addObject("paradesRejected", paradesRejected);
+			result.addObject("paradesSubmitted", paradesSubmitted);
+			result.addObject("paradesPending", paradesPending);
 			result.addObject("requestURI",
 					"parade/brotherhood/list.do?brotherhoodId="
 							+ brotherhoodId);
@@ -62,6 +72,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 					.iterator().next().getBanner());
 			result.addObject("systemName", this.configurationService.findAll()
 					.iterator().next().getSystemName());
+			
 		} catch (final Throwable e) {
 			result = new ModelAndView("redirect:/");
 		}

@@ -9,8 +9,9 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
-
-<display:table name="parades" id="row" requestURI="${requestURI}"
+<spring:message code="parade.accepted" />
+<br>
+<display:table name="paradesAccepted" id="row" requestURI="${requestURI}"
 	pagesize="5" class="displaytag">
 
 	<display:column property="ticker" titleKey="parade.ticker" />
@@ -18,6 +19,80 @@
 	<display:column property="title" titleKey="parade.title" />
 
 	<display:column property="moment" titleKey="parade.moment" />
+	
+	<display:column property="status" titleKey="parade.status" />
+
+	<security:authorize access="hasRole('BROTHERHOOD')">
+		<display:column>
+				<a href="parade/brotherhood/show.do?paradeId=${row.id}">
+					<spring:message code="parade.show" />
+				</a>
+		</display:column>
+	</security:authorize>
+
+</display:table>
+<br>
+<br>
+<spring:message code="parade.rejected" />
+<br>
+<display:table name="paradesRejected" id="row" requestURI="${requestURI}"
+	pagesize="5" class="displaytag">
+
+	<display:column property="ticker" titleKey="parade.ticker" />
+
+	<display:column property="title" titleKey="parade.title" />
+
+	<display:column property="moment" titleKey="parade.moment" />
+	
+	<display:column property="status" titleKey="parade.status" />
+
+	<security:authorize access="hasRole('BROTHERHOOD')">
+		<display:column>
+				<a href="parade/brotherhood/show.do?paradeId=${row.id}">
+					<spring:message code="parade.show" />
+				</a>
+		</display:column>
+	</security:authorize>
+
+</display:table>
+<br>
+<br>
+<spring:message code="parade.submitted" />
+<br>
+<display:table name="paradesSubmitted" id="row" requestURI="${requestURI}"
+	pagesize="5" class="displaytag">
+
+	<display:column property="ticker" titleKey="parade.ticker" />
+
+	<display:column property="title" titleKey="parade.title" />
+
+	<display:column property="moment" titleKey="parade.moment" />
+	
+	<display:column property="status" titleKey="parade.status" />
+
+	<security:authorize access="hasRole('BROTHERHOOD')">
+		<display:column>
+				<a href="parade/brotherhood/show.do?paradeId=${row.id}">
+					<spring:message code="parade.show" />
+				</a>
+		</display:column>
+	</security:authorize>
+
+</display:table>
+<br>
+<br>
+<spring:message code="parade.pending" />
+<br>
+<display:table name="paradesPending" id="row" requestURI="${requestURI}"
+	pagesize="5" class="displaytag">
+
+	<display:column property="ticker" titleKey="parade.ticker" />
+
+	<display:column property="title" titleKey="parade.title" />
+
+	<display:column property="moment" titleKey="parade.moment" />
+	
+	<display:column property="status" titleKey="parade.status" />
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 		<display:column>
@@ -35,6 +110,7 @@
 	</security:authorize>
 
 </display:table>
+<br>
 <br>
 <a href="parade/brotherhood/create.do"> <spring:message
 		code="parade.create" />
