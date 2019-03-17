@@ -74,4 +74,9 @@ public class PathService {
 	}
 
 	// Other Methods--------------------------------------------
+	
+	public Path findByParadeId(int paradeId){
+		Assert.notNull(paradeId);
+		return pathRepository.findByParadeId(paradeId);
+	}
 }

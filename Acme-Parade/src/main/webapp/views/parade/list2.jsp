@@ -11,22 +11,27 @@
 
 <spring:message code="parade.accepted" />
 <br>
-<display:table name="paradesAccepted" id="row" requestURI="${requestURI}"
-	pagesize="5" class="displaytag">
+<display:table name="paradesAccepted" id="row"
+	requestURI="${requestURI}" pagesize="5" class="displaytag">
 
 	<display:column property="ticker" titleKey="parade.ticker" />
 
 	<display:column property="title" titleKey="parade.title" />
 
 	<display:column property="moment" titleKey="parade.moment" />
-	
-	<display:column property="status" titleKey="parade.status" />
+
+	<display:column property="status" class="${'GREEN'}" titleKey="parade.status" />
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 		<display:column>
-				<a href="parade/brotherhood/show.do?paradeId=${row.id}">
-					<spring:message code="parade.show" />
-				</a>
+			<a href="parade/brotherhood/show.do?paradeId=${row.id}"> <spring:message
+					code="parade.show" />
+			</a>
+		</display:column>
+		<display:column>
+			<a href="parade/brotherhood/copy.do?paradeId=${row.id}"> <spring:message
+					code="parade.copy" />
+			</a>
 		</display:column>
 	</security:authorize>
 
@@ -35,22 +40,27 @@
 <br>
 <spring:message code="parade.rejected" />
 <br>
-<display:table name="paradesRejected" id="row" requestURI="${requestURI}"
-	pagesize="5" class="displaytag">
+<display:table name="paradesRejected" id="row"
+	requestURI="${requestURI}" pagesize="5" class="displaytag">
 
 	<display:column property="ticker" titleKey="parade.ticker" />
 
 	<display:column property="title" titleKey="parade.title" />
 
 	<display:column property="moment" titleKey="parade.moment" />
-	
-	<display:column property="status" titleKey="parade.status" />
+
+	<display:column property="status" class="${'RED'}" titleKey="parade.status" />
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 		<display:column>
-				<a href="parade/brotherhood/show.do?paradeId=${row.id}">
-					<spring:message code="parade.show" />
-				</a>
+			<a href="parade/brotherhood/show.do?paradeId=${row.id}"> <spring:message
+					code="parade.show" />
+			</a>
+		</display:column>
+		<display:column>
+			<a href="parade/brotherhood/copy.do?paradeId=${row.id}"> <spring:message
+					code="parade.copy" />
+			</a>
 		</display:column>
 	</security:authorize>
 
@@ -59,22 +69,27 @@
 <br>
 <spring:message code="parade.submitted" />
 <br>
-<display:table name="paradesSubmitted" id="row" requestURI="${requestURI}"
-	pagesize="5" class="displaytag">
+<display:table name="paradesSubmitted" id="row"
+	requestURI="${requestURI}" pagesize="5" class="displaytag">
 
 	<display:column property="ticker" titleKey="parade.ticker" />
 
 	<display:column property="title" titleKey="parade.title" />
 
 	<display:column property="moment" titleKey="parade.moment" />
-	
-	<display:column property="status" titleKey="parade.status" />
+
+	<display:column property="status" class="${'GREY'}" titleKey="parade.status" />
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 		<display:column>
-				<a href="parade/brotherhood/show.do?paradeId=${row.id}">
-					<spring:message code="parade.show" />
-				</a>
+			<a href="parade/brotherhood/show.do?paradeId=${row.id}"> <spring:message
+					code="parade.show" />
+			</a>
+		</display:column>
+		<display:column>
+			<a href="parade/brotherhood/copy.do?paradeId=${row.id}"> <spring:message
+					code="parade.copy" />
+			</a>
 		</display:column>
 	</security:authorize>
 
@@ -91,21 +106,26 @@
 	<display:column property="title" titleKey="parade.title" />
 
 	<display:column property="moment" titleKey="parade.moment" />
-	
+
 	<display:column property="status" titleKey="parade.status" />
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 		<display:column>
 			<jstl:if test="${row.draftMode == true}">
-				<a href="parade/brotherhood/edit.do?paradeId=${row.id}">
-					<spring:message code="parade.edit" />
+				<a href="parade/brotherhood/edit.do?paradeId=${row.id}"> <spring:message
+						code="parade.edit" />
 				</a>
 			</jstl:if>
 		</display:column>
 		<display:column>
-				<a href="parade/brotherhood/show.do?paradeId=${row.id}">
-					<spring:message code="parade.show" />
-				</a>
+			<a href="parade/brotherhood/show.do?paradeId=${row.id}"> <spring:message
+					code="parade.show" />
+			</a>
+		</display:column>
+		<display:column>
+			<a href="parade/brotherhood/copy.do?paradeId=${row.id}"> <spring:message
+					code="parade.copy" />
+			</a>
 		</display:column>
 	</security:authorize>
 
