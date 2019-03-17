@@ -41,7 +41,8 @@
 						code="master.page.administrator" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a class="fNiv" href="dashboard/administrator/dashboard.do"><spring:message
+					<li><a class="fNiv"
+						href="dashboard/administrator/dashboard.do"><spring:message
 								code="master.page.administrator.dashboard" /></a> <br></li>
 					<li><a href="area/list.do"><spring:message
 								code="master.page.administrator.areas" /></a></li>
@@ -67,7 +68,7 @@
 								code="master.page.register.admin" /></a></li>
 
 				</ul></li>
-			
+
 		</security:authorize>
 
 		<security:authorize access="isAuthenticated()">
@@ -110,10 +111,10 @@
 
 					<li><a href="register/actor.do?authority=BROTHERHOOD"><spring:message
 								code="master.page.register.brotherhood" /></a></li>
-					
+
 					<li><a href="register/actor.do?authority=CHAPTER"><spring:message
-								code="master.page.register" /></a></li>			
-								
+								code="master.page.register" /></a></li>
+
 					<security:authorize access="hasRole('ADMIN')">
 						<li><a
 							href="register/administrator/newActor.do?authority=ADMIN"><spring:message
@@ -129,12 +130,15 @@
 		<security:authorize access="hasRole('BROTHERHOOD')">
 			<li><a class="fNiv" href="parade/brotherhood/list.do"><spring:message
 						code="master.page.myParades" /></a></li>
+			<li><a class="fNiv" href="path/brotherhood/list.do"><spring:message
+						code="master.page.paths" /></a></li>
 			<li><a class="fNiv" href="float/brotherhood/list.do"><spring:message
 						code="master.page.floats" /></a></li>
 			<li><a class="fNiv" href="request/brotherhood/list.do"><spring:message
 						code="master.page.request" /></a></li>
 			<li><a class="fNiv" href="enrolment/brotherhood/list.do"><spring:message
 						code="master.page.enrolment" /></a></li>
+
 		</security:authorize>
 
 		<security:authorize access="hasRole('MEMBER')">

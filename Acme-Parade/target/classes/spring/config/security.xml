@@ -280,6 +280,12 @@
 		<security:intercept-url pattern="/configuration/administrator/show.do"
 			access="hasRole('ADMIN')" />
 
+		<!-- PATH -->
+		<security:intercept-url pattern="/path/brotherhood/list.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/path/brotherhood/create.do"
+			access="hasRole('BROTHERHOOD')" />
+
 		<!-- OTHERS -->
 		<security:intercept-url pattern="/welcome/terms.do"
 			access="permitAll" />

@@ -79,4 +79,9 @@ public class PathService {
 		Assert.notNull(paradeId);
 		return pathRepository.findByParadeId(paradeId);
 	}
+	
+	public Collection<Path> findByBrotherhoodId(int brotherhoodId){
+		Assert.notNull(brotherhoodId);
+		return pathRepository.findByBrotherhoodId(brotherhoodId);
+	}
 }
