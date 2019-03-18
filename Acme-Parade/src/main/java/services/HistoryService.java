@@ -71,4 +71,11 @@ public class HistoryService {
 		this.historyRepository.delete(history);
 	}
 
+	//-----------Other ----------
+
+	public Collection<History> findByBrotherhoodId(final int brotherhoodId) {
+		Assert.notNull(brotherhoodId);
+		return this.historyRepository.findByBrotherhoodId(brotherhoodId);
+	}
+
 }

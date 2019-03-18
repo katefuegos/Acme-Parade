@@ -61,6 +61,9 @@
 		<bean class="converters.SegmentToStringConverter" />
 		<bean class="converters.StringToSegmentConverter" />
 		
+		<bean class="converters.HistoryToStringConverter" />
+		<bean class="converters.StringToHistoryConverter" />
+		
 	</util:list>
 
 </beans>

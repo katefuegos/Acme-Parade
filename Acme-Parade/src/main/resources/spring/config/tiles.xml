@@ -35,6 +35,7 @@
 		<value>/views/area/tiles.xml</value>
 		<value>/views/path/tiles.xml</value>
 		<value>/views/segment/tiles.xml</value>
+		<value>/views/history/tiles.xml</value>
 
 	</util:list>
 

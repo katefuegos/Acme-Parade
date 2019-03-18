@@ -291,6 +291,9 @@
 			access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/path/brotherhood/create.do"
 			access="hasRole('BROTHERHOOD')" />
+					
+		<security:intercept-url pattern="/history/list.do"
+			access="permitAll" />
 
 		<!-- OTHERS -->
 		<security:intercept-url pattern="/welcome/terms.do"
