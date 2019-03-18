@@ -62,10 +62,12 @@ public class ParadeService {
 
 	public Parade save(final Parade parade) {
 		Assert.notNull(parade);
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("BROTHERHOOD"), "SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PROCESSION");
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("BROTHERHOOD"), "SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PARADE");
+
 		if (parade.isDraftMode() == false)
 			parade.setStatus("SUBMITTED");
 		final Parade saved = this.paradeRepository.save(parade);
+
 		return saved;
 	}
 
@@ -74,6 +76,15 @@ public class ParadeService {
 	}
 
 	// Other Methods--------------------------------------------
+
+	public Parade changeStatus(final Parade parade) {
+		Assert.notNull(parade, "chapter.parade.error.null");
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("CHAPTER"), "chapter.parade.error.noChapter");
+		Assert.isTrue(parade.isDraftMode() == false, "chapter.parade.error.DraftMode");
+
+		final Parade saved = this.paradeRepository.save(parade);
+		return saved;
+	}
 
 	@SuppressWarnings("deprecation")
 	public String generateTicker() {

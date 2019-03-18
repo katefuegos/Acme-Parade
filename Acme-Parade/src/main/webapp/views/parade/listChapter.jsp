@@ -22,29 +22,34 @@
 	<jstl:if test="${row.status == 'ACCEPTED' }">
 		<display:column property="status" class="${'GREEN'}"
 			titleKey="parade.status" />
+		<display:column property="reasonReject" titleKey="request.reasonReject" />
 		<display:column>
-			&nbsp;
-	</display:column>
+		
+		</display:column>
 	</jstl:if>
 	<jstl:if test="${row.status == 'REJECTED' }">
 		<display:column property="status" class="${'RED'}"
 			titleKey="parade.status" />
+		<display:column property="reasonReject" titleKey="request.reasonReject" />
 		<display:column>
-			&nbsp;
-	</display:column>
+		</display:column>
 	</jstl:if>
 	<jstl:if test="${row.status == 'SUBMITTED' }">
+			
+	
 		<display:column property="status" class="${'GREY'}"
 			titleKey="parade.status" />
+		<display:column property="reasonReject" titleKey="request.reasonReject" />
 		<display:column>
 			<a href="parade/chapter/reject.do?paradeId=${row.id}"> <spring:message
-					code="parade.show" />
+					code="request.reject" />
 			</a>
 			<br>
-			<a href="parade/chapter/accepted.do?paradeId=${row.id}"> <spring:message
-					code="parade.show" />
+			<a href="parade/chapter/accept.do?paradeId=${row.id}"> <spring:message
+					code="request.accept" />
 			</a>
 		</display:column>
+		
 	</jstl:if>
 
 

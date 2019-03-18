@@ -126,6 +126,11 @@
 			<li><a class="fNiv" href="brotherhood/list.do"><spring:message
 						code="master.page.brotherhood" /></a></li>
 		</security:authorize>
+		
+		<security:authorize access="hasRole('CHAPTER')">
+		<li><a class="fNiv" href="parade/chapter/list.do"><spring:message
+						code="master.page.myParades" /></a></li>
+		</security:authorize>
 
 		<security:authorize access="hasRole('BROTHERHOOD')">
 			<li><a class="fNiv" href="parade/brotherhood/list.do"><spring:message

@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Collection;
@@ -24,21 +25,22 @@ public class Parade extends DomainEntity {
 
 	// Identification ---------------------------------------------------------
 	// ATRIBUTOS
-	private String ticker;
-	private String title;
-	private String description;
-	private Date moment;
-	private boolean draftMode;
-	private String status;
+	private String	ticker;
+	private String	title;
+	private String	description;
+	private Date	moment;
+	private boolean	draftMode;
+	private String	status;
+	private String	reasonReject;
 
-	
+
 	@NotBlank
 	@Pattern(regexp = "^(PENDING|SUBMITTED|ACCEPTED|REJECTED)$")
 	public String getStatus() {
-		return status;
+		return this.status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(final String status) {
 		this.status = status;
 	}
 
@@ -91,18 +93,28 @@ public class Parade extends DomainEntity {
 		this.draftMode = draftMode;
 	}
 
+	public String getReasonReject() {
+		return this.reasonReject;
+	}
+
+	public void setReasonReject(final String reasonReject) {
+		this.reasonReject = reasonReject;
+	}
+
+
 	// Relationships ---------------------------------------------------------
-	private Collection<Floaat> floats;
-	private Brotherhood brotherhood;
+	private Collection<Floaat>	floats;
+	private Brotherhood			brotherhood;
+
 
 	@NotNull
 	@Valid
 	@ManyToOne(optional = false)
 	public Brotherhood getBrotherhood() {
-		return brotherhood;
+		return this.brotherhood;
 	}
 
-	public void setBrotherhood(Brotherhood brotherhood) {
+	public void setBrotherhood(final Brotherhood brotherhood) {
 		this.brotherhood = brotherhood;
 	}
 

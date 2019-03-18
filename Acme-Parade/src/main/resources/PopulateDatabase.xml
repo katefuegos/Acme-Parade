@@ -1282,6 +1282,7 @@
 		</property>
 		<property name="brotherhood" ref="brotherhood2" />
 		<property name="status" value="REJECTED" />
+		<property name="reasonReject" value="Desfile religioso." />
 	</bean>
 
 	<bean id="parade3" class="domain.Parade">

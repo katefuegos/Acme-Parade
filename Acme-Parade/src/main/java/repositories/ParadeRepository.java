@@ -40,7 +40,7 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 	@Query("select p from Parade p where p.brotherhood.id =?1 and p.status='PENDING'")
 	Collection<Parade> findByBrotherhoodIdAndPending(int brotherhoodId);
 
-	@Query("select p from Parade p where p.brotherhood.area.chapter.id=?1 and p.draftMode=false group by p.status")
+	@Query("select p from Parade p where p.brotherhood.area.chapter.id=?1 and p.draftMode=false order by p.status")
 	Collection<Parade> findByChapterId(int chapterId);
 
 }
