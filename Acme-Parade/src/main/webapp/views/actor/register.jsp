@@ -92,7 +92,7 @@
 		}
 	</script>
 
-<jstl:if test="${ !(empty areas)}">
+<jstl:if test="${actorForm.auth != 'CHAPTER' || !(empty areas)}">
 	<acme:submit name="save" code="actor.save" />
 
 </jstl:if>
@@ -100,6 +100,6 @@
 	<acme:cancel url="welcome/index.do" code="message.cancel" />
 
 </form:form>
-<jstl:if test="${ (empty areas)}">
+<jstl:if test="${actorForm.auth == 'CHAPTER' && (empty areas)}">
 <span class="message"><spring:message code="actor.chapter.error.area" /></span>
 </jstl:if>
