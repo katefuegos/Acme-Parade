@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.ArrayList;
@@ -24,11 +25,12 @@ public class ParadeService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private ParadeRepository paradeRepository;
+	private ParadeRepository	paradeRepository;
 
 	// Services-------------------------------------------------
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
+
 
 	// Constructor----------------------------------------------
 
@@ -40,12 +42,11 @@ public class ParadeService {
 
 	public Parade create() {
 		final Parade res = new Parade();
-		String ticker = generateTicker();
+		final String ticker = this.generateTicker();
 		final Collection<Floaat> floaats = new ArrayList<>();
 		res.setTicker(ticker);
 		res.setDraftMode(true);
-		res.setBrotherhood(brotherhoodService.findByUserAccountId(LoginService
-				.getPrincipal().getId()));
+		res.setBrotherhood(this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId()));
 		res.setFloats(floaats);
 		res.setStatus("PENDING");
 		return res;
@@ -61,12 +62,9 @@ public class ParadeService {
 
 	public Parade save(final Parade parade) {
 		Assert.notNull(parade);
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
-				.contains("BROTHERHOOD"),
-				"SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PROCESSION");
-		if (parade.isDraftMode() == false) {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("BROTHERHOOD"), "SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PROCESSION");
+		if (parade.isDraftMode() == false)
 			parade.setStatus("SUBMITTED");
-		}
 		final Parade saved = this.paradeRepository.save(parade);
 		return saved;
 	}
@@ -104,50 +102,53 @@ public class ParadeService {
 		return new String(text);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndNotDraft(int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndNotDraft(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository.findByBrotherhoodIdAndNotDraft(brotherhoodId);
+		return this.paradeRepository.findByBrotherhoodIdAndNotDraft(brotherhoodId);
 	}
 
-	public Collection<Parade> findByBrotherhoodId(int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodId(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository.findByBrotherhoodId(brotherhoodId);
+		return this.paradeRepository.findByBrotherhoodId(brotherhoodId);
 	}
 
-	public Collection<Parade> findByFloaat(Floaat floaat) {
+	public Collection<Parade> findByFloaat(final Floaat floaat) {
 		Assert.notNull(floaat);
-		return paradeRepository.findByFloaat(floaat);
+		return this.paradeRepository.findByFloaat(floaat);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndNotDraftAndAccepted(
-			int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndNotDraftAndAccepted(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository
-				.findByBrotherhoodIdAndNotDraftAndAccepted(brotherhoodId);
+		return this.paradeRepository.findByBrotherhoodIdAndNotDraftAndAccepted(brotherhoodId);
 	}
 
 	public Collection<Parade> findAccepted() {
-		return paradeRepository.findAccepted();
+		return this.paradeRepository.findAccepted();
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndAccepted(int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndAccepted(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository.findByBrotherhoodIdAndAccepted(brotherhoodId);
+		return this.paradeRepository.findByBrotherhoodIdAndAccepted(brotherhoodId);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndRejected(int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndRejected(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository.findByBrotherhoodIdAndRejected(brotherhoodId);
+		return this.paradeRepository.findByBrotherhoodIdAndRejected(brotherhoodId);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndSubmitted(int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndSubmitted(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository.findByBrotherhoodIdAndSubmitted(brotherhoodId);
+		return this.paradeRepository.findByBrotherhoodIdAndSubmitted(brotherhoodId);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndPending(int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndPending(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository.findByBrotherhoodIdAndPending(brotherhoodId);
+		return this.paradeRepository.findByBrotherhoodIdAndPending(brotherhoodId);
+	}
+
+	public Collection<Parade> findByChapterId(final int chapterId) {
+		return this.paradeRepository.findByChapterId(chapterId);
+
 	}
 
 }

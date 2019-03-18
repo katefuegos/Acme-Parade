@@ -1,3 +1,4 @@
+
 package repositories;
 
 import java.util.Collection;
@@ -11,32 +12,35 @@ import domain.Parade;
 
 @Repository
 public interface ParadeRepository extends JpaRepository<Parade, Integer> {
-	
+
 	@Query("select p from Parade p where p.draftMode = false and p.brotherhood.id =?1")
 	Collection<Parade> findByBrotherhoodIdAndNotDraft(int brotherhoodId);
-	
+
 	@Query("select p from Parade p where p.brotherhood.id =?1")
 	Collection<Parade> findByBrotherhoodId(int brotherhoodId);
-	
+
 	@Query("select p from Parade p where ?1 member of p.floats")
 	Collection<Parade> findByFloaat(Floaat floaat);
-	
+
 	@Query("select p from Parade p where p.draftMode = false and p.brotherhood.id =?1 and p.status='ACCEPTED'")
 	Collection<Parade> findByBrotherhoodIdAndNotDraftAndAccepted(int brotherhoodId);
-	
+
 	@Query("select p from Parade p where p.draftMode = false and p.status='ACCEPTED'")
 	Collection<Parade> findAccepted();
-	
+
 	@Query("select p from Parade p where p.brotherhood.id =?1 and p.status='ACCEPTED'")
 	Collection<Parade> findByBrotherhoodIdAndAccepted(int brotherhoodId);
-	
+
 	@Query("select p from Parade p where p.brotherhood.id =?1 and p.status='REJECTED'")
 	Collection<Parade> findByBrotherhoodIdAndRejected(int brotherhoodId);
-	
+
 	@Query("select p from Parade p where p.brotherhood.id =?1 and p.status='SUBMITTED'")
 	Collection<Parade> findByBrotherhoodIdAndSubmitted(int brotherhoodId);
-	
+
 	@Query("select p from Parade p where p.brotherhood.id =?1 and p.status='PENDING'")
 	Collection<Parade> findByBrotherhoodIdAndPending(int brotherhoodId);
+
+	@Query("select p from Parade p where p.brotherhood.area.chapter.id=?1 and p.draftMode=false group by p.status")
+	Collection<Parade> findByChapterId(int chapterId);
 
 }

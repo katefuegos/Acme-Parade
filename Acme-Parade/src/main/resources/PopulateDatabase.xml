@@ -1382,7 +1382,14 @@
 		<property name="name" value="Parque alcosa" />
 		<property name="pictures"
 			value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
-
+		<property name="chapter" ref="chapter1" />
+	</bean>
+	
+	<bean id="area4" class="domain.Area">
+		<property name="name" value="Los remedios" />
+		<property name="pictures"
+			value="https://sevilla.abc.es/media/sevilla/2016/01/19/s/sevilla-remedios-republica-argentina--620x349.jpg" />
+		<property name="chapter" ref="chapter1" />
 	</bean>
 
 
