@@ -71,7 +71,7 @@ public class requestMemberController extends AbstractController {
 						requestsRejected.add(r);
 
 			final Collection<Parade> parades = this.paradeService
-					.findAll();
+					.findAccepted();
 			if (!requestsPending.isEmpty())
 				for (final Request r : requestsPending)
 					parades.remove(r.getParade());
@@ -114,6 +114,7 @@ public class requestMemberController extends AbstractController {
 			member = this.memberService.findByUserAccountId(LoginService
 					.getPrincipal().getId());
 			Assert.notNull(member);
+			Assert.isTrue(parade.getStatus().equals("ACCEPTED"));
 			final Collection<Request> requests = this.requestService
 					.findRequestByMemberId(member.getId());
 
@@ -132,6 +133,9 @@ public class requestMemberController extends AbstractController {
 			if (parade == null)
 				redirectAttrs.addFlashAttribute("message",
 						"request.error.paradeUnexists");
+			else if(!parade.getStatus().equals("ACCEPTED"))
+				redirectAttrs.addFlashAttribute("message",
+						"request.error.notAccepted");
 			else if (!request.getMember().equals(member)) {
 				redirectAttrs.addFlashAttribute("message",
 						"request.error.nobrotherhood");

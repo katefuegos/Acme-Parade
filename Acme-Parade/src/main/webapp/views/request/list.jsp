@@ -16,8 +16,8 @@
 
 	<display:column property="member.name" titleKey="request.member" />
 
-	<display:column property="procession.title"
-		titleKey="request.procession" />
+	<display:column property="parade.title"
+		titleKey="request.parade" />
 
 	<display:column property="roow" titleKey="request.row" />
 
@@ -33,8 +33,8 @@
 
 	<display:column property="member.name" titleKey="request.member" />
 
-	<display:column property="procession.title"
-		titleKey="request.procession" />
+	<display:column property="parade.title"
+		titleKey="request.parade" />
 
 	<display:column property="reasonReject" titleKey="request.reasonReject" />
 
@@ -48,8 +48,8 @@
 
 	<display:column property="member.name" titleKey="request.member" />
 
-	<display:column property="procession.title"
-		titleKey="request.procession" />
+	<display:column property="parade.title"
+		titleKey="request.parade" />
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 		<display:column>

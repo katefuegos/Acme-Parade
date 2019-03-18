@@ -47,6 +47,7 @@ public class ParadeService {
 		res.setBrotherhood(brotherhoodService.findByUserAccountId(LoginService
 				.getPrincipal().getId()));
 		res.setFloats(floaats);
+		res.setStatus("PENDING");
 		return res;
 	}
 
@@ -63,6 +64,9 @@ public class ParadeService {
 		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
 				.contains("BROTHERHOOD"),
 				"SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PROCESSION");
+		if (parade.isDraftMode() == false) {
+			parade.setStatus("SUBMITTED");
+		}
 		final Parade saved = this.paradeRepository.save(parade);
 		return saved;
 	}
@@ -100,11 +104,9 @@ public class ParadeService {
 		return new String(text);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndNotDraft(
-			int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndNotDraft(int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return paradeRepository
-				.findByBrotherhoodIdAndNotDraft(brotherhoodId);
+		return paradeRepository.findByBrotherhoodIdAndNotDraft(brotherhoodId);
 	}
 
 	public Collection<Parade> findByBrotherhoodId(int brotherhoodId) {
@@ -116,4 +118,36 @@ public class ParadeService {
 		Assert.notNull(floaat);
 		return paradeRepository.findByFloaat(floaat);
 	}
+
+	public Collection<Parade> findByBrotherhoodIdAndNotDraftAndAccepted(
+			int brotherhoodId) {
+		Assert.notNull(brotherhoodId);
+		return paradeRepository
+				.findByBrotherhoodIdAndNotDraftAndAccepted(brotherhoodId);
+	}
+
+	public Collection<Parade> findAccepted() {
+		return paradeRepository.findAccepted();
+	}
+
+	public Collection<Parade> findByBrotherhoodIdAndAccepted(int brotherhoodId) {
+		Assert.notNull(brotherhoodId);
+		return paradeRepository.findByBrotherhoodIdAndAccepted(brotherhoodId);
+	}
+
+	public Collection<Parade> findByBrotherhoodIdAndRejected(int brotherhoodId) {
+		Assert.notNull(brotherhoodId);
+		return paradeRepository.findByBrotherhoodIdAndRejected(brotherhoodId);
+	}
+
+	public Collection<Parade> findByBrotherhoodIdAndSubmitted(int brotherhoodId) {
+		Assert.notNull(brotherhoodId);
+		return paradeRepository.findByBrotherhoodIdAndSubmitted(brotherhoodId);
+	}
+
+	public Collection<Parade> findByBrotherhoodIdAndPending(int brotherhoodId) {
+		Assert.notNull(brotherhoodId);
+		return paradeRepository.findByBrotherhoodIdAndPending(brotherhoodId);
+	}
+
 }

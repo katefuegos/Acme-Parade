@@ -89,9 +89,9 @@
 		</a>
 	</display:column>
 	
-	<display:column titleKey="brotherhood.processions">
+	<display:column titleKey="brotherhood.parades">
 		<a
-			href="procession/list.do?brotherhoodId=${row.id}">
+			href="parade/list.do?brotherhoodId=${row.id}">
 			<spring:message code="brotherhood.view" />
 		</a>
 	</display:column>

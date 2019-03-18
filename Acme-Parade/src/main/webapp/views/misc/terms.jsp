@@ -262,7 +262,6 @@ Blocking all cookies will have a negative impact upon the usability of many webs
 	<br>
 <h2>N. Additional note</h2>
 	<br>
-	<br>
 	Acme Madrugá, Inc. is the company that provides the service and Acme Parade is the name of the service.
 	<br>
 	<br>
@@ -501,7 +500,6 @@ Nuestro sitio web usa cookies. Una cookie es un fichero que contiene un identifi
 <br>
 	<br>
 	<h2>N. Nota adicional</h2>
-	<br>
 	<br>
 	Acme Madrugá, Inc. es la empresa proveedora del servicio y Acme Parade es el nombre del servicio mismo.
 	<br>

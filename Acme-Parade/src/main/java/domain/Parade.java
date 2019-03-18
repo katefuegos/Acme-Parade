@@ -29,6 +29,18 @@ public class Parade extends DomainEntity {
 	private String description;
 	private Date moment;
 	private boolean draftMode;
+	private String status;
+
+	
+	@NotBlank
+	@Pattern(regexp = "^(PENDING|SUBMITTED|ACCEPTED|REJECTED)$")
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Column(unique = true)
 	@NotBlank
