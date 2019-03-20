@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import domain.Administrator;
+import domain.Brotherhood;
 import domain.Member;
 import domain.Parade;
 
@@ -65,5 +66,40 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 
 	@Query("select (select count(f1) from Finder f1 where f1.parades.size != (select count(p) from Parade p))*1.0/count(f) from Finder f")
 	Double queryB3NotEmpty();
+
+	// New DASHBOARD C
+
+	// New C1
+	@Query("select avg(1.0 * (select count(e) from EveryRecord e where e.history.id = b.id)),min(1.0 * (select count(e) from EveryRecord e where e.history.id = b.id)), max(1.0 * (select count(e) from EveryRecord e where e.history.id = b.id)),stddev(1.0 * (select count(e) from EveryRecord e where e.history.id = b.id)) from History b")
+	Object[] queryNewC1();
+
+	// New C2
+	@Query("select f.history.brotherhood from EveryRecord f group by f.history having count(f)= (select max(1.0 * (select count(e) from EveryRecord e where e.history.id = b.id)) from History b)")
+	Collection<Brotherhood> queryNewC2();
+
+	// New C3
+	@Query("select f.history.brotherhood from EveryRecord f group by f.history having count(f)> (select avg(1.0 * (select count(e) from EveryRecord e where e.history.id = b.id)) from History b)")
+	Collection<Brotherhood> queryNewC3();
+
+	//NEW DASHBOARD B
+
+	// New B1
+	@Query("select (select count(b) from Area b where b.chapter.id=null)/(1.0*count(a)) from Area a")
+	Double queryNewB1();
+	// New B2
+	@Query("select avg(1.0 * (select count(e) from Parade e where e.brotherhood.area.chapter.id = b.id)), min(1.0 * (select count(e) from Parade e where e.brotherhood.area.chapter.id = b.id)), max(1.0 * (select count(e) from Parade e where e.brotherhood.area.chapter.id = b.id)), stddev(1.0 * (select count(e) from Parade e where e.brotherhood.area.chapter.id = b.id)) from Chapter b")
+	Object[] queryNewB2();
+
+	// New B3
+	@Query("select c from Parade p join p.brotherhood.area.chapter c group by c having count(p)> (select avg(1.0 * (select count(e) from Parade e where e.brotherhood.area.chapter.id = b.id)) from Chapter b)")
+	Collection<domain.Chapter> queryNewB3();
+
+	// New B4 - 2 valores [0,1]
+	@Query("select (select count(b) from Parade b where b.draftMode=true)/(1.0*count(a)),(select count(c) from Parade c where c.draftMode=false)/(1.0*count(a)) from Parade a")
+	Object[] queryNewB4();
+
+	// New B5
+	@Query("select p.status, (count(p)*1.0)/(1.0*(select count(r) from Parade r)) from Parade p group by p.status")
+	Collection<Object[]> queryNewB5();
 
 }

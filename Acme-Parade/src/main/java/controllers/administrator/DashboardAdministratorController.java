@@ -1,6 +1,8 @@
+
 package controllers.administrator;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,6 +21,7 @@ import domain.Member;
 import domain.Parade;
 import forms.AreaQueryB1Form;
 import forms.PositionCountForm;
+import forms.QueryForm;
 
 @Controller
 @RequestMapping("/dashboard/administrator")
@@ -26,10 +29,11 @@ public class DashboardAdministratorController extends AbstractController {
 
 	// Services-----------------------------------------------------------
 	@Autowired
-	private AdministratorService administratorService;
+	private AdministratorService	administratorService;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ConfigurationService	configurationService;
+
 
 	// Constructor-------------------------------------------------------
 
@@ -41,8 +45,7 @@ public class DashboardAdministratorController extends AbstractController {
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public ModelAndView dashboard() {
-		final ModelAndView modelAndView = new ModelAndView(
-				"administrator/dashboard");
+		final ModelAndView modelAndView = new ModelAndView("administrator/dashboard");
 		final DecimalFormat df = new DecimalFormat("0.00");
 
 		final String nulo = "n/a";
@@ -76,8 +79,7 @@ public class DashboardAdministratorController extends AbstractController {
 			modelAndView.addObject("stddevC1", nulo);
 
 		// QueryC2 - The largest brotherhood, minimum 1
-		final Collection<Object[]> resultC2 = this.administratorService
-				.queryC2();
+		final Collection<Object[]> resultC2 = this.administratorService.queryC2();
 
 		Integer idLargest = null;
 		String nameLargest = null;
@@ -97,8 +99,7 @@ public class DashboardAdministratorController extends AbstractController {
 		}
 
 		// QueryC3 - The smallest brotherhood, minimum 1
-		final Collection<Object[]> resultC3 = this.administratorService
-				.queryC3();
+		final Collection<Object[]> resultC3 = this.administratorService.queryC3();
 
 		Integer idSmallest = null;
 		String nameSmallest = null;
@@ -122,8 +123,7 @@ public class DashboardAdministratorController extends AbstractController {
 		try {
 			final Map<String, String> statusCount = new TreeMap<>();
 			for (final Object[] resultC : this.administratorService.queryC4())
-				statusCount.put(((String) resultC[0]).toUpperCase(),
-						df.format(resultC[1]));
+				statusCount.put(((String) resultC[0]).toUpperCase(), df.format(resultC[1]));
 
 			modelAndView.addObject("statusCount", statusCount);
 
@@ -133,8 +133,7 @@ public class DashboardAdministratorController extends AbstractController {
 		// QueryC5 - The parades that are going to be organised in 30 days
 		// or less.
 		try {
-			final Collection<Parade> parades = this.administratorService
-					.queryC5();
+			final Collection<Parade> parades = this.administratorService.queryC5();
 
 			modelAndView.addObject("paradesC5", parades);
 		} catch (final Exception e) {
@@ -144,8 +143,7 @@ public class DashboardAdministratorController extends AbstractController {
 
 		// QueryC71
 		try {
-			final Collection<Member> queryC7 = this.administratorService
-					.queryC7();
+			final Collection<Member> queryC7 = this.administratorService.queryC7();
 			modelAndView.addObject("queryC7", queryC7);
 		} catch (final Exception e) {
 			modelAndView.addObject("message", "message.commit.error");
@@ -154,13 +152,11 @@ public class DashboardAdministratorController extends AbstractController {
 
 		// QueryC8
 
-		final Collection<PositionCountForm> queryC8 = this.administratorService
-				.queryC8();
+		final Collection<PositionCountForm> queryC8 = this.administratorService.queryC8();
 
 		if (queryC8 != null) {
 			modelAndView.addObject("position", queryC8);
-			modelAndView.addObject("lang", LocaleContextHolder.getLocale()
-					.getLanguage().toUpperCase());
+			modelAndView.addObject("lang", LocaleContextHolder.getLocale().getLanguage().toUpperCase());
 		}
 
 		// Query B1
@@ -191,8 +187,7 @@ public class DashboardAdministratorController extends AbstractController {
 		else
 			modelAndView.addObject("stddevB1", nulo);
 
-		final Collection<AreaQueryB1Form> queryB1A = this.administratorService
-				.queryB1A();
+		final Collection<AreaQueryB1Form> queryB1A = this.administratorService.queryB1A();
 
 		modelAndView.addObject("areaQueryB1", queryB1A);
 
@@ -228,24 +223,140 @@ public class DashboardAdministratorController extends AbstractController {
 		final Double queryB3Empty = this.administratorService.queryB3Empty();
 
 		if (queryB3Empty != null)
-			modelAndView.addObject("queryB3FinderResultEmpty",
-					df.format(queryB3Empty));
+			modelAndView.addObject("queryB3FinderResultEmpty", df.format(queryB3Empty));
 		else
 			modelAndView.addObject("queryB3FinderResultEmpty", nulo);
 
-		final Double queryB3NotEmpty = this.administratorService
-				.queryB3NotEmpty();
+		final Double queryB3NotEmpty = this.administratorService.queryB3NotEmpty();
 
 		if (queryB3NotEmpty != null)
-			modelAndView.addObject("queryB3FinderResultNotEmpty",
-					df.format(queryB3NotEmpty));
+			modelAndView.addObject("queryB3FinderResultNotEmpty", df.format(queryB3NotEmpty));
 		else
 			modelAndView.addObject("queryB3FinderResultNotEmpty", nulo);
 
-		modelAndView.addObject("banner", this.configurationService.findAll()
-				.iterator().next().getBanner());
-		modelAndView.addObject("systemName", this.configurationService
-				.findAll().iterator().next().getSystemName());
+		// ----------------------------------------------------------------------
+		// --------------------- NEW FUNTIONS -----------------------
+		// ----------------------------------------------------------------------
+
+		// Query New C1
+		final Object[] queryNewC1 = this.administratorService.queryNewC1();
+
+		final Double avgNewC1 = (Double) queryNewC1[0];
+		final Double minNewC1 = (Double) queryNewC1[1];
+		final Double maxNewC1 = (Double) queryNewC1[2];
+		final Double stddevNewC1 = (Double) queryNewC1[3];
+
+		if (avgNewC1 != null)
+			modelAndView.addObject("avgNewC1", df.format(avgNewC1));
+		else
+			modelAndView.addObject("avgNewC1", nulo);
+
+		if (minNewC1 != null)
+			modelAndView.addObject("minNewC1", df.format(minNewC1));
+		else
+			modelAndView.addObject("minNewC1", nulo);
+
+		if (maxNewC1 != null)
+			modelAndView.addObject("maxNewC1", df.format(maxNewC1));
+		else
+			modelAndView.addObject("maxNewC1", nulo);
+
+		if (stddevNewC1 != null)
+			modelAndView.addObject("stddevNewC1", df.format(stddevNewC1));
+		else
+			modelAndView.addObject("stddevNewC1", nulo);
+
+		// Query New C2
+		try {
+			final Collection<domain.Brotherhood> queryNewC2 = this.administratorService.queryNewC2();
+			modelAndView.addObject("queryNewC2", queryNewC2);
+		} catch (final Exception e) {
+			modelAndView.addObject("queryNewC2", new ArrayList<domain.Brotherhood>());
+			modelAndView.addObject("message", "message.commit.error");
+		}
+
+		// Query New C3
+		try {
+			final Collection<domain.Brotherhood> queryNewC3 = this.administratorService.queryNewC3();
+			modelAndView.addObject("queryNewC3", queryNewC3);
+		} catch (final Exception e) {
+			modelAndView.addObject("queryNewC3", new ArrayList<domain.Brotherhood>());
+			modelAndView.addObject("message", "message.commit.error");
+		}
+
+		// Query New B1
+		final Double queryNewB1 = this.administratorService.queryNewB1();
+
+		if (queryNewB1 != null)
+			modelAndView.addObject("queryNewB1", df.format(queryNewB1));
+		else
+			modelAndView.addObject("queryNewB1", nulo);
+
+		// Query New B2
+		final Object[] queryNewB2 = this.administratorService.queryNewB2();
+
+		final Double avgNewB2 = (Double) queryNewB2[0];
+		final Double minNewB2 = (Double) queryNewB2[1];
+		final Double maxNewB2 = (Double) queryNewB2[2];
+		final Double stddevNewB2 = (Double) queryNewB2[3];
+
+		if (avgNewB2 != null)
+			modelAndView.addObject("avgNewB2", df.format(avgNewB2));
+		else
+			modelAndView.addObject("avgNewB2", nulo);
+
+		if (minNewB2 != null)
+			modelAndView.addObject("minNewB2", df.format(minNewB2));
+		else
+			modelAndView.addObject("minNewB2", nulo);
+
+		if (maxNewB2 != null)
+			modelAndView.addObject("maxNewB2", df.format(maxNewB2));
+		else
+			modelAndView.addObject("maxNewB2", nulo);
+
+		if (stddevNewB2 != null)
+			modelAndView.addObject("stddevNewB2", df.format(stddevNewB2));
+		else
+			modelAndView.addObject("stddevNewB2", nulo);
+
+		// Query New B3
+		try {
+			final Collection<domain.Chapter> queryNewB3 = this.administratorService.queryNewB3();
+			modelAndView.addObject("queryNewB3", queryNewB3);
+		} catch (final Exception e) {
+			modelAndView.addObject("queryNewB3", new ArrayList<domain.Chapter>());
+			modelAndView.addObject("message", "message.commit.error");
+		}
+
+		// Query New B4
+		final Object[] queryNewB4 = this.administratorService.queryNewB4();
+
+		final Double ratioDraftMode = (Double) queryNewB4[0];
+		final Double ratioFinalMode = (Double) queryNewB4[1];
+
+		if (ratioDraftMode != null)
+			modelAndView.addObject("ratioDraftMode", df.format(ratioDraftMode));
+		else
+			modelAndView.addObject("ratioDraftMode", nulo);
+
+		if (ratioFinalMode != null)
+			modelAndView.addObject("ratioFinalMode", df.format(ratioFinalMode));
+		else
+			modelAndView.addObject("ratioFinalMode", nulo);
+
+		// Query New B5
+		try {
+			final Collection<QueryForm> queryNewB5 = this.administratorService.queryNewB5();
+			modelAndView.addObject("queryNewB5", queryNewB5);
+		} catch (final Exception e) {
+			modelAndView.addObject("queryNewB5", new ArrayList<QueryForm>());
+			modelAndView.addObject("message", "message.commit.error");
+		}
+
+		// --------------------------------
+		modelAndView.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
+		modelAndView.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
 		return modelAndView;
 	}
 }

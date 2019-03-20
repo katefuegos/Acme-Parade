@@ -175,5 +175,119 @@
 	<li><spring:message code="administrator.ratio.finder.notEmpty" />:
 		<jstl:out value="${queryB3FinderResultNotEmpty}" /></li>
 </ul>
+
+<!-- ---
+----------------------------------------------------
+----------------------------------------------------
+ -->
+
+<h3>
+	<spring:message code="administrator.dashboard.newC1" />
+</h3>
+<ul>
+	<li><spring:message code="administrator.avg" />: <jstl:out
+			value="${avgNewC1}" /></li>
+	<li><spring:message code="administrator.max" />: <jstl:out
+			value="${maxNewC1}" /></li>
+	<li><spring:message code="administrator.min" />: <jstl:out
+			value="${minNewC1}" /></li>
+	<li><spring:message code="administrator.stddev" />: <jstl:out
+			value="${stddevNewC1}" /></li>
+</ul>
+<br />
+<br /> 
+ 
+ 
+<h3>
+	<spring:message code="administrator.dashboard.newC2" />
+</h3>
+<display:table name="queryNewC2" id="row" class="displaytag">
+<display:column property="title" titleKey="administrator.dashboard.name" />
+	<display:column property="name" titleKey="actor.name" />
+	<display:column property="userAccount.username"
+		titleKey="actor.username" />
+	<display:column property="email" titleKey="actor.email" />
+	<display:column property="phone" titleKey="actor.phone" />
+</display:table>
 <br />
 <br />
+
+<h3>
+	<spring:message code="administrator.dashboard.newC3" />
+</h3>
+<display:table name="queryNewC3" id="row" class="displaytag">
+<display:column property="title" titleKey="administrator.dashboard.name" />
+	<display:column property="name" titleKey="actor.name" />
+	<display:column property="userAccount.username"
+		titleKey="actor.username" />
+	<display:column property="email" titleKey="actor.email" />
+	<display:column property="phone" titleKey="actor.phone" />
+</display:table>
+<br />
+<br />
+ 
+<h3>
+	<spring:message code="administrator.dashboard.newB1" />
+</h3>
+<p>
+	<spring:message code="administrator.ratio" />
+	:
+	<jstl:out value="${queryNewB1}" />
+</p>
+<br />
+<br />
+
+<h3>
+	<spring:message code="administrator.dashboard.newB2" />
+</h3>
+<ul>
+	<li><spring:message code="administrator.avg" />: <jstl:out
+			value="${avgNewB2}" /></li>
+	<li><spring:message code="administrator.max" />: <jstl:out
+			value="${maxNewB2}" /></li>
+	<li><spring:message code="administrator.min" />: <jstl:out
+			value="${minNewB2}" /></li>
+	<li><spring:message code="administrator.stddev" />: <jstl:out
+			value="${stddevNewB2}" /></li>
+</ul>
+<br />
+<br />
+
+<h3>
+	<spring:message code="administrator.dashboard.newB3" />
+</h3>
+<display:table name="queryNewB3" id="row" class="displaytag">
+<display:column property="title" titleKey="administrator.dashboard.name" />
+	<display:column property="name" titleKey="actor.name" />
+	<display:column property="userAccount.username"
+		titleKey="actor.username" />
+	<display:column property="email" titleKey="actor.email" />
+	<display:column property="phone" titleKey="actor.phone" />
+</display:table>
+<br />
+<br />
+
+
+
+<h3>
+	<spring:message code="administrator.dashboard.newB4" />
+</h3>
+<ul><!-- administrator.newB4.ratioDraftMode -->
+	<li><spring:message code="administrator.newB4.ratioDraftMode" />:<jstl:out
+			value="${ratioDraftMode}" /></li>
+	<li><spring:message code="administrator.newB4.ratioFinalMode" />:
+		<jstl:out value="${ratioFinalMode}" /></li>
+</ul>
+<br />
+<br />
+
+<h3>
+	<spring:message code="administrator.dashboard.newB5" />
+</h3>
+<display:table name="queryNewB5" id="row" class="displaytag">
+	<display:column property="name" titleKey="actor.name" />
+	<display:column property="ratio" titleKey="administrator.ratio" />
+</display:table>
+<br />
+<br />
+

@@ -1392,6 +1392,12 @@
 			value="https://sevilla.abc.es/media/sevilla/2016/01/19/s/sevilla-remedios-republica-argentina--620x349.jpg" />
 		<property name="chapter" ref="chapter1" />
 	</bean>
+	
+	<bean id="area5" class="domain.Area">
+		<property name="name" value="Bellavista" />
+		<property name="pictures"
+			value="http://sevillaciudad.sevilla.abc.es/wp-content/uploads/2014/07/rotanda-bellavista.jpg" />
+	</bean>
 
 
 	<!-- REQUEST -->
@@ -1733,17 +1739,9 @@
 		<property name="history" ref="history1" />
 	</bean>
 
-	<bean id="miscellaneousRecord2" class="domain.MiscellaneousRecord">
-		<property name="title" value="titleevery2" />
-		<property name="description" value="posmubien" />
-		<property name="history" ref="history2" />
-	</bean>
 
-	<bean id="miscellaneousRecord3" class="domain.MiscellaneousRecord">
-		<property name="title" value="titleevery3" />
-		<property name="description" value="posmubien" />
-		<property name="history" ref="history3" />
-	</bean>
+
+
 
 	<bean id="inceptionRecord1" class="domain.InceptionRecord">
 		<property name="title" value="titleinception1" />
@@ -1752,19 +1750,7 @@
 		<property name="photos" value="http:\\photo.com" />
 	</bean>
 
-	<bean id="inceptionRecord2" class="domain.InceptionRecord">
-		<property name="title" value="titleinception2" />
-		<property name="description" value="posmubien" />
-		<property name="history" ref="history2" />
-		<property name="photos" value="http:\\photo2.com" />
-	</bean>
 
-	<bean id="inceptionRecord3" class="domain.InceptionRecord">
-		<property name="title" value="titleinception3" />
-		<property name="description" value="posmubien" />
-		<property name="history" ref="history3" />
-		<property name="photos" value="http:\\photo3.com" />
-	</bean>
 
 	<bean id="periodRecord1" class="domain.PeriodRecord">
 		<property name="title" value="titleinception3" />
@@ -1775,14 +1761,7 @@
 		<property name="photos" value="http:\\photo3.com" />
 	</bean>
 
-	<bean id="periodRecord2" class="domain.PeriodRecord">
-		<property name="title" value="titleperiod1" />
-		<property name="description" value="posmubien" />
-		<property name="history" ref="history2" />
-		<property name="startYear" value="2001" />
-		<property name="endYear" value="2012" />
-		<property name="photos" value="http:\\photo3.com" />
-	</bean>
+
 
 	<bean id="periodRecord3" class="domain.PeriodRecord">
 		<property name="title" value="titleperiod3" />
@@ -1803,15 +1782,7 @@
 
 	</bean>
 
-	<bean id="legalRecord2" class="domain.LegalRecord">
-		<property name="title" value="titleplegal3" />
-		<property name="description" value="posmubien" />
-		<property name="history" ref="history1" />
-		<property name="legalName" value="superlegall" />
-		<property name="VATnumber" value="12555" />
-		<property name="applicableLaws" value="superley2" />
 
-	</bean>
 
 	<bean id="legalRecord3" class="domain.LegalRecord">
 		<property name="title" value="titleplegal9" />

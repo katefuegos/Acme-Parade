@@ -25,6 +25,7 @@ import domain.Parade;
 import domain.Position;
 import forms.AreaQueryB1Form;
 import forms.PositionCountForm;
+import forms.QueryForm;
 
 @Service
 @Transactional
@@ -255,4 +256,65 @@ public class AdministratorService {
 		return result;
 	}
 
+	// ---------------------------------------------------------------------------
+
+	public Object[] queryNewC1() {
+		final Object[] result = this.administratorRepository.queryNewC1();
+
+		return result;
+	}
+
+	public Collection<Brotherhood> queryNewC2() {
+		final Collection<domain.Brotherhood> result2 = this.administratorRepository.queryNewC2();
+
+		final Collection<domain.Brotherhood> result = new ArrayList<>();
+		result.add(result2.iterator().next());
+
+		return result;
+	}
+
+	public Collection<Brotherhood> queryNewC3() {
+		final Collection<domain.Brotherhood> result = this.administratorRepository.queryNewC3();
+
+		return result;
+	}
+
+	public Double queryNewB1() {
+		final Double result = this.administratorRepository.queryNewB1();
+
+		return result;
+	}
+
+	public Object[] queryNewB2() {
+		final Object[] result = this.administratorRepository.queryNewB2();
+
+		return result;
+	}
+	public Collection<domain.Chapter> queryNewB3() {
+		final Collection<domain.Chapter> result = this.administratorRepository.queryNewB3();
+
+		return result;
+	}
+	public Object[] queryNewB4() {
+		final Object[] result = this.administratorRepository.queryNewB4();
+
+		return result;
+	}
+
+	public Collection<QueryForm> queryNewB5() {
+		final Collection<Object[]> query = this.administratorRepository.queryNewB5();
+		final Collection<QueryForm> result = new LinkedList<>();
+
+		for (final Object[] objects : query) {
+			final QueryForm queryForm = new QueryForm();
+
+			queryForm.setName((String) objects[0]);
+			queryForm.setRatio((Double) objects[1]);
+
+			result.add(queryForm);
+
+		}
+
+		return result;
+	}
 }
