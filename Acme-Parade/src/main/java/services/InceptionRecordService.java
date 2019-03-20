@@ -72,4 +72,9 @@ public class InceptionRecordService {
 		this.inceptionRecordRepository.delete(inceptionRecord);
 	}
 
+	public Collection<InceptionRecord> findInceptionRecordByHistoryId(final int historyId) {
+		Assert.notNull(historyId);
+		return this.inceptionRecordRepository.findInceptionRecordByHistoryId(historyId);
+	}
+
 }

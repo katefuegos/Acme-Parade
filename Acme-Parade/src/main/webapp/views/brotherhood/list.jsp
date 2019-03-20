@@ -35,4 +35,11 @@
 			<spring:message code="brotherhood.view" />
 		</a>
 	</display:column>
+	
+	<display:column titleKey="brotherhood.historys">
+		<a
+			href="history/list.do?brotherhoodId=${row.id}">
+			<spring:message code="brotherhood.view" />
+		</a>
+	</display:column>
 </display:table>

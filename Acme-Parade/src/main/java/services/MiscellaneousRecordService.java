@@ -69,4 +69,9 @@ public class MiscellaneousRecordService {
 		this.miscellaneousRecordRepository.delete(miscellaneousRecord);
 	}
 
+	public Collection<MiscellaneousRecord> findMiscellaneousRecordByHistoryId(final int historyId) {
+		Assert.notNull(historyId);
+		return this.miscellaneousRecordRepository.findMiscellaneousRecordByHistoryId(historyId);
+	}
+
 }

@@ -69,4 +69,9 @@ public class LinkRecordService {
 		this.linkRecordRepository.delete(linkRecord);
 	}
 
+	public Collection<LinkRecord> findLinkRecordByHistoryId(final int historyId) {
+		Assert.notNull(historyId);
+		return this.linkRecordRepository.findLinkRecordByHistoryId(historyId);
+	}
+
 }
