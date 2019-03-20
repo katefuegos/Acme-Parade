@@ -78,9 +78,4 @@ public class HistoryService {
 		return this.historyRepository.findByBrotherhoodId(brotherhoodId);
 	}
 
-	public History findHistoryBrotherhoodById(final int brotherhoodId) {
-		Assert.notNull(brotherhoodId);
-		return this.historyRepository.findHistoryBrotherhoodById(brotherhoodId);
-	}
-
 }

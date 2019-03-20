@@ -76,4 +76,9 @@ public class LegalRecordService {
 		this.legalRecordRepository.delete(legalRecord);
 	}
 
+	public Collection<LegalRecord> findLegalRecordByHistoryId(final int historyId) {
+		Assert.notNull(historyId);
+		return this.legalRecordRepository.findLegalRecordByHistoryId(historyId);
+	}
+
 }

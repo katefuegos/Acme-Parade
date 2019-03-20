@@ -9,8 +9,8 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
-	<definition name="inceptionRecord/list" extends="master.page">
+	<definition name="linkRecord/list" extends="master.page">
 		<put-attribute name="title" value="Titulaciones" />
-		<put-attribute name="body" value="/views/inceptionRecord/list.jsp" />
+		<put-attribute name="body" value="/views/linkRecord/list.jsp" />
 	</definition>
 </tiles-definitions>

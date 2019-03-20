@@ -20,3 +20,72 @@
 	<display:column property="photos" titleKey="history.photos" />
 	
 </display:table>
+
+
+<display:table name="historys" id="row" requestURI="${requestURI}" pagesize="4" class="displaytag">
+
+
+	<!-- Realizar vistas de los records -->
+
+	<display:column titleKey="history.periodRecords">
+		<spring:url value="/periodRecord/brotherhood/list.do" var="editURL">
+			<spring:param name="historyId" value="${row.id}" />
+		</spring:url>
+		<a href="${editURL}"><spring:message code="history.show" /> </a>
+		<br />
+	</display:column>
+
+	<display:column titleKey="history.legalRecords">
+		<spring:url value="/legalRecord/brotherhood/list.do" var="editURL">
+			<spring:param name="historyId" value="${row.id}" />
+		</spring:url>
+		<a href="${editURL}"><spring:message code="history.show" /> </a>
+		<br />
+	</display:column>
+
+	<display:column titleKey="history.linkRecords">
+		<spring:url value="/linkRecord/brotherhood/list.do" var="editURL">
+			<spring:param name="historyId" value="${row.id}" />
+		</spring:url>
+		<a href="${editURL}"><spring:message code="history.show" /> </a>
+		<br />
+	</display:column>
+
+	<display:column titleKey="history.miscellaneousRecords">
+		<spring:url value="/miscellaneousRecord/brotherhood/list.do" var="editURL">
+			<spring:param name="historyId" value="${row.id}" />
+		</spring:url>
+		<a href="${editURL}"><spring:message code="history.show" /> </a>
+		<br />
+	</display:column>
+	
+	<display:column titleKey="history.inceptionRecords">
+		<spring:url value="/inceptionRecord/brotherhood/list.do" var="editURL">
+			<spring:param name="historyId" value="${row.id}" />
+		</spring:url>
+		<a href="${editURL}"><spring:message code="history.show" /> </a>
+		<br />
+	</display:column>
+
+	<!-- BORRAR -->
+
+		
+</display:table>
+
+<br />
+
+<br />
+
+<!-- CREAR -->
+
+<security:authorize access="hasRole('BROTHERHOOD')">
+	<input type="button" value="<spring:message code="history.create"/>"
+		onclick="javascript: window.location.href = 'periodRecord/brotherhood/create.do';" />
+	
+	<input type="button" value="<spring:message code="history.delete"/>" 
+		onclick="javascript:confirm('<spring:message code="history.confirm.delete" />');
+			window.location.href='history/brotherhood/delete.do?historyId=${row.id}' ;" />
+	
+</security:authorize>
+
+

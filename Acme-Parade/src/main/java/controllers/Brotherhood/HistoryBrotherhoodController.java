@@ -1,6 +1,8 @@
 
 package controllers.Brotherhood;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,14 +37,14 @@ public class HistoryBrotherhoodController extends AbstractController {
 
 	//List
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	private ModelAndView list() {
+	public ModelAndView list() {
 		final ModelAndView modelAndView;
 		final Brotherhood brotherhood = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
 		final int brotherhoodId = brotherhood.getId();
-		final History history = this.historyService.findHistoryBrotherhoodById(brotherhoodId);
+		final Collection<History> historys = this.historyService.findByBrotherhoodId(brotherhoodId);
 
 		modelAndView = new ModelAndView("history/list");
-		modelAndView.addObject("history", history);
+		modelAndView.addObject("historys", historys);
 		modelAndView.addObject("requestURI", "/list.do?brotherhoodId=" + brotherhoodId);
 
 		return modelAndView;
