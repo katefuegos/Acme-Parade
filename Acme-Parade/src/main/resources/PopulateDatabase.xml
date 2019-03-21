@@ -1845,7 +1845,7 @@
 	
 	<bean id="segment2" class="domain.Segment">
 		<property name="originLatitude" value="37.381561" />
-		<property name="originLongitude" value="-5.984459" />
+		<property name="originLongitude" value="-5.983332" />
 		<property name="destinationLatitude" value="37.379243" />
 		<property name="destinationLongitude" value="-5.981102" />
 		<property name="approximateTimeOri" value="0.89" />

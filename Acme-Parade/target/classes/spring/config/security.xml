@@ -291,28 +291,38 @@
 			access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/path/brotherhood/create.do"
 			access="hasRole('BROTHERHOOD')" />
-					
+
+
+		<!-- SEGMENT -->
+
+		<security:intercept-url pattern="/segment/brotherhood/list.do"
+			access="hasRole('BROTHERHOOD')" />
+			<security:intercept-url pattern="/segment/brotherhood/deleteLast.do"
+			access="hasRole('BROTHERHOOD')" />
+
+		<!-- HISTORY -->
+
 		<security:intercept-url pattern="/history/list.do"
 			access="permitAll" />
-			
+
 		<security:intercept-url pattern="/history/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
 
 		<security:intercept-url pattern="/periodRecord/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
-		
+
 		<security:intercept-url pattern="/periodRecord/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />
-			
+
 		<security:intercept-url pattern="/inceptionRecord/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
-			
+
 		<security:intercept-url pattern="/miscellaneousRecord/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
-			
+
 		<security:intercept-url pattern="/legalRecord/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
-			
+
 		<security:intercept-url pattern="/linkRecord/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
 

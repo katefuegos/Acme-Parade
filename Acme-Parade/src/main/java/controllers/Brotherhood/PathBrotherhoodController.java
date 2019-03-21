@@ -1,5 +1,6 @@
 package controllers.Brotherhood;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,14 +59,18 @@ public class PathBrotherhoodController extends AbstractController {
 					.findByBrotherhoodId(brotherhoodId);
 			Collection<Parade> parades = paradeService
 					.findByBrotherhoodIdAndPending(brotherhoodId);
+			Collection<Parade> parades2 = new ArrayList<Parade>();
 			
 			if (!parades.isEmpty()) {
 				for (Parade p:parades) {
-					if (pathService.findByParadeId(p.getId()) != null) {
-						parades.remove(p);
+					Path pt = pathService.findByParadeId(p.getId());
+					if (pt != null) {
+						parades2.add(p);
 					}
 				}
 			}
+			
+			parades.removeAll(parades2);
 
 			result = new ModelAndView("path/list");
 			result.addObject("requestURI", "path/brotherhood/list.do");

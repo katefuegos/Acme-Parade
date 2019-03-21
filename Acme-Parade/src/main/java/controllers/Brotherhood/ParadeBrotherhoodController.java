@@ -316,7 +316,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 				copyPath = pathService.save(copyPath);
 
 				Collection<Segment> segmentsOriginal = segmentService
-						.findByPathId(copyPath.getId());
+						.findByPathId(pathOriginal.getId());
 				if (!segmentsOriginal.isEmpty()) {
 					for (Segment s : segmentsOriginal) {
 						Segment copySegment = segmentService.create();
