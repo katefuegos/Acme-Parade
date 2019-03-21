@@ -300,7 +300,10 @@
 
 		<security:intercept-url pattern="/periodRecord/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
-
+		
+		<security:intercept-url pattern="/periodRecord/brotherhood/edit.do"
+			access="hasRole('BROTHERHOOD')" />
+			
 		<security:intercept-url pattern="/inceptionRecord/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
 			
