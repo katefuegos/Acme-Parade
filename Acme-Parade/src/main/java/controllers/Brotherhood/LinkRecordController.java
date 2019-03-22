@@ -8,18 +8,21 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
-import services.BrotherhoodService;
-import services.HistoryService;
+import services.ActorService;
 import services.LinkRecordService;
 import controllers.AbstractController;
+import domain.Actor;
 import domain.LinkRecord;
+import forms.LinkRecordForm;
 
 @Controller
 @RequestMapping("/linkRecord/brotherhood")
@@ -28,13 +31,10 @@ public class LinkRecordController extends AbstractController {
 	//Service----------------------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
-	@Autowired
-	private HistoryService		historyService;
-
-	@Autowired
 	private LinkRecordService	linkRecordService;
+
+	@Autowired
+	private ActorService		actorService;
 
 
 	//Constructor--------------------------------------------------------------
@@ -58,100 +58,208 @@ public class LinkRecordController extends AbstractController {
 
 	}
 
-	//
-	//Create
+	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
-		final ModelAndView modelAndView;
+		ModelAndView result;
+		final LinkRecordForm linkRecordForm = new LinkRecordForm();
+		linkRecordForm.setId(0);
 
-		final LinkRecord linkRecord = this.linkRecordService.create();
-
-		modelAndView = this.createEditModelAndView(linkRecord);
-
-		return modelAndView;
+		result = this.createModelAndView(linkRecordForm);
+		return result;
 	}
 
-	//	//Show
-	//	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	//	private ModelAndView show(@RequestParam final int historyId) {
-	//		final ModelAndView modelAndView;
-	//
-	//		final LinkRecord linkRecord = this.linkRecordService.findLinkRecordByHistoryId(historyId);
-	//
-	//		modelAndView = this.createEditModelAndView(linkRecord);
-	//		modelAndView.addObject("isRead", true);
-	//		modelAndView.addObject("requestURI", "/show.do?historyId=" + historyId);
-	//
-	//		return modelAndView;
-	//	}
+	// Show------------------------------------------------------------
 
-	//Edit
+	@RequestMapping(value = "/show", method = RequestMethod.GET)
+	public ModelAndView show(@RequestParam final int linkRecordId, final RedirectAttributes redirectAttrs) {
+		ModelAndView result;
+		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordId);
+		final LinkRecordForm linkRecordForm = new LinkRecordForm();
+		Actor actor = null;
+		try {
+			Assert.notNull(linkRecord);
+			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+			Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
+			linkRecordForm.setId(linkRecordId);
+			linkRecordForm.setTitle(linkRecord.getTitle());
+			linkRecordForm.setDescription(linkRecord.getDescription());
+			result = this.showModelAndView(linkRecordForm);
+		} catch (final Throwable e) {
+			result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do");
+			if (linkRecord == null)
+				redirectAttrs.addFlashAttribute("message", "linkRecord.error.unexist");
+			else if (actor.getId() != linkRecord.getHistory().getBrotherhood().getId())
+				redirectAttrs.addFlashAttribute("message", "linkRecord.error.notFromActor");
+		}
+		return result;
+
+	}
+
+	// Edit ---------------------------------------------------------------
+
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int historyId) {
-		final ModelAndView modelAndView;
-		final LinkRecord linkRecord = this.linkRecordService.findOne(historyId);
-
-		modelAndView = this.createEditModelAndView(linkRecord);
-		modelAndView.addObject("isRead", false);
-		return modelAndView;
+	public ModelAndView edit(@RequestParam final int linkRecordId, final RedirectAttributes redirectAttrs) {
+		ModelAndView result;
+		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordId);
+		final LinkRecordForm linkRecordForm = new LinkRecordForm();
+		Actor actor = null;
+		try {
+			Assert.notNull(linkRecord);
+			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+			Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
+			linkRecordForm.setId(linkRecordId);
+			linkRecordForm.setTitle(linkRecord.getTitle());
+			linkRecordForm.setDescription(linkRecord.getDescription());
+			result = this.editModelAndView(linkRecordForm);
+		} catch (final Throwable e) {
+			result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do?historyId=" + linkRecord.getHistory().getId());
+			if (linkRecord == null)
+				redirectAttrs.addFlashAttribute("message", "linkRecord.error.unexist");
+			else if (actor.getId() != linkRecord.getHistory().getBrotherhood().getId())
+				redirectAttrs.addFlashAttribute("message", "linkRecord.error.notFromActor");
+		}
+		return result;
 	}
 
-	//Save
+	// Save
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final LinkRecord linkRecord, final BindingResult binding) {
-
+	public ModelAndView save(@Valid final LinkRecordForm linkRecordForm, final BindingResult binding) {
 		ModelAndView result;
-
+		Actor actor = new Actor();
+		LinkRecord linkRecord;
+		if (linkRecordForm.getId() != 0)
+			linkRecord = this.linkRecordService.findOne(linkRecordForm.getId());
+		else
+			linkRecord = new LinkRecord();
 		if (binding.hasErrors())
-			result = this.createEditModelAndView(linkRecord);
+			result = this.editModelAndView(linkRecordForm);
 		else
 			try {
+				System.out.println("owo" + linkRecord);
+				Assert.notNull(linkRecord);
+				System.out.println("uwu" + linkRecord);
+				actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+				//Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
+				System.out.println("iwi" + linkRecord);
+				linkRecord.setTitle(linkRecordForm.getTitle());
+				linkRecord.setDescription(linkRecordForm.getDescription());
 				this.linkRecordService.save(linkRecord);
-				result = new ModelAndView("redirect:/history/brotherhood/list.do");
+
+				result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do?historyId=" + linkRecord.getHistory().getId());
 			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(linkRecord, "linkRecord.commit.error");
+				oops.printStackTrace();
+				result = this.editModelAndView(linkRecordForm, "linkRecord.commit.error");
 			}
 		return result;
 	}
 
-	//Cancel
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "cancel")
-	public ModelAndView cancel(final LinkRecord linkRecord) {
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
+	public ModelAndView save2(@Valid final LinkRecordForm linkRecordForm, final BindingResult binding) {
 
 		ModelAndView result;
-
-		if (linkRecord.getId() == 0)
-			try {
-				this.historyService.delete(linkRecord.getHistory());
-				result = new ModelAndView("redirect:/history/brotherhood/list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(linkRecord, "linkRecord.commit.error");
-			}
+		final LinkRecord linkRecord = this.linkRecordService.create();
+		if (binding.hasErrors())
+			result = this.createModelAndView(linkRecordForm);
 		else
-			result = new ModelAndView("redirect:/history/brotherhood/list.do");
+			try {
+				linkRecord.setTitle(linkRecordForm.getTitle());
+				linkRecord.setDescription(linkRecordForm.getDescription());
+				this.linkRecordService.save(linkRecord);
+				result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do");
+			} catch (final Throwable oops) {
+				result = this.createModelAndView(linkRecordForm, "linkRecord.commit.error");
+			}
 		return result;
 	}
 
-	//CreateModelAndView
+	// delete
 
-	protected ModelAndView createEditModelAndView(final LinkRecord linkRecord) {
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
+	public ModelAndView delete(final LinkRecordForm linkRecordForm, final BindingResult binding) {
 		ModelAndView result;
-		result = this.createEditModelAndView(linkRecord, null);
+		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordForm.getId());
+		Actor actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+		try {
+			Assert.notNull(linkRecord);
+			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+			Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
+			this.linkRecordService.delete(linkRecord);
+			result = new ModelAndView("redirect:list.do");
+		} catch (final Throwable oops) {
+			result = this.editModelAndView(linkRecordForm, "linkRecord.commit.error");
+		}
+		return result;
+	}
+
+	// CreateModelAndView
+
+	protected ModelAndView createModelAndView(final LinkRecordForm linkRecordForm) {
+		ModelAndView result;
+
+		result = this.createModelAndView(linkRecordForm, null);
+
 		return result;
 
 	}
 
-	protected ModelAndView createEditModelAndView(final LinkRecord linkRecord, final String message) {
-		ModelAndView result;
-		final int brotherhoodId = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId()).getId();
+	protected ModelAndView createModelAndView(final LinkRecordForm linkRecordForm, final String message) {
+		final ModelAndView result;
 
-		result = new ModelAndView("personal/edit");
-		result.addObject("linkRecord", linkRecord);
+		result = new ModelAndView("linkRecord/create");
+		result.addObject("linkRecordForm", linkRecordForm);
 		result.addObject("message", message);
-		result.addObject("brotherhoodId", brotherhoodId);
 		result.addObject("isRead", false);
-		result.addObject("requestURI", "linkRecord/brotherhood/edit.do");
 
+		result.addObject("requestURI", "linkRecord/create.do");
+		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
+		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		return result;
+	}
+
+	protected ModelAndView editModelAndView(final LinkRecordForm linkRecordForm) {
+		ModelAndView result;
+
+		result = this.editModelAndView(linkRecordForm, null);
+
+		return result;
+
+	}
+
+	protected ModelAndView editModelAndView(final LinkRecordForm linkRecordForm, final String message) {
+		final ModelAndView result;
+
+		result = new ModelAndView("linkRecord/edit");
+		result.addObject("linkRecordForm", linkRecordForm);
+		result.addObject("message", message);
+		result.addObject("isRead", false);
+
+		result.addObject("requestURI", "linkRecord/edit.do?linkRecordId=" + linkRecordForm.getId());
+		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
+		//result.addObject("systemName", ((ActorService) this.configurationService).findAll().iterator().next().getSystemName());
+		return result;
+	}
+
+	protected ModelAndView showModelAndView(final LinkRecordForm linkRecordForm) {
+		ModelAndView result;
+
+		result = this.showModelAndView(linkRecordForm, null);
+
+		return result;
+
+	}
+
+	protected ModelAndView showModelAndView(final LinkRecordForm linkRecordForm, final String message) {
+		final ModelAndView result;
+
+		result = new ModelAndView("linkRecord/show");
+		result.addObject("linkRecordForm", linkRecordForm);
+		result.addObject("message", message);
+		result.addObject("isRead", true);
+
+		result.addObject("requestURI", "linkRecord/show.do?linkRecordId=" + linkRecordForm.getId());
+		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
+		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
 		return result;
 	}
 

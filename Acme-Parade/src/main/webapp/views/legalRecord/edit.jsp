@@ -16,16 +16,16 @@
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 
-<form:form action="periodRecord/brotherhood/edit.do" modelAttribute="periodRecordForm">
+<form:form action="legalRecord/brotherhood/edit.do" modelAttribute="legalRecordForm">
 	<form:hidden path="id" />
 	
-	<acme:textbox code="periodRecord.title" path="title"/>
-	<acme:textbox code="periodRecord.description" path="description"/>
-	<acme:textbox code="periodRecord.startYear" path="startYear"/>
-	<acme:textbox code="periodRecord.endYear" path="endYear"/>
-	<acme:textarea code="periodRecord.photos" path="photos"/>
+	<acme:textbox code="legalRecord.title" path="title"/>
+	<acme:textbox code="legalRecord.description" path="description"/>
+	<acme:textbox code="legalRecord.VATnumber" path="VATnumber"/>
+	<acme:textbox code="legalRecord.legalName" path="legalName"/>
+	<acme:textarea code="legalRecord.applicableLaws" path="applicableLaws"/>
 	
-	<acme:submit name="save" code="periodRecord.save"/>
-	<acme:cancel url="history/brotherhood/list.do" code="periodRecord.cancel"/>
-	<acme:delete confirmDelete="periodRecord.confirmDelete" name="delete" code="periodRecord.delete"/>
+	<acme:submit name="save" code="legalRecord.save"/>
+	<acme:cancel url="history/brotherhood/list.do" code="legalRecord.cancel"/>
+	<acme:delete confirmDelete="legalRecord.confirmDelete" name="delete" code="legalRecord.delete"/>
 </form:form>
