@@ -61,11 +61,18 @@ public class SegmentBrotherhoodController extends AbstractController {
 			final Collection<Segment> segments = this.segmentService
 					.findByPathId(pathId);
 
+			Boolean isEmpty = false;
+			if(segments.isEmpty()){
+				isEmpty=true;
+			}
+			Boolean draft = path.getParade().isDraftMode();
 			result = new ModelAndView("segment/list");
 			result.addObject("requestURI",
 					"segment/brotherhood/list.do?pathId=" + pathId);
 			result.addObject("segments", segments);
 			result.addObject("pathId", pathId);
+			result.addObject("draft", draft);
+			result.addObject("isEmpty", isEmpty);
 			result.addObject("banner", this.configurationService.findAll()
 					.iterator().next().getBanner());
 			result.addObject("systemName", this.configurationService.findAll()

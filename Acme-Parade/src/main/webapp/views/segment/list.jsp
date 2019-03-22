@@ -29,11 +29,15 @@
 
 <br>
 <br>
-<a href="segment/brotherhood/add.do"> <spring:message
-		code="segment.add" />
-</a>
-<br>
-<br>
-<a href="segment/brotherhood/deleteLast.do?pathId=${pathId}"> <spring:message
-		code="segment.deleteLast" />
-</a>
+<jstl:if test="${draft == true}">
+	<a href="segment/brotherhood/add.do"> <spring:message
+			code="segment.add" />
+	</a>
+	<br>
+	<br>
+	<jstl:if test="${isEmpty == false}">
+		<a href="segment/brotherhood/deleteLast.do?pathId=${pathId}"> <spring:message
+				code="segment.deleteLast" />
+		</a>
+	</jstl:if>
+</jstl:if>

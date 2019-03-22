@@ -29,6 +29,14 @@
 		</jstl:if>
 	</display:column>
 
+	<display:column>
+		<jstl:if test="${row.parade.draftMode == true}">
+			<a href="path/brotherhood/delete.do?pathId=${row.id}"> <spring:message
+					code="path.delete" />
+			</a>
+		</jstl:if>
+	</display:column>
+
 </display:table>
 <br>
 <br>

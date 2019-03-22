@@ -16,10 +16,12 @@ import services.BrotherhoodService;
 import services.ConfigurationService;
 import services.ParadeService;
 import services.PathService;
+import services.SegmentService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Parade;
 import domain.Path;
+import domain.Segment;
 
 @Controller
 @RequestMapping("/path/brotherhood")
@@ -37,6 +39,9 @@ public class PathBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private ConfigurationService configurationService;
+	
+	@Autowired
+	private SegmentService segmentService;
 
 	// Constructor---------------------------------------------------------
 
@@ -130,4 +135,48 @@ public class PathBrotherhoodController extends AbstractController {
 		}
 		return result;
 	}
+	
+	// Create ---------------------------------------------------------------
+		@RequestMapping(value = "/delete", method = RequestMethod.GET)
+		public ModelAndView delete(final int pathId,
+				final RedirectAttributes redirectAttrs) {
+			ModelAndView result;
+			final Path path = this.pathService.findOne(pathId);
+			Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+					.getPrincipal().getId());
+			try {
+				Assert.notNull(b);
+				Assert.notNull(path);
+				Assert.isTrue(path.getParade().getBrotherhood()
+						.equals(b));
+				Assert.isTrue(path.getParade().getStatus().equals("PENDING"));
+
+				Collection<Segment> segments = segmentService.findByPathId(pathId);
+				if(!segments.isEmpty()){
+					for(Segment s:segments){
+						segmentService.delete(s);
+					}
+				}
+				
+				pathService.delete(path);
+
+				result = new ModelAndView("redirect:/path/brotherhood/list.do");
+
+			} catch (final Throwable e) {
+
+				result = new ModelAndView("redirect:/path/brotherhood/list.do");
+				if (path == null)
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotExists");
+				else if (!path.getParade().getBrotherhood().equals(b)) {
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotYours");
+				} else if (path.getParade().isDraftMode()==false) {
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotDraft");
+				} else
+					redirectAttrs.addFlashAttribute("message", "commit.error");
+			}
+			return result;
+		}
 }
