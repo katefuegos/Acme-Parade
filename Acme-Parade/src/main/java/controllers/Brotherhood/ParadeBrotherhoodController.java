@@ -1,4 +1,3 @@
-
 package controllers.Brotherhood;
 
 import java.util.ArrayList;
@@ -37,23 +36,22 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 	// Services-----------------------------------------------------------
 	@Autowired
-	private ParadeService			paradeService;
+	private ParadeService paradeService;
 
 	@Autowired
-	private BrotherhoodService		brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
-	private ConfigurationService	configurationService;
+	private ConfigurationService configurationService;
 
 	@Autowired
-	private FloaatService			floaatService;
+	private FloaatService floaatService;
 
 	@Autowired
-	private PathService				pathService;
+	private PathService pathService;
 
 	@Autowired
-	private SegmentService			segmentService;
-
+	private SegmentService segmentService;
 
 	// Constructor---------------------------------------------------------
 
@@ -67,21 +65,30 @@ public class ParadeBrotherhoodController extends AbstractController {
 		ModelAndView result;
 
 		try {
-			final Integer brotherhoodId = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId()).getId();
+			final Integer brotherhoodId = this.brotherhoodService
+					.findByUserAccountId(LoginService.getPrincipal().getId())
+					.getId();
 			Assert.notNull(this.brotherhoodService.findOne(brotherhoodId));
-			final Collection<Parade> paradesAccepted = this.paradeService.findByBrotherhoodIdAndAccepted(brotherhoodId);
-			final Collection<Parade> paradesRejected = this.paradeService.findByBrotherhoodIdAndRejected(brotherhoodId);
-			final Collection<Parade> paradesSubmitted = this.paradeService.findByBrotherhoodIdAndSubmitted(brotherhoodId);
-			final Collection<Parade> paradesPending = this.paradeService.findByBrotherhoodIdAndPending(brotherhoodId);
+			final Collection<Parade> paradesAccepted = this.paradeService
+					.findByBrotherhoodIdAndAccepted(brotherhoodId);
+			final Collection<Parade> paradesRejected = this.paradeService
+					.findByBrotherhoodIdAndRejected(brotherhoodId);
+			final Collection<Parade> paradesSubmitted = this.paradeService
+					.findByBrotherhoodIdAndSubmitted(brotherhoodId);
+			final Collection<Parade> paradesPending = this.paradeService
+					.findByBrotherhoodIdAndPending(brotherhoodId);
 
 			result = new ModelAndView("parade/list2");
 			result.addObject("paradesAccepted", paradesAccepted);
 			result.addObject("paradesRejected", paradesRejected);
 			result.addObject("paradesSubmitted", paradesSubmitted);
 			result.addObject("paradesPending", paradesPending);
-			result.addObject("requestURI", "parade/brotherhood/list.do?brotherhoodId=" + brotherhoodId);
-			result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-			result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+			result.addObject("requestURI",
+					"parade/brotherhood/list.do?brotherhoodId=" + brotherhoodId);
+			result.addObject("banner", this.configurationService.findAll()
+					.iterator().next().getBanner());
+			result.addObject("systemName", this.configurationService.findAll()
+					.iterator().next().getSystemName());
 
 		} catch (final Throwable e) {
 			result = new ModelAndView("redirect:/");
@@ -91,20 +98,24 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 	// MANAGE FLOATS
 	@RequestMapping(value = "/manageFloat.do", method = RequestMethod.GET)
-	public ModelAndView manageFloats(final int paradeId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView manageFloats(final int paradeId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
 		Parade parade = null;
-		final Brotherhood b = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			parade = this.paradeService.findOne(paradeId);
 			Assert.notNull(parade);
-			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood().equals(b));
+			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b));
 			Assert.isTrue(this.paradeService.findOne(paradeId).isDraftMode());
 
 			final Collection<FloaatForm> collection = new ArrayList<>();
 
 			final Collection<Floaat> removeFloaats = parade.getFloats();
-			Collection<Floaat> allFloats = this.floaatService.findByBrotherhoodId(b.getId());
+			Collection<Floaat> allFloats = this.floaatService
+					.findByBrotherhoodId(b.getId());
 			if (allFloats == null)
 				allFloats = new ArrayList<>();
 			allFloats.removeAll(removeFloaats);
@@ -145,32 +156,41 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 			result = new ModelAndView("redirect:/parade/brotherhood/list.do");
 			if (this.paradeService.findOne(paradeId) == null)
-				redirectAttrs.addFlashAttribute("message", "parade.error.unexist");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.unexist");
 			else if (this.paradeService.findOne(paradeId).isDraftMode() == false)
-				redirectAttrs.addFlashAttribute("message", "parade.error.notDraftMode");
-			else if (!this.paradeService.findOne(paradeId).getBrotherhood().equals(b))
-				redirectAttrs.addFlashAttribute("message", "parade.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notDraftMode");
+			else if (!this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b))
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notFromActor");
 			else
-				redirectAttrs.addFlashAttribute("message", "message.commit.error");
+				redirectAttrs.addFlashAttribute("message",
+						"message.commit.error");
 		}
 		return result;
 	}
 
 	@RequestMapping(value = "/addFloat.do", method = RequestMethod.GET)
-	public ModelAndView addFloats(final int floatId, final int paradeId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView addFloats(final int floatId, final int paradeId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
 		Parade parade = null;
 		Floaat floaat = null;
-		final Brotherhood b = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			parade = this.paradeService.findOne(paradeId);
 			Assert.notNull(parade);
-			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood().equals(b));
+			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b));
 			Assert.isTrue(this.paradeService.findOne(paradeId).isDraftMode());
 
 			floaat = this.floaatService.findOne(floatId);
 			Assert.notNull(floaat);
-			Assert.isTrue(this.floaatService.findOne(floatId).getBrotherhood().equals(b));
+			Assert.isTrue(this.floaatService.findOne(floatId).getBrotherhood()
+					.equals(b));
 
 			Assert.isTrue(!parade.getFloats().contains(floaat));
 
@@ -180,45 +200,59 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 			this.paradeService.save(parade);
 
-			result = new ModelAndView("redirect:/parade/brotherhood/manageFloat.do");
+			result = new ModelAndView(
+					"redirect:/parade/brotherhood/manageFloat.do");
 			result.addObject("paradeId", parade.getId());
 
 		} catch (final Throwable e) {
 
 			result = new ModelAndView("redirect:/parade/brotherhood/list.do");
 			if (this.paradeService.findOne(paradeId) == null)
-				redirectAttrs.addFlashAttribute("message", "parade.error.unexist");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.unexist");
 			else if (this.paradeService.findOne(paradeId).isDraftMode() == false)
-				redirectAttrs.addFlashAttribute("message", "parade.error.notDraftMode");
-			else if (!this.paradeService.findOne(paradeId).getBrotherhood().equals(b))
-				redirectAttrs.addFlashAttribute("message", "parade.error.notFromActor");
-			else if (!this.floaatService.findOne(floatId).getBrotherhood().equals(b))
-				redirectAttrs.addFlashAttribute("message", "floaat.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notDraftMode");
+			else if (!this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b))
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notFromActor");
+			else if (!this.floaatService.findOne(floatId).getBrotherhood()
+					.equals(b))
+				redirectAttrs.addFlashAttribute("message",
+						"floaat.error.notFromActor");
 			else if (this.floaatService.findOne(floatId) == null)
-				redirectAttrs.addFlashAttribute("message", "floaat.error.unexist");
+				redirectAttrs.addFlashAttribute("message",
+						"floaat.error.unexist");
 			else if (parade.getFloats().contains(floaat) == true)
-				redirectAttrs.addFlashAttribute("message", "parade.error.floatContain");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.floatContain");
 			else
-				redirectAttrs.addFlashAttribute("message", "message.commit.error");
+				redirectAttrs.addFlashAttribute("message",
+						"message.commit.error");
 		}
 		return result;
 	}
 
 	@RequestMapping(value = "/removeFloat.do", method = RequestMethod.GET)
-	public ModelAndView removeFloats(final int floatId, final int paradeId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView removeFloats(final int floatId, final int paradeId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
 		Parade parade = null;
 		Floaat floaat = null;
-		final Brotherhood b = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			parade = this.paradeService.findOne(paradeId);
 			Assert.notNull(parade);
-			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood().equals(b));
+			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b));
 			Assert.isTrue(this.paradeService.findOne(paradeId).isDraftMode());
 
 			floaat = this.floaatService.findOne(floatId);
 			Assert.notNull(floaat);
-			Assert.isTrue(this.floaatService.findOne(floatId).getBrotherhood().equals(b));
+			Assert.isTrue(this.floaatService.findOne(floatId).getBrotherhood()
+					.equals(b));
 
 			Assert.isTrue(parade.getFloats().contains(floaat));
 
@@ -228,25 +262,35 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 			this.paradeService.save(parade);
 
-			result = new ModelAndView("redirect:/parade/brotherhood/manageFloat.do");
+			result = new ModelAndView(
+					"redirect:/parade/brotherhood/manageFloat.do");
 			result.addObject("paradeId", parade.getId());
 		} catch (final Throwable e) {
 
 			result = new ModelAndView("redirect:/parade/brotherhood/list.do");
 			if (this.paradeService.findOne(paradeId) == null)
-				redirectAttrs.addFlashAttribute("message", "parade.error.unexist");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.unexist");
 			else if (this.paradeService.findOne(paradeId).isDraftMode() == false)
-				redirectAttrs.addFlashAttribute("message", "parade.error.notDraftMode");
-			else if (!this.paradeService.findOne(paradeId).getBrotherhood().equals(b))
-				redirectAttrs.addFlashAttribute("message", "parade.error.notFromActor");
-			else if (!this.floaatService.findOne(floatId).getBrotherhood().equals(b))
-				redirectAttrs.addFlashAttribute("message", "floaat.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notDraftMode");
+			else if (!this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b))
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notFromActor");
+			else if (!this.floaatService.findOne(floatId).getBrotherhood()
+					.equals(b))
+				redirectAttrs.addFlashAttribute("message",
+						"floaat.error.notFromActor");
 			else if (this.floaatService.findOne(floatId) == null)
-				redirectAttrs.addFlashAttribute("message", "floaat.error.unexist");
+				redirectAttrs.addFlashAttribute("message",
+						"floaat.error.unexist");
 			else if (parade.getFloats().contains(floaat) == false)
-				redirectAttrs.addFlashAttribute("message", "parade.error.floatNotContain");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.floatNotContain");
 			else
-				redirectAttrs.addFlashAttribute("message", "message.commit.error");
+				redirectAttrs.addFlashAttribute("message",
+						"message.commit.error");
 		}
 		return result;
 	}
@@ -263,7 +307,8 @@ public class ParadeBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final ParadeForm paradeForm, final BindingResult binding) {
+	public ModelAndView save(@Valid final ParadeForm paradeForm,
+			final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors())
@@ -278,7 +323,8 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 				this.paradeService.save(parade);
 
-				result = new ModelAndView("redirect:/parade/brotherhood/list.do");
+				result = new ModelAndView(
+						"redirect:/parade/brotherhood/list.do");
 			} catch (final Throwable oops) {
 				result = this.createModelAndView(paradeForm, "commit.error");
 			}
@@ -287,14 +333,17 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 	// EDIT
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(final int paradeId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView edit(final int paradeId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
 		Parade parade = null;
-		final Brotherhood b = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			parade = this.paradeService.findOne(paradeId);
 			Assert.notNull(parade);
-			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood().equals(b));
+			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b));
 			Assert.isTrue(this.paradeService.findOne(paradeId).isDraftMode());
 
 			final ParadeForm paradeForm = new ParadeForm();
@@ -310,25 +359,32 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 			result = new ModelAndView("redirect:/parade/brotherhood/list.do");
 			if (this.paradeService.findOne(paradeId) == null)
-				redirectAttrs.addFlashAttribute("message", "parade.error.unexist");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.unexist");
 			else if (this.paradeService.findOne(paradeId).isDraftMode() == false)
-				redirectAttrs.addFlashAttribute("message", "parade.error.notDraftMode");
-			else if (!this.paradeService.findOne(paradeId).getBrotherhood().equals(b))
-				redirectAttrs.addFlashAttribute("message", "parade.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notDraftMode");
+			else if (!this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b))
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notFromActor");
 		}
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save2(@Valid final ParadeForm paradeForm, final BindingResult binding) {
+	public ModelAndView save2(@Valid final ParadeForm paradeForm,
+			final BindingResult binding) {
 		ModelAndView result;
-		final Brotherhood b = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		if (binding.hasErrors())
 			result = this.editModelAndView(paradeForm, "commit.error");
 		else
 			try {
 				Assert.notNull(paradeForm);
-				final Parade parade = this.paradeService.findOne(paradeForm.getId());
+				final Parade parade = this.paradeService.findOne(paradeForm
+						.getId());
 				Assert.isTrue(parade.getBrotherhood().equals(b));
 				Assert.isTrue(parade.isDraftMode());
 				parade.setDescription(paradeForm.getDescription());
@@ -338,7 +394,8 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 				this.paradeService.save(parade);
 
-				result = new ModelAndView("redirect:/parade/brotherhood/list.do");
+				result = new ModelAndView(
+						"redirect:/parade/brotherhood/list.do");
 			} catch (final Throwable oops) {
 				result = this.editModelAndView(paradeForm, "commit.error");
 			}
@@ -346,29 +403,36 @@ public class ParadeBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(@Valid final ParadeForm paradeForm, final BindingResult binding) {
+	public ModelAndView delete(@Valid final ParadeForm paradeForm,
+			final BindingResult binding) {
 		ModelAndView result;
-		final Brotherhood b = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		if (binding.hasErrors())
 			result = this.editModelAndView(paradeForm, "commit.error");
 		else
 			try {
 				Assert.notNull(paradeForm);
-				final Parade parade = this.paradeService.findOne(paradeForm.getId());
+				final Parade parade = this.paradeService.findOne(paradeForm
+						.getId());
 				Assert.isTrue(parade.getBrotherhood().equals(b));
 				Assert.isTrue(parade.isDraftMode());
 
-				final Path path = this.pathService.findByParadeId(parade.getId());
+				final Path path = this.pathService.findByParadeId(parade
+						.getId());
 				if (path != null) {
-					final Collection<Segment> segments = this.segmentService.findByPathId(path.getId());
+					final Collection<Segment> segments = this.segmentService
+							.findByPathId(path.getId());
 					for (final Segment s : segments)
 						this.segmentService.delete(s);
 					this.pathService.delete(path);
 				}
 
-				this.paradeService.delete(this.paradeService.findOne(paradeForm.getId()));
+				this.paradeService.delete(this.paradeService.findOne(paradeForm
+						.getId()));
 
-				result = new ModelAndView("redirect:/parade/brotherhood/list.do");
+				result = new ModelAndView(
+						"redirect:/parade/brotherhood/list.do");
 			} catch (final Throwable oops) {
 
 				result = this.editModelAndView(paradeForm, "commit.error");
@@ -378,10 +442,12 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 	// SHOW
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ModelAndView show(final int paradeId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView show(final int paradeId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
 		Parade parade = null;
-		final Brotherhood b = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			parade = this.paradeService.findOne(paradeId);
 			Assert.notNull(parade);
@@ -400,46 +466,43 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 			result = new ModelAndView("redirect:/parade/brotherhood/list.do");
 			if (this.paradeService.findOne(paradeId) == null)
-				redirectAttrs.addFlashAttribute("message", "parade.error.unexist");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.unexist");
 			else if (this.paradeService.findOne(paradeId).isDraftMode() == false)
-				redirectAttrs.addFlashAttribute("message", "parade.error.notDraftMode");
-			else if (!this.paradeService.findOne(paradeId).getBrotherhood().equals(b))
-				redirectAttrs.addFlashAttribute("message", "parade.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notDraftMode");
+			else if (!this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b))
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.notFromActor");
 		}
 		return result;
 	}
 
 	// COPY
 	@RequestMapping(value = "/copy", method = RequestMethod.GET)
-	public ModelAndView copy(final int paradeId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView copy(final int paradeId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
 		final Parade parade = this.paradeService.findOne(paradeId);
-		final Brotherhood b = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			Assert.notNull(b);
 			Assert.notNull(parade);
-			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood().equals(b));
-
-			final Collection<Floaat> floats = new ArrayList<Floaat>();
-			if (!parade.getFloats().isEmpty())
-				for (final Floaat f : parade.getFloats()) {
-					Floaat floaat = this.floaatService.create();
-					floaat.setDescription(f.getDescription());
-					floaat.setPictures(f.getPictures());
-					floaat.setTitle(f.getTitle());
-					floaat = this.floaatService.save(floaat);
-					floats.add(floaat);
-				}
+			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
+					.equals(b));
 
 			Parade copy = this.paradeService.create();
 			copy.setDescription(parade.getDescription());
-			copy.setFloats(floats);
+			copy.setFloats(parade.getFloats());
 			copy.setMoment(parade.getMoment());
 			copy.setTitle(parade.getTitle());
 
 			copy = this.paradeService.save(copy);
 
-			final Path pathOriginal = this.pathService.findByParadeId(parade.getId());
+			final Path pathOriginal = this.pathService.findByParadeId(parade
+					.getId());
 			if (pathOriginal != null) {
 				Path copyPath = this.pathService.create();
 				copyPath.setParade(copy);
@@ -463,6 +526,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 						copySegment.setPath(copyPath);
 						copySegment = this.segmentService.save(copySegment);
 					}
+				}
 			}
 
 			result = new ModelAndView("redirect:/parade/brotherhood/list.do");
@@ -471,9 +535,11 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 			result = new ModelAndView("redirect:/parade/brotherhood/list.do");
 			if (parade == null)
-				redirectAttrs.addFlashAttribute("message", "parade.error.paradeUnexists");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.paradeUnexists");
 			else if (!parade.getBrotherhood().equals(b))
-				redirectAttrs.addFlashAttribute("message", "parade.error.nobrotherhood");
+				redirectAttrs.addFlashAttribute("message",
+						"parade.error.nobrotherhood");
 			else
 				redirectAttrs.addFlashAttribute("message", "commit.error");
 		}
@@ -487,7 +553,8 @@ public class ParadeBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createModelAndView(final ParadeForm paradeForm, final String message) {
+	protected ModelAndView createModelAndView(final ParadeForm paradeForm,
+			final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("parade/create");
@@ -497,8 +564,10 @@ public class ParadeBrotherhoodController extends AbstractController {
 		result.addObject("paradeForm", paradeForm);
 		result.addObject("isRead", false);
 		result.addObject("id", 0);
-		result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 
@@ -508,17 +577,21 @@ public class ParadeBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView editModelAndView(final ParadeForm paradeForm, final String message) {
+	protected ModelAndView editModelAndView(final ParadeForm paradeForm,
+			final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("parade/edit");
 
 		result.addObject("message", message);
-		result.addObject("requestURI", "parade/brotherhood/edit.do?paradeId=" + paradeForm.getId());
+		result.addObject("requestURI", "parade/brotherhood/edit.do?paradeId="
+				+ paradeForm.getId());
 		result.addObject("paradeForm", paradeForm);
 		result.addObject("isRead", false);
-		result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 
@@ -528,16 +601,20 @@ public class ParadeBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView ShowModelAndView(final ParadeForm paradeForm, final String message) {
+	protected ModelAndView ShowModelAndView(final ParadeForm paradeForm,
+			final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("parade/show");
 		result.addObject("message", message);
-		result.addObject("requestURI", "parade/brotherhood/show.do?paradeId=" + paradeForm.getId());
+		result.addObject("requestURI", "parade/brotherhood/show.do?paradeId="
+				+ paradeForm.getId());
 		result.addObject("paradeForm", paradeForm);
 		result.addObject("isRead", true);
-		result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 }
