@@ -109,6 +109,12 @@
 			access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/parade/brotherhood/copy.do"
 			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/parade/brotherhood/manageFloat.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/parade/brotherhood/addFloat.do"
+			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/parade/brotherhood/removeFloat.do"
+			access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/parade/chapter/list.do"
 			access="hasRole('CHAPTER')" />
 		<security:intercept-url pattern="/parade/chapter/accept.do"
@@ -116,6 +122,8 @@
 		<security:intercept-url pattern="/parade/chapter/reject.do"
 			access="hasRole('CHAPTER')" />
 		<security:intercept-url pattern="/parade/list.do"
+			access="permitAll" />
+		<security:intercept-url pattern="/parade/showFloat.do"
 			access="permitAll" />
 
 		<!-- FLOAT -->

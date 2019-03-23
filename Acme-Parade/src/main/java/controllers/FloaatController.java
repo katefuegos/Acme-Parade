@@ -87,7 +87,6 @@ public class FloaatController extends AbstractController {
 	}
 
 	// Edit
-
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam final int floaatId) {
 		ModelAndView result;

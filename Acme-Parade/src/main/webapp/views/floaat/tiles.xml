@@ -29,4 +29,15 @@
 		<put-attribute name="title" value="Create float" />
 		<put-attribute name="body" value="/views/floaat/edit.jsp" />
 	</definition>
+	<definition name="floaat/manage" extends="master.page">
+		<put-attribute name="title" value="Manage floats" />
+		<put-attribute name="body" value="/views/floaat/manage.jsp" />
+	</definition>
+	
+	<definition name="floaat/showByParade" extends="master.page">
+		<put-attribute name="title" value="Show floats" />
+		<put-attribute name="body" value="/views/floaat/manage.jsp" />
+	</definition>
+	
+
 </tiles-definitions>

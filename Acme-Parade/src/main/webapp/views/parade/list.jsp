@@ -14,9 +14,14 @@
 	pagesize="5" class="displaytag">
 
 	<display:column property="ticker" titleKey="parade.ticker" />
-	
+
 	<display:column property="title" titleKey="parade.title" />
-	
+
 	<display:column property="moment" titleKey="parade.moment" />
-	
+
+	<display:column>
+		<a href="parade/showFloat.do?paradeId=${row.id}"> <spring:message
+				code="floaat.list" />
+		</a>
+	</display:column>
 </display:table>

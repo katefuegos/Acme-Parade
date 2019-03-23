@@ -32,6 +32,7 @@
 	<form:errors path="draftMode" cssClass="error" />
 	<br />
 
+
 	<jstl:if test="${isRead == false}">
 			<acme:submit name="save" code="parade.save"/>
 		<jstl:if test="${id != 0}">

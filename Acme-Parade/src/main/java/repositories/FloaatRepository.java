@@ -1,3 +1,4 @@
+
 package repositories;
 
 import java.util.Collection;
@@ -13,4 +14,5 @@ public interface FloaatRepository extends JpaRepository<Floaat, Integer> {
 
 	@Query("select f from Floaat f where f.brotherhood.id=?1")
 	Collection<Floaat> findByBrotherhoodId(int brotherhoodId);
+
 }

@@ -33,6 +33,8 @@
 					code="parade.copy" />
 			</a>
 		</display:column>
+		
+	
 	</security:authorize>
 
 </display:table>
@@ -127,6 +129,12 @@
 					code="parade.copy" />
 			</a>
 		</display:column>
+			<display:column>
+			<a href="parade/brotherhood/manageFloat.do?paradeId=${row.id}"> <spring:message
+					code="floaat.list" />
+			</a>
+		</display:column>
+		
 	</security:authorize>
 
 </display:table>

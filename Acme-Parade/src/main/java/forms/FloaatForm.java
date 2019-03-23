@@ -17,7 +17,25 @@ public class FloaatForm {
 	private String	title;
 	private String	description;
 	private String	pictures;
+	private boolean	add;
+	private int		paradeId;
 
+
+	public boolean isAdd() {
+		return this.add;
+	}
+
+	public void setAdd(final boolean add) {
+		this.add = add;
+	}
+
+	public int getParadeId() {
+		return this.paradeId;
+	}
+
+	public void setParadeId(final int paradeId) {
+		this.paradeId = paradeId;
+	}
 
 	@NotBlank
 	public String getTitle() {

@@ -1,3 +1,4 @@
+
 package forms;
 
 import java.util.Date;
@@ -16,11 +17,12 @@ public class ParadeForm {
 
 	// Attributes------------------------------------------------------------------
 
-	private int id;
-	private String title;
-	private String description;
-	private Date moment;
-	private boolean draftMode;
+	private int		id;
+	private String	title;
+	private String	description;
+	private Date	moment;
+	private boolean	draftMode;
+
 
 	// Constructor------------------------------------------------------------------
 
@@ -69,7 +71,6 @@ public class ParadeForm {
 		this.draftMode = draftMode;
 	}
 
-	@NotNull
 	public int getId() {
 		return id;
 	}
@@ -77,4 +78,5 @@ public class ParadeForm {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 }

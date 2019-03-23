@@ -10,6 +10,7 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 
+
 <display:table name="floaats" id="row" requestURI="${requestURI}"
 	pagesize="5" class="displaytag">
 
