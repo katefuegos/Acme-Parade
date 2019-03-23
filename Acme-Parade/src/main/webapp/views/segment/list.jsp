@@ -30,7 +30,7 @@
 <br>
 <br>
 <jstl:if test="${draft == true}">
-	<a href="segment/brotherhood/add.do"> <spring:message
+	<a href="segment/brotherhood/create.do?pathId=${pathId}"> <spring:message
 			code="segment.add" />
 	</a>
 	<br>

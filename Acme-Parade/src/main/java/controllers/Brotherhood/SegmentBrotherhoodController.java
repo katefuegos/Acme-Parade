@@ -3,9 +3,12 @@ package controllers.Brotherhood;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +23,7 @@ import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Path;
 import domain.Segment;
+import forms.SegmentForm;
 
 @Controller
 @RequestMapping("/segment/brotherhood")
@@ -62,8 +66,8 @@ public class SegmentBrotherhoodController extends AbstractController {
 					.findByPathId(pathId);
 
 			Boolean isEmpty = false;
-			if(segments.isEmpty()){
-				isEmpty=true;
+			if (segments.isEmpty()) {
+				isEmpty = true;
 			}
 			Boolean draft = path.getParade().isDraftMode();
 			result = new ModelAndView("segment/list");
@@ -132,18 +136,129 @@ public class SegmentBrotherhoodController extends AbstractController {
 				redirectAttrs.addFlashAttribute("message",
 						"path.error.pathNotYours");
 			} else if (path.getParade().isDraftMode() == false) {
-				result = new ModelAndView("redirect:/segment/brotherhood/list.do?pathId="+pathId);
+				result = new ModelAndView(
+						"redirect:/segment/brotherhood/list.do?pathId="
+								+ pathId);
 				redirectAttrs.addFlashAttribute("message",
 						"path.error.pathNotDraft");
-			} else if (segments.isEmpty()){
-				result = new ModelAndView("redirect:/segment/brotherhood/list.do?pathId="+pathId);
-				redirectAttrs.addFlashAttribute("message",
-						"path.error.nothing");
-			}
-			else {	redirectAttrs.addFlashAttribute("message", "commit.error");
+			} else if (segments.isEmpty()) {
+				result = new ModelAndView(
+						"redirect:/segment/brotherhood/list.do?pathId="
+								+ pathId);
+				redirectAttrs
+						.addFlashAttribute("message", "path.error.nothing");
+			} else {
+				redirectAttrs.addFlashAttribute("message", "commit.error");
 			}
 		}
 		return result;
+	}
+
+	// CREATE
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public ModelAndView create(final int pathId,
+			final RedirectAttributes redirectAttrs) {
+		ModelAndView result;
+		final Path path = this.pathService.findOne(pathId);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Collection<Segment> segments = null;
+		try {
+			Assert.notNull(b);
+			Assert.notNull(path);
+			Assert.isTrue(path.getParade().getBrotherhood().equals(b));
+			Assert.isTrue(path.getParade().isDraftMode());
+
+			SegmentForm segmentForm = new SegmentForm();
+
+			segments = segmentService.findByPathId(pathId);
+			if (!segments.isEmpty()) {
+				Segment last = (Segment) getLastElement(segments);
+				segmentForm.setOriginLatitude(last.getDestinationLatitude());
+				segmentForm.setOriginLongitude(last.getDestinationLongitude());
+			}
+
+			segmentForm.setPath(path);
+
+			result = createModelAndView(segmentForm);
+
+		} catch (final Throwable e) {
+
+			result = new ModelAndView(
+					"redirect:/segment/brotherhood/list.do?pathId=" + pathId);
+			if (path == null)
+				redirectAttrs.addFlashAttribute("message",
+						"path.error.pathNotExists");
+			else if (!path.getParade().getBrotherhood().equals(b)) {
+				redirectAttrs.addFlashAttribute("message",
+						"path.error.pathNotYours");
+			} else if (path.getParade().isDraftMode() == false) {
+				result = new ModelAndView(
+						"redirect:/segment/brotherhood/list.do?pathId="
+								+ pathId);
+				redirectAttrs.addFlashAttribute("message",
+						"path.error.pathNotDraft");
+			} else {
+				redirectAttrs.addFlashAttribute("message", "commit.error");
+			}
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
+	public ModelAndView save(@Valid final SegmentForm segmentForm,
+			final BindingResult binding, final RedirectAttributes redirectAttrs) {
+		ModelAndView result;
+		Path path = pathService.findOne(segmentForm.getPath().getId());
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		if (binding.hasErrors())
+			result = this.createModelAndView(segmentForm, "commit.error");
+		else
+			try {
+				Assert.notNull(b);
+				Assert.notNull(path);
+				Assert.isTrue(path.getParade().getBrotherhood().equals(b));
+				Assert.isTrue(path.getParade().isDraftMode());
+
+				final Segment segment = this.segmentService.create();
+				segment.setApproximateTimeDes(segmentForm
+						.getApproximateTimeDes());
+				segment.setApproximateTimeOri(segmentForm
+						.getApproximateTimeOri());
+				segment.setDestinationLatitude(segmentForm
+						.getDestinationLatitude());
+				segment.setDestinationLongitude(segmentForm
+						.getDestinationLongitude());
+				segment.setOriginLatitude(segmentForm.getOriginLatitude());
+				segment.setOriginLongitude(segmentForm.getOriginLongitude());
+				segment.setPath(path);
+
+				this.segmentService.save(segment);
+
+				result = new ModelAndView(
+						"redirect:/segment/brotherhood/list.do?pathId="
+								+ segmentForm.getPath().getId());
+			} catch (final Throwable oops) {
+				result = this.createModelAndView(segmentForm, "commit.error");
+				if (path == null)
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotExists");
+				else if (!path.getParade().getBrotherhood().equals(b)) {
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotYours");
+				} else if (path.getParade().isDraftMode() == false) {
+					result = new ModelAndView(
+							"redirect:/segment/brotherhood/list.do?pathId="
+									+ segmentForm.getPath().getId());
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotDraft");
+				} else {
+					redirectAttrs.addFlashAttribute("message", "commit.error");
+				}
+			}
+		return result;
+
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -154,5 +269,30 @@ public class SegmentBrotherhoodController extends AbstractController {
 			lastElement = itr.next();
 		}
 		return lastElement;
+	}
+
+	// MODEL
+	protected ModelAndView createModelAndView(final SegmentForm segmentForm) {
+		ModelAndView result;
+		result = this.createModelAndView(segmentForm, null);
+		return result;
+	}
+
+	protected ModelAndView createModelAndView(final SegmentForm segmentForm,
+			final String message) {
+		final ModelAndView result;
+
+		result = new ModelAndView("segment/create");
+
+		result.addObject("message1", message);
+		result.addObject("requestURI", "segment/brotherhood/create.do");
+		result.addObject("segmentForm", segmentForm);
+		result.addObject("isRead", false);
+		result.addObject("pathId", segmentForm.getPath().getId());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
+		return result;
 	}
 }
