@@ -13,4 +13,14 @@
 		<put-attribute name="title" value="Titulaciones" />
 		<put-attribute name="body" value="/views/linkRecord/list.jsp" />
 	</definition>
+	
+		<definition name="linkRecord/edit" extends="master.page">
+		<put-attribute name="title" value="Titulaciones" />
+		<put-attribute name="body" value="/views/linkRecord/edit.jsp" />
+	</definition>
+	
+	<definition name="linkRecord/create" extends="master.page">
+		<put-attribute name="title" value="Titulaciones" />
+		<put-attribute name="body" value="/views/linkRecord/edit.jsp" />
+	</definition>
 </tiles-definitions>

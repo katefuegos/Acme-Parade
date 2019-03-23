@@ -1,5 +1,6 @@
 package controllers.Brotherhood;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,12 @@ import services.BrotherhoodService;
 import services.ConfigurationService;
 import services.ParadeService;
 import services.PathService;
+import services.SegmentService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Parade;
 import domain.Path;
+import domain.Segment;
 
 @Controller
 @RequestMapping("/path/brotherhood")
@@ -36,6 +39,9 @@ public class PathBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private ConfigurationService configurationService;
+	
+	@Autowired
+	private SegmentService segmentService;
 
 	// Constructor---------------------------------------------------------
 
@@ -58,14 +64,18 @@ public class PathBrotherhoodController extends AbstractController {
 					.findByBrotherhoodId(brotherhoodId);
 			Collection<Parade> parades = paradeService
 					.findByBrotherhoodIdAndPending(brotherhoodId);
+			Collection<Parade> parades2 = new ArrayList<Parade>();
 			
 			if (!parades.isEmpty()) {
 				for (Parade p:parades) {
-					if (pathService.findByParadeId(p.getId()) != null) {
-						parades.remove(p);
+					Path pt = pathService.findByParadeId(p.getId());
+					if (pt != null) {
+						parades2.add(p);
 					}
 				}
 			}
+			
+			parades.removeAll(parades2);
 
 			result = new ModelAndView("path/list");
 			result.addObject("requestURI", "path/brotherhood/list.do");
@@ -125,4 +135,48 @@ public class PathBrotherhoodController extends AbstractController {
 		}
 		return result;
 	}
+	
+	// Create ---------------------------------------------------------------
+		@RequestMapping(value = "/delete", method = RequestMethod.GET)
+		public ModelAndView delete(final int pathId,
+				final RedirectAttributes redirectAttrs) {
+			ModelAndView result;
+			final Path path = this.pathService.findOne(pathId);
+			Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+					.getPrincipal().getId());
+			try {
+				Assert.notNull(b);
+				Assert.notNull(path);
+				Assert.isTrue(path.getParade().getBrotherhood()
+						.equals(b));
+				Assert.isTrue(path.getParade().getStatus().equals("PENDING"));
+
+				Collection<Segment> segments = segmentService.findByPathId(pathId);
+				if(!segments.isEmpty()){
+					for(Segment s:segments){
+						segmentService.delete(s);
+					}
+				}
+				
+				pathService.delete(path);
+
+				result = new ModelAndView("redirect:/path/brotherhood/list.do");
+
+			} catch (final Throwable e) {
+
+				result = new ModelAndView("redirect:/path/brotherhood/list.do");
+				if (path == null)
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotExists");
+				else if (!path.getParade().getBrotherhood().equals(b)) {
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotYours");
+				} else if (path.getParade().isDraftMode()==false) {
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotDraft");
+				} else
+					redirectAttrs.addFlashAttribute("message", "commit.error");
+			}
+			return result;
+		}
 }

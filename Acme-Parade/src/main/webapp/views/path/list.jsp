@@ -16,6 +16,26 @@
 
 	<display:column property="parade.ticker" titleKey="path.parade.ticker" />
 	<display:column property="parade.title" titleKey="path.parade.title" />
+	<display:column>
+		<jstl:if test="${row.parade.draftMode == true}">
+			<a href="segment/brotherhood/list.do?pathId=${row.id}"> <spring:message
+					code="path.viewEdit" />
+			</a>
+		</jstl:if>
+		<jstl:if test="${row.parade.draftMode == false}">
+			<a href="segment/brotherhood/list.do?pathId=${row.id}"> <spring:message
+					code="path.view" />
+			</a>
+		</jstl:if>
+	</display:column>
+
+	<display:column>
+		<jstl:if test="${row.parade.draftMode == true}">
+			<a href="path/brotherhood/delete.do?pathId=${row.id}"> <spring:message
+					code="path.delete" />
+			</a>
+		</jstl:if>
+	</display:column>
 
 </display:table>
 <br>

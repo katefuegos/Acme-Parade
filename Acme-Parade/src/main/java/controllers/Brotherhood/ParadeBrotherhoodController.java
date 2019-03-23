@@ -443,16 +443,21 @@ public class ParadeBrotherhoodController extends AbstractController {
 			if (pathOriginal != null) {
 				Path copyPath = this.pathService.create();
 				copyPath.setParade(copy);
-				copyPath = this.pathService.save(copyPath);
+				copyPath = pathService.save(copyPath);
 
-				final Collection<Segment> segmentsOriginal = this.segmentService.findByPathId(copyPath.getId());
-				if (!segmentsOriginal.isEmpty())
-					for (final Segment s : segmentsOriginal) {
-						Segment copySegment = this.segmentService.create();
-						copySegment.setApproximateTimeDes(s.getApproximateTimeDes());
-						copySegment.setApproximateTimeOri(s.getApproximateTimeOri());
-						copySegment.setDestinationLatitude(s.getDestinationLatitude());
-						copySegment.setDestinationLongitude(s.getDestinationLongitude());
+				Collection<Segment> segmentsOriginal = segmentService
+						.findByPathId(pathOriginal.getId());
+				if (!segmentsOriginal.isEmpty()) {
+					for (Segment s : segmentsOriginal) {
+						Segment copySegment = segmentService.create();
+						copySegment.setApproximateTimeDes(s
+								.getApproximateTimeDes());
+						copySegment.setApproximateTimeOri(s
+								.getApproximateTimeOri());
+						copySegment.setDestinationLatitude(s
+								.getDestinationLatitude());
+						copySegment.setDestinationLongitude(s
+								.getDestinationLongitude());
 						copySegment.setOriginLatitude(s.getOriginLatitude());
 						copySegment.setOriginLongitude(s.getOriginLongitude());
 						copySegment.setPath(copyPath);

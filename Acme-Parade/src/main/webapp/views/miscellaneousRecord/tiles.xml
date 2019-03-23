@@ -13,4 +13,15 @@
 		<put-attribute name="title" value="Titulaciones" />
 		<put-attribute name="body" value="/views/miscellaneousRecord/list.jsp" />
 	</definition>
+	
+	<definition name="miscellaneousRecord/edit" extends="master.page">
+		<put-attribute name="title" value="Miscelanea" />
+		<put-attribute name="body" value="/views/miscellaneousRecord/edit.jsp" />
+	</definition>
+	
+	<definition name="miscellaneousRecord/create" extends="master.page">
+		<put-attribute name="title" value="Miscelanea" />
+		<put-attribute name="body" value="/views/miscellaneousRecord/edit.jsp" />
+	</definition>
+	
 </tiles-definitions>

@@ -79,13 +79,15 @@
 <!-- CREAR -->
 
 <security:authorize access="hasRole('BROTHERHOOD')">
+	<jstl:if test="${history.id == 0}">
 	<input type="button" value="<spring:message code="history.create"/>"
 		onclick="javascript: window.location.href = 'periodRecord/brotherhood/create.do';" />
-	
+	</jstl:if>
+	<jstl:if test="${history.id != 0}">
 	<input type="button" value="<spring:message code="history.delete"/>" 
 		onclick="javascript:confirm('<spring:message code="history.confirm.delete" />');
 			window.location.href='history/brotherhood/delete.do?historyId=${row.id}' ;" />
-	
+	</jstl:if>
 </security:authorize>
 
 

@@ -18,9 +18,9 @@
 
 <form:form action="periodRecord/brotherhood/edit.do" modelAttribute="periodRecordForm">
 	<form:hidden path="id" />
-	<form:hidden path="title"/>
-	<form:hidden path="description"/>
 	
+	<acme:textbox code="periodRecord.title" path="title"/>
+	<acme:textbox code="periodRecord.description" path="description"/>
 	<acme:textbox code="periodRecord.startYear" path="startYear"/>
 	<acme:textbox code="periodRecord.endYear" path="endYear"/>
 	<acme:textarea code="periodRecord.photos" path="photos"/>

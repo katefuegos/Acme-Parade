@@ -85,9 +85,11 @@ public class PeriodRecordController extends AbstractController {
 			periodRecordForm.setStartYear(periodRecord.getStartYear());
 			periodRecordForm.setEndYear(periodRecord.getEndYear());
 			periodRecordForm.setPhotos(periodRecord.getPhotos());
+			periodRecordForm.setTitle(periodRecord.getTitle());
+			periodRecordForm.setDescription(periodRecord.getDescription());
 			result = this.showModelAndView(periodRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/periodRecord/list.do");
+			result = new ModelAndView("redirect:/periodRecord/brotherhood/list.do");
 			if (periodRecord == null)
 				redirectAttrs.addFlashAttribute("message", "periodRecord.error.unexist");
 			else if (actor.getId() != periodRecord.getHistory().getBrotherhood().getId())
@@ -113,9 +115,11 @@ public class PeriodRecordController extends AbstractController {
 			periodRecordForm.setStartYear(periodRecord.getStartYear());
 			periodRecordForm.setEndYear(periodRecord.getEndYear());
 			periodRecordForm.setPhotos(periodRecord.getPhotos());
+			periodRecordForm.setTitle(periodRecord.getTitle());
+			periodRecordForm.setDescription(periodRecord.getDescription());
 			result = this.editModelAndView(periodRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/periodRecord/list.do");
+			result = new ModelAndView("redirect:/periodRecord/brotherhood/list.do?historyId=" + periodRecord.getHistory().getId());
 			if (periodRecord == null)
 				redirectAttrs.addFlashAttribute("message", "periodRecord.error.unexist");
 			else if (actor.getId() != periodRecord.getHistory().getBrotherhood().getId())
@@ -128,21 +132,32 @@ public class PeriodRecordController extends AbstractController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@Valid final PeriodRecordForm periodRecordForm, final BindingResult binding) {
 		ModelAndView result;
-		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordForm.getId());
-		Actor actor = null;
+		Actor actor = new Actor();
+		PeriodRecord periodRecord;
+		if (periodRecordForm.getId() != 0)
+			periodRecord = this.periodRecordService.findOne(periodRecordForm.getId());
+		else
+			periodRecord = new PeriodRecord();
 		if (binding.hasErrors())
 			result = this.editModelAndView(periodRecordForm);
 		else
 			try {
+				System.out.println("owo" + periodRecord);
 				Assert.notNull(periodRecord);
+				System.out.println("uwu" + periodRecord);
 				actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-				Assert.isTrue(actor.getId() == periodRecord.getHistory().getBrotherhood().getId());
+				//Assert.isTrue(actor.getId() == periodRecord.getHistory().getBrotherhood().getId());
+				System.out.println("iwi" + periodRecord);
 				periodRecord.setStartYear(periodRecordForm.getStartYear());
 				periodRecord.setEndYear(periodRecordForm.getEndYear());
 				periodRecord.setPhotos(periodRecordForm.getPhotos());
+				periodRecord.setTitle(periodRecordForm.getTitle());
+				periodRecord.setDescription(periodRecordForm.getDescription());
 				this.periodRecordService.save(periodRecord);
-				result = new ModelAndView("redirect:/periodRecord/list.do");
+
+				result = new ModelAndView("redirect:/periodRecord/brotherhood/list.do?historyId=" + periodRecord.getHistory().getId());
 			} catch (final Throwable oops) {
+				oops.printStackTrace();
 				result = this.editModelAndView(periodRecordForm, "periodRecord.commit.error");
 			}
 		return result;
@@ -160,8 +175,10 @@ public class PeriodRecordController extends AbstractController {
 				periodRecord.setStartYear(periodRecordForm.getStartYear());
 				periodRecord.setEndYear(periodRecordForm.getEndYear());
 				periodRecord.setPhotos(periodRecordForm.getPhotos());
+				periodRecord.setTitle(periodRecordForm.getTitle());
+				periodRecord.setDescription(periodRecordForm.getDescription());
 				this.periodRecordService.save(periodRecord);
-				result = new ModelAndView("redirect:/periodRecord/list.do");
+				result = new ModelAndView("redirect:/periodRecord/brotherhood/list.do");
 			} catch (final Throwable oops) {
 				result = this.createModelAndView(periodRecordForm, "periodRecord.commit.error");
 			}

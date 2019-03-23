@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.PeriodRecordRepository;
+import domain.History;
 import domain.PeriodRecord;
 
 @Service
@@ -68,6 +69,7 @@ public class PeriodRecordService {
 
 	public PeriodRecord save(final PeriodRecord periodRecord) {
 		Assert.notNull(periodRecord);
+		//periodRecord.setHistory(this.findHistoryByBrotherhoodId(LoginService.getPrincipal().getId()));
 		final PeriodRecord saved = this.periodRecordRepository.save(periodRecord);
 		return saved;
 	}
@@ -79,6 +81,10 @@ public class PeriodRecordService {
 
 	public Collection<PeriodRecord> findPeriodRecordByHistoryId(final int historyId) {
 		return this.periodRecordRepository.findPeriodRecordByHistoryId(historyId);
+	}
+
+	public History findHistoryByBrotherhoodId(final int brotherhoodId) {
+		return this.periodRecordRepository.findHistoryByBrotherhoodId(brotherhoodId);
 	}
 
 }

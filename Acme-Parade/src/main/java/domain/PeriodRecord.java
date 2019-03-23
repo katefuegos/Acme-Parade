@@ -4,7 +4,6 @@ package domain;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
@@ -19,15 +18,14 @@ public class PeriodRecord extends EveryRecord {
 
 
 	@NotNull
-	@Valid
 	public Integer getStartYear() {
 		return this.startYear;
 	}
 	public void setStartYear(final Integer startYear) {
 		this.startYear = startYear;
 	}
+	
 	@NotNull
-	@Valid
 	public Integer getEndYear() {
 		return this.endYear;
 	}

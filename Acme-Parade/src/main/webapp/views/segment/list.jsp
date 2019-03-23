@@ -12,5 +12,32 @@
 
 <display:table name="segments" id="row" requestURI="${requestURI}"
 	pagesize="5" class="displaytag">
-	
+
+	<display:column property="originLatitude"
+		titleKey="path.originLatitude" />
+	<display:column property="originLongitude"
+		titleKey="path.originLongitude" />
+	<display:column property="approximateTimeOri"
+		titleKey="path.approximateTimeOri" />
+	<display:column property="destinationLatitude"
+		titleKey="path.destinationLatitude" />
+	<display:column property="destinationLongitude"
+		titleKey="path.destinationLongitude" />
+	<display:column property="approximateTimeDes"
+		titleKey="path.approximateTimeDes" />
 </display:table>
+
+<br>
+<br>
+<jstl:if test="${draft == true}">
+	<a href="segment/brotherhood/add.do"> <spring:message
+			code="segment.add" />
+	</a>
+	<br>
+	<br>
+	<jstl:if test="${isEmpty == false}">
+		<a href="segment/brotherhood/deleteLast.do?pathId=${pathId}"> <spring:message
+				code="segment.deleteLast" />
+		</a>
+	</jstl:if>
+</jstl:if>

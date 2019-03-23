@@ -3,7 +3,6 @@ package forms;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
@@ -31,15 +30,14 @@ public class PeriodRecordForm extends EveryRecordForm {
 	}
 
 	@NotNull
-	@Valid
 	public Integer getStartYear() {
 		return this.startYear;
 	}
 	public void setStartYear(final Integer startYear) {
 		this.startYear = startYear;
 	}
+
 	@NotNull
-	@Valid
 	public Integer getEndYear() {
 		return this.endYear;
 	}
