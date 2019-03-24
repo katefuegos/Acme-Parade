@@ -6,6 +6,8 @@ import javax.persistence.AccessType;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import domain.History;
+
 @Access(AccessType.PROPERTY)
 public class EveryRecordForm {
 
@@ -13,6 +15,7 @@ public class EveryRecordForm {
 	private String	description;
 	private int		id;
 	private int		version;
+	private History	history;
 
 
 	@NotBlank
@@ -47,6 +50,14 @@ public class EveryRecordForm {
 
 	public void setVersion(final int version) {
 		this.version = version;
+	}
+
+	public History getHistory() {
+		return this.history;
+	}
+
+	public void setHistory(final History history) {
+		this.history = history;
 	}
 
 }

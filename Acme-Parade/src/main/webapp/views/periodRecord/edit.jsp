@@ -1,4 +1,4 @@
-€%<%--
+<%--
  *
  * Copyright (C) 2017 Universidad de Sevilla
  * 
@@ -18,6 +18,7 @@
 
 <form:form action="periodRecord/brotherhood/edit.do" modelAttribute="periodRecordForm">
 	<form:hidden path="id" />
+	<form:hidden path="history" />
 	
 	<acme:textbox code="periodRecord.title" path="title"/>
 	<acme:textbox code="periodRecord.description" path="description"/>

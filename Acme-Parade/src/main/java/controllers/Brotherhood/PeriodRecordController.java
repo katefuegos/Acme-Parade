@@ -18,9 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.HistoryService;
 import services.PeriodRecordService;
 import controllers.AbstractController;
 import domain.Actor;
+import domain.History;
 import domain.PeriodRecord;
 import forms.PeriodRecordForm;
 
@@ -35,6 +37,9 @@ public class PeriodRecordController extends AbstractController {
 
 	@Autowired
 	private ActorService		actorService;
+
+	@Autowired
+	private HistoryService		historyService;
 
 
 	//Constructor--------------------------------------------------------------
@@ -52,6 +57,7 @@ public class PeriodRecordController extends AbstractController {
 
 		modelAndView = new ModelAndView("periodRecord/list");
 		modelAndView.addObject("periodRecords", periodRecords);
+		modelAndView.addObject("historyId", historyId);
 
 		modelAndView.addObject("requestURI", "/periodRecord/brotherhood/list.do");
 		return modelAndView;
@@ -60,10 +66,12 @@ public class PeriodRecordController extends AbstractController {
 
 	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int historyId) {
 		ModelAndView result;
 		final PeriodRecordForm periodRecordForm = new PeriodRecordForm();
 		periodRecordForm.setId(0);
+		final History history = this.historyService.findOne(historyId);
+		periodRecordForm.setHistory(history);
 
 		result = this.createModelAndView(periodRecordForm);
 		return result;
@@ -112,6 +120,7 @@ public class PeriodRecordController extends AbstractController {
 			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
 			Assert.isTrue(actor.getId() == periodRecord.getHistory().getBrotherhood().getId());
 			periodRecordForm.setId(periodRecordId);
+			periodRecordForm.setHistory(periodRecord.getHistory());
 			periodRecordForm.setStartYear(periodRecord.getStartYear());
 			periodRecordForm.setEndYear(periodRecord.getEndYear());
 			periodRecordForm.setPhotos(periodRecord.getPhotos());
@@ -127,7 +136,6 @@ public class PeriodRecordController extends AbstractController {
 		}
 		return result;
 	}
-
 	// Save
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@Valid final PeriodRecordForm periodRecordForm, final BindingResult binding) {
@@ -149,6 +157,7 @@ public class PeriodRecordController extends AbstractController {
 				//Assert.isTrue(actor.getId() == periodRecord.getHistory().getBrotherhood().getId());
 				System.out.println("iwi" + periodRecord);
 				periodRecord.setStartYear(periodRecordForm.getStartYear());
+				periodRecord.setHistory(periodRecordForm.getHistory());
 				periodRecord.setEndYear(periodRecordForm.getEndYear());
 				periodRecord.setPhotos(periodRecordForm.getPhotos());
 				periodRecord.setTitle(periodRecordForm.getTitle());
@@ -162,7 +171,6 @@ public class PeriodRecordController extends AbstractController {
 			}
 		return result;
 	}
-
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
 	public ModelAndView save2(@Valid final PeriodRecordForm periodRecordForm, final BindingResult binding) {
 
