@@ -18,6 +18,7 @@
 
 <form:form action="inceptionRecord/brotherhood/edit.do" modelAttribute="inceptionRecordForm">
 	<form:hidden path="id" />
+	<form:hidden path="history" />
 	
 	<acme:textbox code="inceptionRecord.title" path="title"/>
 	<acme:textbox code="inceptionRecord.description" path="description"/>

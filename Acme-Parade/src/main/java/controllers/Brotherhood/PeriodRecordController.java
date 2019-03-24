@@ -145,7 +145,7 @@ public class PeriodRecordController extends AbstractController {
 		if (periodRecordForm.getId() != 0)
 			periodRecord = this.periodRecordService.findOne(periodRecordForm.getId());
 		else
-			periodRecord = new PeriodRecord();
+			periodRecord = this.periodRecordService.create();
 		if (binding.hasErrors())
 			result = this.editModelAndView(periodRecordForm);
 		else

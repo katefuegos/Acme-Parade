@@ -18,6 +18,7 @@
 
 <form:form action="miscellaneousRecord/brotherhood/edit.do" modelAttribute="miscellaneousRecordForm">
 	<form:hidden path="id" />
+	<form:hidden path="history" />
 	
 	<acme:textbox code="miscellaneousRecord.title" path="title"/>
 	<acme:textbox code="miscellaneousRecord.description" path="description"/>

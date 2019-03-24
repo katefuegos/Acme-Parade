@@ -18,9 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.HistoryService;
 import services.LinkRecordService;
 import controllers.AbstractController;
 import domain.Actor;
+import domain.History;
 import domain.LinkRecord;
 import forms.LinkRecordForm;
 
@@ -35,6 +37,9 @@ public class LinkRecordController extends AbstractController {
 
 	@Autowired
 	private ActorService		actorService;
+
+	@Autowired
+	private HistoryService		historyService;
 
 
 	//Constructor--------------------------------------------------------------
@@ -52,6 +57,7 @@ public class LinkRecordController extends AbstractController {
 
 		modelAndView = new ModelAndView("linkRecord/list");
 		modelAndView.addObject("linkRecords", linkRecords);
+		modelAndView.addObject("historyId", historyId);
 
 		modelAndView.addObject("requestURI", "/linkRecord/brotherhood/list.do");
 		return modelAndView;
@@ -60,10 +66,12 @@ public class LinkRecordController extends AbstractController {
 
 	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int historyId) {
 		ModelAndView result;
 		final LinkRecordForm linkRecordForm = new LinkRecordForm();
 		linkRecordForm.setId(0);
+		final History history = this.historyService.findOne(historyId);
+		linkRecordForm.setHistory(history);
 
 		result = this.createModelAndView(linkRecordForm);
 		return result;
@@ -111,6 +119,7 @@ public class LinkRecordController extends AbstractController {
 			linkRecordForm.setId(linkRecordId);
 			linkRecordForm.setTitle(linkRecord.getTitle());
 			linkRecordForm.setDescription(linkRecord.getDescription());
+			linkRecordForm.setHistory(linkRecord.getHistory());
 			result = this.editModelAndView(linkRecordForm);
 		} catch (final Throwable e) {
 			result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do?historyId=" + linkRecord.getHistory().getId());
@@ -142,6 +151,7 @@ public class LinkRecordController extends AbstractController {
 				actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
 				//Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
 				System.out.println("iwi" + linkRecord);
+				linkRecord.setHistory(linkRecordForm.getHistory());
 				linkRecord.setTitle(linkRecordForm.getTitle());
 				linkRecord.setDescription(linkRecordForm.getDescription());
 				this.linkRecordService.save(linkRecord);

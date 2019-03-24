@@ -18,6 +18,7 @@
 
 <form:form action="legalRecord/brotherhood/edit.do" modelAttribute="legalRecordForm">
 	<form:hidden path="id" />
+	<form:hidden path="history" />
 	
 	<acme:textbox code="legalRecord.title" path="title"/>
 	<acme:textbox code="legalRecord.description" path="description"/>

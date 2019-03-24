@@ -18,9 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.HistoryService;
 import services.MiscellaneousRecordService;
 import controllers.AbstractController;
 import domain.Actor;
+import domain.History;
 import domain.MiscellaneousRecord;
 import forms.MiscellaneousRecordForm;
 
@@ -35,6 +37,9 @@ public class MiscellaneousRecordController extends AbstractController {
 
 	@Autowired
 	private ActorService				actorService;
+
+	@Autowired
+	private HistoryService				historyService;
 
 
 	//Constructor--------------------------------------------------------------
@@ -52,7 +57,7 @@ public class MiscellaneousRecordController extends AbstractController {
 
 		modelAndView = new ModelAndView("miscellaneousRecord/list");
 		modelAndView.addObject("miscellaneousRecords", miscellaneousRecords);
-
+		modelAndView.addObject("historyId", historyId);
 		modelAndView.addObject("requestURI", "/miscellaneousRecord/brotherhood/list.do");
 		return modelAndView;
 
@@ -60,11 +65,12 @@ public class MiscellaneousRecordController extends AbstractController {
 
 	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int historyId) {
 		ModelAndView result;
 		final MiscellaneousRecordForm miscellaneousRecordForm = new MiscellaneousRecordForm();
 		miscellaneousRecordForm.setId(0);
-
+		final History history = this.historyService.findOne(historyId);
+		miscellaneousRecordForm.setHistory(history);
 		result = this.createModelAndView(miscellaneousRecordForm);
 		return result;
 	}
@@ -108,6 +114,7 @@ public class MiscellaneousRecordController extends AbstractController {
 			Assert.notNull(miscellaneousRecord);
 			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
 			Assert.isTrue(actor.getId() == miscellaneousRecord.getHistory().getBrotherhood().getId());
+			miscellaneousRecordForm.setHistory(miscellaneousRecord.getHistory());
 			miscellaneousRecordForm.setId(miscellaneousRecordId);
 			miscellaneousRecordForm.setTitle(miscellaneousRecord.getTitle());
 			miscellaneousRecordForm.setDescription(miscellaneousRecord.getDescription());
@@ -142,7 +149,7 @@ public class MiscellaneousRecordController extends AbstractController {
 				actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
 				//Assert.isTrue(actor.getId() == miscellaneousRecord.getHistory().getBrotherhood().getId());
 				System.out.println("iwi" + miscellaneousRecord);
-
+				miscellaneousRecord.setHistory(miscellaneousRecordForm.getHistory());
 				miscellaneousRecord.setTitle(miscellaneousRecordForm.getTitle());
 				miscellaneousRecord.setDescription(miscellaneousRecordForm.getDescription());
 				this.miscellaneousRecordService.save(miscellaneousRecord);

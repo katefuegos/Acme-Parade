@@ -18,9 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.HistoryService;
 import services.InceptionRecordService;
 import controllers.AbstractController;
 import domain.Actor;
+import domain.History;
 import domain.InceptionRecord;
 import forms.InceptionRecordForm;
 
@@ -35,6 +37,9 @@ public class InceptionRecordController extends AbstractController {
 
 	@Autowired
 	private ActorService			actorService;
+
+	@Autowired
+	private HistoryService			historyService;
 
 
 	//Constructor--------------------------------------------------------------
@@ -52,6 +57,7 @@ public class InceptionRecordController extends AbstractController {
 
 		modelAndView = new ModelAndView("inceptionRecord/list");
 		modelAndView.addObject("inceptionRecords", inceptionRecords);
+		modelAndView.addObject("historyId", historyId);
 
 		modelAndView.addObject("requestURI", "/inceptionRecord/brotherhood/list.do");
 		return modelAndView;
@@ -60,11 +66,12 @@ public class InceptionRecordController extends AbstractController {
 
 	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int historyId) {
 		ModelAndView result;
 		final InceptionRecordForm inceptionRecordForm = new InceptionRecordForm();
 		inceptionRecordForm.setId(0);
-
+		final History history = this.historyService.findOne(historyId);
+		inceptionRecordForm.setHistory(history);
 		result = this.createModelAndView(inceptionRecordForm);
 		return result;
 	}
@@ -113,6 +120,7 @@ public class InceptionRecordController extends AbstractController {
 			inceptionRecordForm.setPhotos(inceptionRecord.getPhotos());
 			inceptionRecordForm.setTitle(inceptionRecord.getTitle());
 			inceptionRecordForm.setDescription(inceptionRecord.getDescription());
+			inceptionRecordForm.setHistory(inceptionRecord.getHistory());
 			result = this.editModelAndView(inceptionRecordForm);
 		} catch (final Throwable e) {
 			result = new ModelAndView("redirect:/inceptionRecord/brotherhood/list.do?historyId=" + inceptionRecord.getHistory().getId());
@@ -147,6 +155,7 @@ public class InceptionRecordController extends AbstractController {
 				inceptionRecord.setPhotos(inceptionRecordForm.getPhotos());
 				inceptionRecord.setTitle(inceptionRecordForm.getTitle());
 				inceptionRecord.setDescription(inceptionRecordForm.getDescription());
+				inceptionRecord.setHistory(inceptionRecordForm.getHistory());
 				this.inceptionRecordService.save(inceptionRecord);
 
 				result = new ModelAndView("redirect:/inceptionRecord/brotherhood/list.do?historyId=" + inceptionRecord.getHistory().getId());

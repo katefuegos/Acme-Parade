@@ -361,6 +361,9 @@
 
 		<security:intercept-url pattern="/linkRecord/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />
+			
+		<security:intercept-url pattern="/linkRecord/brotherhood/create.do"
+			access="hasRole('BROTHERHOOD')" />
 
 		<!-- OTHERS -->
 		<security:intercept-url pattern="/welcome/terms.do"

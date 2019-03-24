@@ -35,7 +35,7 @@
 
 
 <security:authorize access="hasRole('BROTHERHOOD')">
-	<div> <a href="miscellaneousRecord/brotherhood/create.do"> 
+	<div> <a href="miscellaneousRecord/brotherhood/create.do?historyId=${historyId}"> 
 	<spring:message code="miscellaneousRecord.create" />
 	</a>
 	</div>

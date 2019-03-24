@@ -18,6 +18,7 @@
 
 <form:form action="linkRecord/brotherhood/edit.do" modelAttribute="linkRecordForm">
 	<form:hidden path="id" />
+	<form:hidden path="history" />
 	
 	
 	<acme:textbox code="linkRecord.title" path="title"/>

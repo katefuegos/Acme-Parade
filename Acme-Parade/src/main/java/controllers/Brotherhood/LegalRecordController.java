@@ -18,9 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.HistoryService;
 import services.LegalRecordService;
 import controllers.AbstractController;
 import domain.Actor;
+import domain.History;
 import domain.LegalRecord;
 import forms.LegalRecordForm;
 
@@ -35,6 +37,9 @@ public class LegalRecordController extends AbstractController {
 
 	@Autowired
 	private ActorService		actorService;
+
+	@Autowired
+	private HistoryService		historyService;
 
 
 	//Constructor--------------------------------------------------------------
@@ -52,6 +57,7 @@ public class LegalRecordController extends AbstractController {
 
 		modelAndView = new ModelAndView("legalRecord/list");
 		modelAndView.addObject("legalRecords", legalRecords);
+		modelAndView.addObject("historyId", historyId);
 
 		modelAndView.addObject("requestURI", "/legalRecord/brotherhood/list.do");
 		return modelAndView;
@@ -60,11 +66,12 @@ public class LegalRecordController extends AbstractController {
 
 	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int historyId) {
 		ModelAndView result;
 		final LegalRecordForm legalRecordForm = new LegalRecordForm();
 		legalRecordForm.setId(0);
-
+		final History history = this.historyService.findOne(historyId);
+		legalRecordForm.setHistory(history);
 		result = this.createModelAndView(legalRecordForm);
 		return result;
 	}
@@ -117,6 +124,7 @@ public class LegalRecordController extends AbstractController {
 			legalRecordForm.setApplicableLaws(legalRecord.getApplicableLaws());
 			legalRecordForm.setTitle(legalRecord.getTitle());
 			legalRecordForm.setDescription(legalRecord.getDescription());
+			legalRecordForm.setHistory(legalRecord.getHistory());
 			result = this.editModelAndView(legalRecordForm);
 		} catch (final Throwable e) {
 			result = new ModelAndView("redirect:/legalRecord/brotherhood/list.do?historyId=" + legalRecord.getHistory().getId());
@@ -153,6 +161,7 @@ public class LegalRecordController extends AbstractController {
 				legalRecord.setApplicableLaws(legalRecordForm.getApplicableLaws());
 				legalRecord.setTitle(legalRecordForm.getTitle());
 				legalRecord.setDescription(legalRecordForm.getDescription());
+				legalRecord.setHistory(legalRecordForm.getHistory());
 				this.legalRecordService.save(legalRecord);
 
 				result = new ModelAndView("redirect:/legalRecord/brotherhood/list.do?historyId=" + legalRecord.getHistory().getId());
