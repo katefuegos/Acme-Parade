@@ -323,7 +323,7 @@
 			access="hasRole('BROTHERHOOD')" />
 
 		<security:intercept-url pattern="/periodRecord/brotherhood/list.do"
-			access="hasRole('BROTHERHOOD')" />
+			access="permitAll" />
 
 		<security:intercept-url pattern="/periodRecord/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />
@@ -332,7 +332,7 @@
 			access="hasRole('BROTHERHOOD')" />
 
 		<security:intercept-url pattern="/inceptionRecord/brotherhood/list.do"
-			access="hasRole('BROTHERHOOD')" />
+			access="permitAll" />
 
 		<security:intercept-url pattern="/inceptionRecord/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />
@@ -341,7 +341,7 @@
 			access="hasRole('BROTHERHOOD')" />
 
 		<security:intercept-url pattern="/miscellaneousRecord/brotherhood/list.do"
-			access="hasRole('BROTHERHOOD')" />
+			access="permitAll" />
 
 		<security:intercept-url pattern="/miscellaneousRecord/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />
@@ -350,7 +350,7 @@
 			access="hasRole('BROTHERHOOD')" />
 
 		<security:intercept-url pattern="/legalRecord/brotherhood/list.do"
-			access="hasRole('BROTHERHOOD')" />
+			access="permitAll" />
 
 		<security:intercept-url pattern="/legalRecord/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />
@@ -359,7 +359,7 @@
 			access="hasRole('BROTHERHOOD')" />
 
 		<security:intercept-url pattern="/linkRecord/brotherhood/list.do"
-			access="hasRole('BROTHERHOOD')" />
+			access="permitAll" />
 
 		<security:intercept-url pattern="/linkRecord/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />

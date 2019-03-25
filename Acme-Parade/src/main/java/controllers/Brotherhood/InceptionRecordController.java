@@ -1,4 +1,3 @@
-
 package controllers.Brotherhood;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.ConfigurationService;
 import services.HistoryService;
 import services.InceptionRecordService;
 import controllers.AbstractController;
@@ -30,36 +30,55 @@ import forms.InceptionRecordForm;
 @RequestMapping("/inceptionRecord/brotherhood")
 public class InceptionRecordController extends AbstractController {
 
-	//Service----------------------------------------------------------------
+	// Service----------------------------------------------------------------
 
 	@Autowired
-	private InceptionRecordService	inceptionRecordService;
+	private InceptionRecordService inceptionRecordService;
 
 	@Autowired
-	private ActorService			actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private HistoryService			historyService;
+	private HistoryService historyService;
 
+	@Autowired
+	private ConfigurationService configurationService;
 
-	//Constructor--------------------------------------------------------------
+	// Constructor--------------------------------------------------------------
 
 	public InceptionRecordController() {
 		super();
 	}
 
-	//Listing----------------------------------------------------------------------------
+	// Listing----------------------------------------------------------------------------
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam final int historyId) {
+	public ModelAndView list(@RequestParam final int historyId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView modelAndView;
-		final Collection<InceptionRecord> inceptionRecords = new ArrayList<>(this.inceptionRecordService.findInceptionRecordByHistoryId(historyId));
+		History history = historyService.findOne(historyId);
 
-		modelAndView = new ModelAndView("inceptionRecord/list");
-		modelAndView.addObject("inceptionRecords", inceptionRecords);
-		modelAndView.addObject("historyId", historyId);
+		try {
+			Assert.notNull(history);
+			final Collection<InceptionRecord> inceptionRecords = new ArrayList<>(
+					this.inceptionRecordService
+							.findInceptionRecordByHistoryId(historyId));
 
-		modelAndView.addObject("requestURI", "/inceptionRecord/brotherhood/list.do");
+			modelAndView = new ModelAndView("inceptionRecord/list");
+			modelAndView.addObject("inceptionRecords", inceptionRecords);
+			modelAndView.addObject("historyId", historyId);
+			modelAndView.addObject("banner", this.configurationService
+					.findAll().iterator().next().getBanner());
+			modelAndView.addObject("systemName", this.configurationService
+					.findAll().iterator().next().getSystemName());
+			modelAndView.addObject("requestURI",
+					"/inceptionRecord/brotherhood/list.do");
+		} catch (final Throwable e) {
+			modelAndView = new ModelAndView("redirect:/brotherhood/list.do");
+			if (history == null)
+				redirectAttrs.addFlashAttribute("message",
+						"history.error.unexist2");
+		}
 		return modelAndView;
 
 	}
@@ -79,26 +98,35 @@ public class InceptionRecordController extends AbstractController {
 	// Show------------------------------------------------------------
 
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam final int inceptionRecordId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView show(@RequestParam final int inceptionRecordId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final InceptionRecord inceptionRecord = this.inceptionRecordService.findOne(inceptionRecordId);
+		final InceptionRecord inceptionRecord = this.inceptionRecordService
+				.findOne(inceptionRecordId);
 		final InceptionRecordForm inceptionRecordForm = new InceptionRecordForm();
 		Actor actor = null;
 		try {
 			Assert.notNull(inceptionRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == inceptionRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == inceptionRecord.getHistory()
+					.getBrotherhood().getId());
 			inceptionRecordForm.setId(inceptionRecordId);
 			inceptionRecordForm.setPhotos(inceptionRecord.getPhotos());
 			inceptionRecordForm.setTitle(inceptionRecord.getTitle());
-			inceptionRecordForm.setDescription(inceptionRecord.getDescription());
+			inceptionRecordForm
+					.setDescription(inceptionRecord.getDescription());
 			result = this.showModelAndView(inceptionRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/inceptionRecord/brotherhood/list.do");
+			result = new ModelAndView(
+					"redirect:/inceptionRecord/brotherhood/list.do");
 			if (inceptionRecord == null)
-				redirectAttrs.addFlashAttribute("message", "inceptionRecord.error.unexist");
-			else if (actor.getId() != inceptionRecord.getHistory().getBrotherhood().getId())
-				redirectAttrs.addFlashAttribute("message", "inceptionRecord.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"inceptionRecord.error.unexist");
+			else if (actor.getId() != inceptionRecord.getHistory()
+					.getBrotherhood().getId())
+				redirectAttrs.addFlashAttribute("message",
+						"inceptionRecord.error.notFromActor");
 		}
 		return result;
 
@@ -107,39 +135,52 @@ public class InceptionRecordController extends AbstractController {
 	// Edit ---------------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int inceptionRecordId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView edit(@RequestParam final int inceptionRecordId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final InceptionRecord inceptionRecord = this.inceptionRecordService.findOne(inceptionRecordId);
+		final InceptionRecord inceptionRecord = this.inceptionRecordService
+				.findOne(inceptionRecordId);
 		final InceptionRecordForm inceptionRecordForm = new InceptionRecordForm();
 		Actor actor = null;
 		try {
 			Assert.notNull(inceptionRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == inceptionRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == inceptionRecord.getHistory()
+					.getBrotherhood().getId());
 			inceptionRecordForm.setId(inceptionRecordId);
 			inceptionRecordForm.setPhotos(inceptionRecord.getPhotos());
 			inceptionRecordForm.setTitle(inceptionRecord.getTitle());
-			inceptionRecordForm.setDescription(inceptionRecord.getDescription());
+			inceptionRecordForm
+					.setDescription(inceptionRecord.getDescription());
 			inceptionRecordForm.setHistory(inceptionRecord.getHistory());
 			result = this.editModelAndView(inceptionRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/inceptionRecord/brotherhood/list.do?historyId=" + inceptionRecord.getHistory().getId());
+			result = new ModelAndView(
+					"redirect:/inceptionRecord/brotherhood/list.do?historyId="
+							+ inceptionRecord.getHistory().getId());
 			if (inceptionRecord == null)
-				redirectAttrs.addFlashAttribute("message", "inceptionRecord.error.unexist");
-			else if (actor.getId() != inceptionRecord.getHistory().getBrotherhood().getId())
-				redirectAttrs.addFlashAttribute("message", "inceptionRecord.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"inceptionRecord.error.unexist");
+			else if (actor.getId() != inceptionRecord.getHistory()
+					.getBrotherhood().getId())
+				redirectAttrs.addFlashAttribute("message",
+						"inceptionRecord.error.notFromActor");
 		}
 		return result;
 	}
 
 	// Save
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final InceptionRecordForm inceptionRecordForm, final BindingResult binding) {
+	public ModelAndView save(
+			@Valid final InceptionRecordForm inceptionRecordForm,
+			final BindingResult binding) {
 		ModelAndView result;
 		Actor actor = new Actor();
 		InceptionRecord inceptionRecord;
 		if (inceptionRecordForm.getId() != 0)
-			inceptionRecord = this.inceptionRecordService.findOne(inceptionRecordForm.getId());
+			inceptionRecord = this.inceptionRecordService
+					.findOne(inceptionRecordForm.getId());
 		else
 			inceptionRecord = new InceptionRecord();
 		if (binding.hasErrors())
@@ -149,39 +190,51 @@ public class InceptionRecordController extends AbstractController {
 				System.out.println("owo" + inceptionRecord);
 				Assert.notNull(inceptionRecord);
 				System.out.println("uwu" + inceptionRecord);
-				actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-				//Assert.isTrue(actor.getId() == inceptionRecord.getHistory().getBrotherhood().getId());
+				actor = this.actorService.findByUserAccount(LoginService
+						.getPrincipal());
+				// Assert.isTrue(actor.getId() ==
+				// inceptionRecord.getHistory().getBrotherhood().getId());
 				System.out.println("iwi" + inceptionRecord);
 				inceptionRecord.setPhotos(inceptionRecordForm.getPhotos());
 				inceptionRecord.setTitle(inceptionRecordForm.getTitle());
-				inceptionRecord.setDescription(inceptionRecordForm.getDescription());
+				inceptionRecord.setDescription(inceptionRecordForm
+						.getDescription());
 				inceptionRecord.setHistory(inceptionRecordForm.getHistory());
 				this.inceptionRecordService.save(inceptionRecord);
 
-				result = new ModelAndView("redirect:/inceptionRecord/brotherhood/list.do?historyId=" + inceptionRecord.getHistory().getId());
+				result = new ModelAndView(
+						"redirect:/inceptionRecord/brotherhood/list.do?historyId="
+								+ inceptionRecord.getHistory().getId());
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
-				result = this.editModelAndView(inceptionRecordForm, "inceptionRecord.commit.error");
+				result = this.editModelAndView(inceptionRecordForm,
+						"inceptionRecord.commit.error");
 			}
 		return result;
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
-	public ModelAndView save2(@Valid final InceptionRecordForm inceptionRecordForm, final BindingResult binding) {
+	public ModelAndView save2(
+			@Valid final InceptionRecordForm inceptionRecordForm,
+			final BindingResult binding) {
 
 		ModelAndView result;
-		final InceptionRecord inceptionRecord = this.inceptionRecordService.create();
+		final InceptionRecord inceptionRecord = this.inceptionRecordService
+				.create();
 		if (binding.hasErrors())
 			result = this.createModelAndView(inceptionRecordForm);
 		else
 			try {
 				inceptionRecord.setPhotos(inceptionRecordForm.getPhotos());
 				inceptionRecord.setTitle(inceptionRecordForm.getTitle());
-				inceptionRecord.setDescription(inceptionRecordForm.getDescription());
+				inceptionRecord.setDescription(inceptionRecordForm
+						.getDescription());
 				this.inceptionRecordService.save(inceptionRecord);
-				result = new ModelAndView("redirect:/inceptionRecord/brotherhood/list.do");
+				result = new ModelAndView(
+						"redirect:/inceptionRecord/brotherhood/list.do");
 			} catch (final Throwable oops) {
-				result = this.createModelAndView(inceptionRecordForm, "inceptionRecord.commit.error");
+				result = this.createModelAndView(inceptionRecordForm,
+						"inceptionRecord.commit.error");
 			}
 		return result;
 	}
@@ -189,25 +242,32 @@ public class InceptionRecordController extends AbstractController {
 	// delete
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final InceptionRecordForm inceptionRecordForm, final BindingResult binding) {
+	public ModelAndView delete(final InceptionRecordForm inceptionRecordForm,
+			final BindingResult binding) {
 		ModelAndView result;
-		final InceptionRecord inceptionRecord = this.inceptionRecordService.findOne(inceptionRecordForm.getId());
-		Actor actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+		final InceptionRecord inceptionRecord = this.inceptionRecordService
+				.findOne(inceptionRecordForm.getId());
+		Actor actor = this.actorService.findByUserAccount(LoginService
+				.getPrincipal());
 		try {
 			Assert.notNull(inceptionRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == inceptionRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == inceptionRecord.getHistory()
+					.getBrotherhood().getId());
 			this.inceptionRecordService.delete(inceptionRecord);
 			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
-			result = this.editModelAndView(inceptionRecordForm, "inceptionRecord.commit.error");
+			result = this.editModelAndView(inceptionRecordForm,
+					"inceptionRecord.commit.error");
 		}
 		return result;
 	}
 
 	// CreateModelAndView
 
-	protected ModelAndView createModelAndView(final InceptionRecordForm inceptionRecordForm) {
+	protected ModelAndView createModelAndView(
+			final InceptionRecordForm inceptionRecordForm) {
 		ModelAndView result;
 
 		result = this.createModelAndView(inceptionRecordForm, null);
@@ -216,7 +276,8 @@ public class InceptionRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView createModelAndView(final InceptionRecordForm inceptionRecordForm, final String message) {
+	protected ModelAndView createModelAndView(
+			final InceptionRecordForm inceptionRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("inceptionRecord/create");
@@ -225,12 +286,15 @@ public class InceptionRecordController extends AbstractController {
 		result.addObject("isRead", false);
 
 		result.addObject("requestURI", "inceptionRecord/create.do");
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName",
+		// this.configurationService.findAll().iterator().next().getSystemName());
 		return result;
 	}
 
-	protected ModelAndView editModelAndView(final InceptionRecordForm inceptionRecordForm) {
+	protected ModelAndView editModelAndView(
+			final InceptionRecordForm inceptionRecordForm) {
 		ModelAndView result;
 
 		result = this.editModelAndView(inceptionRecordForm, null);
@@ -239,7 +303,8 @@ public class InceptionRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView editModelAndView(final InceptionRecordForm inceptionRecordForm, final String message) {
+	protected ModelAndView editModelAndView(
+			final InceptionRecordForm inceptionRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("inceptionRecord/edit");
@@ -247,13 +312,18 @@ public class InceptionRecordController extends AbstractController {
 		result.addObject("message", message);
 		result.addObject("isRead", false);
 
-		result.addObject("requestURI", "inceptionRecord/edit.do?inceptionRecordId=" + inceptionRecordForm.getId());
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", ((ActorService) this.configurationService).findAll().iterator().next().getSystemName());
+		result.addObject("requestURI",
+				"inceptionRecord/edit.do?inceptionRecordId="
+						+ inceptionRecordForm.getId());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName", ((ActorService)
+		// this.configurationService).findAll().iterator().next().getSystemName());
 		return result;
 	}
 
-	protected ModelAndView showModelAndView(final InceptionRecordForm inceptionRecordForm) {
+	protected ModelAndView showModelAndView(
+			final InceptionRecordForm inceptionRecordForm) {
 		ModelAndView result;
 
 		result = this.showModelAndView(inceptionRecordForm, null);
@@ -262,7 +332,8 @@ public class InceptionRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView showModelAndView(final InceptionRecordForm inceptionRecordForm, final String message) {
+	protected ModelAndView showModelAndView(
+			final InceptionRecordForm inceptionRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("inceptionRecord/show");
@@ -270,9 +341,13 @@ public class InceptionRecordController extends AbstractController {
 		result.addObject("message", message);
 		result.addObject("isRead", true);
 
-		result.addObject("requestURI", "inceptionRecord/show.do?inceptionRecordId=" + inceptionRecordForm.getId());
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("requestURI",
+				"inceptionRecord/show.do?inceptionRecordId="
+						+ inceptionRecordForm.getId());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName",
+		// this.configurationService.findAll().iterator().next().getSystemName());
 		return result;
 	}
 

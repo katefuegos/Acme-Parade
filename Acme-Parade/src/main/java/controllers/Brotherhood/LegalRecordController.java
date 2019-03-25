@@ -1,4 +1,3 @@
-
 package controllers.Brotherhood;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.ConfigurationService;
 import services.HistoryService;
 import services.LegalRecordService;
 import controllers.AbstractController;
@@ -30,36 +30,54 @@ import forms.LegalRecordForm;
 @RequestMapping("/legalRecord/brotherhood")
 public class LegalRecordController extends AbstractController {
 
-	//Service----------------------------------------------------------------
+	// Service----------------------------------------------------------------
 
 	@Autowired
-	private LegalRecordService	legalRecordService;
+	private LegalRecordService legalRecordService;
 
 	@Autowired
-	private ActorService		actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private HistoryService		historyService;
+	private HistoryService historyService;
 
+	@Autowired
+	private ConfigurationService configurationService;
 
-	//Constructor--------------------------------------------------------------
+	// Constructor--------------------------------------------------------------
 
 	public LegalRecordController() {
 		super();
 	}
 
-	//Listing----------------------------------------------------------------------------
+	// Listing----------------------------------------------------------------------------
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam final int historyId) {
+	public ModelAndView list(@RequestParam final int historyId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView modelAndView;
-		final Collection<LegalRecord> legalRecords = new ArrayList<>(this.legalRecordService.findLegalRecordByHistoryId(historyId));
+		History history = historyService.findOne(historyId);
+		try {
+			Assert.notNull(history);
+			final Collection<LegalRecord> legalRecords = new ArrayList<>(
+					this.legalRecordService
+							.findLegalRecordByHistoryId(historyId));
 
-		modelAndView = new ModelAndView("legalRecord/list");
-		modelAndView.addObject("legalRecords", legalRecords);
-		modelAndView.addObject("historyId", historyId);
-
-		modelAndView.addObject("requestURI", "/legalRecord/brotherhood/list.do");
+			modelAndView = new ModelAndView("legalRecord/list");
+			modelAndView.addObject("legalRecords", legalRecords);
+			modelAndView.addObject("historyId", historyId);
+			modelAndView.addObject("banner", this.configurationService
+					.findAll().iterator().next().getBanner());
+			modelAndView.addObject("systemName", this.configurationService
+					.findAll().iterator().next().getSystemName());
+			modelAndView.addObject("requestURI",
+					"/legalRecord/brotherhood/list.do");
+		} catch (final Throwable e) {
+			modelAndView = new ModelAndView("redirect:/brotherhood/list.do");
+			if (history == null)
+				redirectAttrs.addFlashAttribute("message",
+						"history.error.unexist2");
+		}
 		return modelAndView;
 
 	}
@@ -79,28 +97,37 @@ public class LegalRecordController extends AbstractController {
 	// Show------------------------------------------------------------
 
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam final int legalRecordId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView show(@RequestParam final int legalRecordId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final LegalRecord legalRecord = this.legalRecordService.findOne(legalRecordId);
+		final LegalRecord legalRecord = this.legalRecordService
+				.findOne(legalRecordId);
 		final LegalRecordForm legalRecordForm = new LegalRecordForm();
 		Actor actor = null;
 		try {
 			Assert.notNull(legalRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == legalRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == legalRecord.getHistory()
+					.getBrotherhood().getId());
 			legalRecordForm.setId(legalRecordId);
 			legalRecordForm.setVATnumber(legalRecordForm.getVATnumber());
 			legalRecordForm.setLegalName(legalRecordForm.getLegalName());
-			legalRecordForm.setApplicableLaws(legalRecordForm.getApplicableLaws());
+			legalRecordForm.setApplicableLaws(legalRecordForm
+					.getApplicableLaws());
 			legalRecordForm.setTitle(legalRecordForm.getTitle());
 			legalRecordForm.setDescription(legalRecordForm.getDescription());
 			result = this.showModelAndView(legalRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/legalRecord/brotherhood/list.do");
+			result = new ModelAndView(
+					"redirect:/legalRecord/brotherhood/list.do");
 			if (legalRecord == null)
-				redirectAttrs.addFlashAttribute("message", "legalRecord.error.unexist");
-			else if (actor.getId() != legalRecord.getHistory().getBrotherhood().getId())
-				redirectAttrs.addFlashAttribute("message", "legalRecord.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"legalRecord.error.unexist");
+			else if (actor.getId() != legalRecord.getHistory().getBrotherhood()
+					.getId())
+				redirectAttrs.addFlashAttribute("message",
+						"legalRecord.error.notFromActor");
 		}
 		return result;
 
@@ -109,15 +136,19 @@ public class LegalRecordController extends AbstractController {
 	// Edit ---------------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int legalRecordId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView edit(@RequestParam final int legalRecordId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final LegalRecord legalRecord = this.legalRecordService.findOne(legalRecordId);
+		final LegalRecord legalRecord = this.legalRecordService
+				.findOne(legalRecordId);
 		final LegalRecordForm legalRecordForm = new LegalRecordForm();
 		Actor actor = null;
 		try {
 			Assert.notNull(legalRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == legalRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == legalRecord.getHistory()
+					.getBrotherhood().getId());
 			legalRecordForm.setId(legalRecordId);
 			legalRecordForm.setVATnumber(legalRecord.getVATnumber());
 			legalRecordForm.setLegalName(legalRecord.getLegalName());
@@ -127,23 +158,30 @@ public class LegalRecordController extends AbstractController {
 			legalRecordForm.setHistory(legalRecord.getHistory());
 			result = this.editModelAndView(legalRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/legalRecord/brotherhood/list.do?historyId=" + legalRecord.getHistory().getId());
+			result = new ModelAndView(
+					"redirect:/legalRecord/brotherhood/list.do?historyId="
+							+ legalRecord.getHistory().getId());
 			if (legalRecord == null)
-				redirectAttrs.addFlashAttribute("message", "legalRecord.error.unexist");
-			else if (actor.getId() != legalRecord.getHistory().getBrotherhood().getId())
-				redirectAttrs.addFlashAttribute("message", "legalRecord.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"legalRecord.error.unexist");
+			else if (actor.getId() != legalRecord.getHistory().getBrotherhood()
+					.getId())
+				redirectAttrs.addFlashAttribute("message",
+						"legalRecord.error.notFromActor");
 		}
 		return result;
 	}
 
 	// Save
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final LegalRecordForm legalRecordForm, final BindingResult binding) {
+	public ModelAndView save(@Valid final LegalRecordForm legalRecordForm,
+			final BindingResult binding) {
 		ModelAndView result;
 		Actor actor = new Actor();
 		LegalRecord legalRecord;
 		if (legalRecordForm.getId() != 0)
-			legalRecord = this.legalRecordService.findOne(legalRecordForm.getId());
+			legalRecord = this.legalRecordService.findOne(legalRecordForm
+					.getId());
 		else
 			legalRecord = new LegalRecord();
 		if (binding.hasErrors())
@@ -153,27 +191,34 @@ public class LegalRecordController extends AbstractController {
 				System.out.println("owo" + legalRecord);
 				Assert.notNull(legalRecord);
 				System.out.println("uwu" + legalRecord);
-				actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-				//Assert.isTrue(actor.getId() == legalRecord.getHistory().getBrotherhood().getId());
+				actor = this.actorService.findByUserAccount(LoginService
+						.getPrincipal());
+				// Assert.isTrue(actor.getId() ==
+				// legalRecord.getHistory().getBrotherhood().getId());
 				System.out.println("iwi" + legalRecord);
 				legalRecord.setVATnumber(legalRecordForm.getVATnumber());
 				legalRecord.setLegalName(legalRecordForm.getLegalName());
-				legalRecord.setApplicableLaws(legalRecordForm.getApplicableLaws());
+				legalRecord.setApplicableLaws(legalRecordForm
+						.getApplicableLaws());
 				legalRecord.setTitle(legalRecordForm.getTitle());
 				legalRecord.setDescription(legalRecordForm.getDescription());
 				legalRecord.setHistory(legalRecordForm.getHistory());
 				this.legalRecordService.save(legalRecord);
 
-				result = new ModelAndView("redirect:/legalRecord/brotherhood/list.do?historyId=" + legalRecord.getHistory().getId());
+				result = new ModelAndView(
+						"redirect:/legalRecord/brotherhood/list.do?historyId="
+								+ legalRecord.getHistory().getId());
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
-				result = this.editModelAndView(legalRecordForm, "legalRecord.commit.error");
+				result = this.editModelAndView(legalRecordForm,
+						"legalRecord.commit.error");
 			}
 		return result;
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
-	public ModelAndView save2(@Valid final LegalRecordForm legalRecordForm, final BindingResult binding) {
+	public ModelAndView save2(@Valid final LegalRecordForm legalRecordForm,
+			final BindingResult binding) {
 
 		ModelAndView result;
 		final LegalRecord legalRecord = this.legalRecordService.create();
@@ -183,13 +228,16 @@ public class LegalRecordController extends AbstractController {
 			try {
 				legalRecord.setVATnumber(legalRecordForm.getVATnumber());
 				legalRecord.setLegalName(legalRecordForm.getLegalName());
-				legalRecord.setApplicableLaws(legalRecordForm.getApplicableLaws());
+				legalRecord.setApplicableLaws(legalRecordForm
+						.getApplicableLaws());
 				legalRecord.setTitle(legalRecordForm.getTitle());
 				legalRecord.setDescription(legalRecordForm.getDescription());
 				this.legalRecordService.save(legalRecord);
-				result = new ModelAndView("redirect:/legalRecord/brotherhood/list.do");
+				result = new ModelAndView(
+						"redirect:/legalRecord/brotherhood/list.do");
 			} catch (final Throwable oops) {
-				result = this.createModelAndView(legalRecordForm, "legalRecord.commit.error");
+				result = this.createModelAndView(legalRecordForm,
+						"legalRecord.commit.error");
 			}
 		return result;
 	}
@@ -197,25 +245,32 @@ public class LegalRecordController extends AbstractController {
 	// delete
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final LegalRecordForm legalRecordForm, final BindingResult binding) {
+	public ModelAndView delete(final LegalRecordForm legalRecordForm,
+			final BindingResult binding) {
 		ModelAndView result;
-		final LegalRecord legalRecord = this.legalRecordService.findOne(legalRecordForm.getId());
-		Actor actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+		final LegalRecord legalRecord = this.legalRecordService
+				.findOne(legalRecordForm.getId());
+		Actor actor = this.actorService.findByUserAccount(LoginService
+				.getPrincipal());
 		try {
 			Assert.notNull(legalRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == legalRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == legalRecord.getHistory()
+					.getBrotherhood().getId());
 			this.legalRecordService.delete(legalRecord);
 			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
-			result = this.editModelAndView(legalRecordForm, "legalRecord.commit.error");
+			result = this.editModelAndView(legalRecordForm,
+					"legalRecord.commit.error");
 		}
 		return result;
 	}
 
 	// CreateModelAndView
 
-	protected ModelAndView createModelAndView(final LegalRecordForm legalRecordForm) {
+	protected ModelAndView createModelAndView(
+			final LegalRecordForm legalRecordForm) {
 		ModelAndView result;
 
 		result = this.createModelAndView(legalRecordForm, null);
@@ -224,7 +279,8 @@ public class LegalRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView createModelAndView(final LegalRecordForm legalRecordForm, final String message) {
+	protected ModelAndView createModelAndView(
+			final LegalRecordForm legalRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("legalRecord/create");
@@ -233,12 +289,15 @@ public class LegalRecordController extends AbstractController {
 		result.addObject("isRead", false);
 
 		result.addObject("requestURI", "legalRecord/create.do");
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName",
+		// this.configurationService.findAll().iterator().next().getSystemName());
 		return result;
 	}
 
-	protected ModelAndView editModelAndView(final LegalRecordForm legalRecordForm) {
+	protected ModelAndView editModelAndView(
+			final LegalRecordForm legalRecordForm) {
 		ModelAndView result;
 
 		result = this.editModelAndView(legalRecordForm, null);
@@ -247,7 +306,8 @@ public class LegalRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView editModelAndView(final LegalRecordForm legalRecordForm, final String message) {
+	protected ModelAndView editModelAndView(
+			final LegalRecordForm legalRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("legalRecord/edit");
@@ -255,13 +315,17 @@ public class LegalRecordController extends AbstractController {
 		result.addObject("message", message);
 		result.addObject("isRead", false);
 
-		result.addObject("requestURI", "legalRecord/edit.do?legalRecordId=" + legalRecordForm.getId());
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", ((ActorService) this.configurationService).findAll().iterator().next().getSystemName());
+		result.addObject("requestURI", "legalRecord/edit.do?legalRecordId="
+				+ legalRecordForm.getId());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName", ((ActorService)
+		// this.configurationService).findAll().iterator().next().getSystemName());
 		return result;
 	}
 
-	protected ModelAndView showModelAndView(final LegalRecordForm legalRecordForm) {
+	protected ModelAndView showModelAndView(
+			final LegalRecordForm legalRecordForm) {
 		ModelAndView result;
 
 		result = this.showModelAndView(legalRecordForm, null);
@@ -270,7 +334,8 @@ public class LegalRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView showModelAndView(final LegalRecordForm legalRecordForm, final String message) {
+	protected ModelAndView showModelAndView(
+			final LegalRecordForm legalRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("legalRecord/show");
@@ -278,9 +343,12 @@ public class LegalRecordController extends AbstractController {
 		result.addObject("message", message);
 		result.addObject("isRead", true);
 
-		result.addObject("requestURI", "legalRecord/show.do?legalRecordId=" + legalRecordForm.getId());
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("requestURI", "legalRecord/show.do?legalRecordId="
+				+ legalRecordForm.getId());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName",
+		// this.configurationService.findAll().iterator().next().getSystemName());
 		return result;
 	}
 

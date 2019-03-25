@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.ConfigurationService;
 import services.HistoryService;
 import services.PeriodRecordService;
 import controllers.AbstractController;
@@ -40,6 +41,9 @@ public class PeriodRecordController extends AbstractController {
 
 	@Autowired
 	private HistoryService		historyService;
+	
+	@Autowired
+	private ConfigurationService		configurationService;
 
 
 	//Constructor--------------------------------------------------------------
@@ -51,15 +55,28 @@ public class PeriodRecordController extends AbstractController {
 	//Listing----------------------------------------------------------------------------
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam final int historyId) {
+	public ModelAndView list(@RequestParam final int historyId, final RedirectAttributes redirectAttrs) {
 		ModelAndView modelAndView;
-		final Collection<PeriodRecord> periodRecords = new ArrayList<>(this.periodRecordService.findPeriodRecordByHistoryId(historyId));
+		History history = historyService.findOne(historyId);
+		try {
+			Assert.notNull(history);
+			final Collection<PeriodRecord> periodRecords = new ArrayList<>(this.periodRecordService.findPeriodRecordByHistoryId(historyId));
+			modelAndView = new ModelAndView("periodRecord/list");
+			modelAndView.addObject("periodRecords", periodRecords);
+			modelAndView.addObject("historyId", historyId);
+			modelAndView.addObject("banner", this.configurationService.findAll()
+					.iterator().next().getBanner());
+			modelAndView.addObject("systemName", this.configurationService.findAll()
+					.iterator().next().getSystemName());
 
-		modelAndView = new ModelAndView("periodRecord/list");
-		modelAndView.addObject("periodRecords", periodRecords);
-		modelAndView.addObject("historyId", historyId);
-
-		modelAndView.addObject("requestURI", "/periodRecord/brotherhood/list.do");
+			modelAndView.addObject("requestURI", "/periodRecord/brotherhood/list.do");
+		} catch (final Throwable e) {
+			modelAndView = new ModelAndView("redirect:/brotherhood/list.do");
+			if (history == null)
+				redirectAttrs.addFlashAttribute("message",
+						"history.error.unexist2");
+		}
+		 
 		return modelAndView;
 
 	}

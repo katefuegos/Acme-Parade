@@ -1777,7 +1777,7 @@
 		<property name="description" value="posmubien" />
 		<property name="history" ref="history3" />
 		<property name="legalName" value="superlegal" />
-		<property name="VATnumber" value="12345" />
+		<property name="VATnumber" value="23" />
 		<property name="applicableLaws" value="superley1" />
 
 	</bean>
@@ -1789,7 +1789,7 @@
 		<property name="description" value="posmubien" />
 		<property name="history" ref="history2" />
 		<property name="legalName" value="superlegall" />
-		<property name="VATnumber" value="12055" />
+		<property name="VATnumber" value="34" />
 		<property name="applicableLaws" value="superley3" />
 
 	</bean>

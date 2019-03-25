@@ -1,4 +1,3 @@
-
 package controllers.Brotherhood;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
 import services.ActorService;
+import services.ConfigurationService;
 import services.HistoryService;
 import services.LinkRecordService;
 import controllers.AbstractController;
@@ -30,36 +30,53 @@ import forms.LinkRecordForm;
 @RequestMapping("/linkRecord/brotherhood")
 public class LinkRecordController extends AbstractController {
 
-	//Service----------------------------------------------------------------
+	// Service----------------------------------------------------------------
 
 	@Autowired
-	private LinkRecordService	linkRecordService;
+	private LinkRecordService linkRecordService;
 
 	@Autowired
-	private ActorService		actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private HistoryService		historyService;
+	private HistoryService historyService;
 
+	@Autowired
+	private ConfigurationService configurationService;
 
-	//Constructor--------------------------------------------------------------
+	// Constructor--------------------------------------------------------------
 
 	public LinkRecordController() {
 		super();
 	}
 
-	//Listing----------------------------------------------------------------------------
+	// Listing----------------------------------------------------------------------------
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam final int historyId) {
+	public ModelAndView list(@RequestParam final int historyId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView modelAndView;
-		final Collection<LinkRecord> linkRecords = new ArrayList<>(this.linkRecordService.findLinkRecordByHistoryId(historyId));
+		History history = historyService.findOne(historyId);
+		try {
+			Assert.notNull(history);
+			final Collection<LinkRecord> linkRecords = new ArrayList<>(
+					this.linkRecordService.findLinkRecordByHistoryId(historyId));
 
-		modelAndView = new ModelAndView("linkRecord/list");
-		modelAndView.addObject("linkRecords", linkRecords);
-		modelAndView.addObject("historyId", historyId);
-
-		modelAndView.addObject("requestURI", "/linkRecord/brotherhood/list.do");
+			modelAndView = new ModelAndView("linkRecord/list");
+			modelAndView.addObject("linkRecords", linkRecords);
+			modelAndView.addObject("historyId", historyId);
+			modelAndView.addObject("banner", this.configurationService
+					.findAll().iterator().next().getBanner());
+			modelAndView.addObject("systemName", this.configurationService
+					.findAll().iterator().next().getSystemName());
+			modelAndView.addObject("requestURI",
+					"/linkRecord/brotherhood/list.do");
+		} catch (final Throwable e) {
+			modelAndView = new ModelAndView("redirect:/brotherhood/list.do");
+			if (history == null)
+				redirectAttrs.addFlashAttribute("message",
+						"history.error.unexist2");
+		}
 		return modelAndView;
 
 	}
@@ -80,25 +97,33 @@ public class LinkRecordController extends AbstractController {
 	// Show------------------------------------------------------------
 
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam final int linkRecordId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView show(@RequestParam final int linkRecordId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordId);
+		final LinkRecord linkRecord = this.linkRecordService
+				.findOne(linkRecordId);
 		final LinkRecordForm linkRecordForm = new LinkRecordForm();
 		Actor actor = null;
 		try {
 			Assert.notNull(linkRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == linkRecord.getHistory()
+					.getBrotherhood().getId());
 			linkRecordForm.setId(linkRecordId);
 			linkRecordForm.setTitle(linkRecord.getTitle());
 			linkRecordForm.setDescription(linkRecord.getDescription());
 			result = this.showModelAndView(linkRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do");
+			result = new ModelAndView(
+					"redirect:/linkRecord/brotherhood/list.do");
 			if (linkRecord == null)
-				redirectAttrs.addFlashAttribute("message", "linkRecord.error.unexist");
-			else if (actor.getId() != linkRecord.getHistory().getBrotherhood().getId())
-				redirectAttrs.addFlashAttribute("message", "linkRecord.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"linkRecord.error.unexist");
+			else if (actor.getId() != linkRecord.getHistory().getBrotherhood()
+					.getId())
+				redirectAttrs.addFlashAttribute("message",
+						"linkRecord.error.notFromActor");
 		}
 		return result;
 
@@ -107,33 +132,43 @@ public class LinkRecordController extends AbstractController {
 	// Edit ---------------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int linkRecordId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView edit(@RequestParam final int linkRecordId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordId);
+		final LinkRecord linkRecord = this.linkRecordService
+				.findOne(linkRecordId);
 		final LinkRecordForm linkRecordForm = new LinkRecordForm();
 		Actor actor = null;
 		try {
 			Assert.notNull(linkRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == linkRecord.getHistory()
+					.getBrotherhood().getId());
 			linkRecordForm.setId(linkRecordId);
 			linkRecordForm.setTitle(linkRecord.getTitle());
 			linkRecordForm.setDescription(linkRecord.getDescription());
 			linkRecordForm.setHistory(linkRecord.getHistory());
 			result = this.editModelAndView(linkRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do?historyId=" + linkRecord.getHistory().getId());
+			result = new ModelAndView(
+					"redirect:/linkRecord/brotherhood/list.do?historyId="
+							+ linkRecord.getHistory().getId());
 			if (linkRecord == null)
-				redirectAttrs.addFlashAttribute("message", "linkRecord.error.unexist");
-			else if (actor.getId() != linkRecord.getHistory().getBrotherhood().getId())
-				redirectAttrs.addFlashAttribute("message", "linkRecord.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"linkRecord.error.unexist");
+			else if (actor.getId() != linkRecord.getHistory().getBrotherhood()
+					.getId())
+				redirectAttrs.addFlashAttribute("message",
+						"linkRecord.error.notFromActor");
 		}
 		return result;
 	}
 
 	// Save
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final LinkRecordForm linkRecordForm, final BindingResult binding) {
+	public ModelAndView save(@Valid final LinkRecordForm linkRecordForm,
+			final BindingResult binding) {
 		ModelAndView result;
 		Actor actor = new Actor();
 		LinkRecord linkRecord;
@@ -148,24 +183,30 @@ public class LinkRecordController extends AbstractController {
 				System.out.println("owo" + linkRecord);
 				Assert.notNull(linkRecord);
 				System.out.println("uwu" + linkRecord);
-				actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-				//Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
+				actor = this.actorService.findByUserAccount(LoginService
+						.getPrincipal());
+				// Assert.isTrue(actor.getId() ==
+				// linkRecord.getHistory().getBrotherhood().getId());
 				System.out.println("iwi" + linkRecord);
 				linkRecord.setHistory(linkRecordForm.getHistory());
 				linkRecord.setTitle(linkRecordForm.getTitle());
 				linkRecord.setDescription(linkRecordForm.getDescription());
 				this.linkRecordService.save(linkRecord);
 
-				result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do?historyId=" + linkRecord.getHistory().getId());
+				result = new ModelAndView(
+						"redirect:/linkRecord/brotherhood/list.do?historyId="
+								+ linkRecord.getHistory().getId());
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
-				result = this.editModelAndView(linkRecordForm, "linkRecord.commit.error");
+				result = this.editModelAndView(linkRecordForm,
+						"linkRecord.commit.error");
 			}
 		return result;
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
-	public ModelAndView save2(@Valid final LinkRecordForm linkRecordForm, final BindingResult binding) {
+	public ModelAndView save2(@Valid final LinkRecordForm linkRecordForm,
+			final BindingResult binding) {
 
 		ModelAndView result;
 		final LinkRecord linkRecord = this.linkRecordService.create();
@@ -176,9 +217,11 @@ public class LinkRecordController extends AbstractController {
 				linkRecord.setTitle(linkRecordForm.getTitle());
 				linkRecord.setDescription(linkRecordForm.getDescription());
 				this.linkRecordService.save(linkRecord);
-				result = new ModelAndView("redirect:/linkRecord/brotherhood/list.do");
+				result = new ModelAndView(
+						"redirect:/linkRecord/brotherhood/list.do");
 			} catch (final Throwable oops) {
-				result = this.createModelAndView(linkRecordForm, "linkRecord.commit.error");
+				result = this.createModelAndView(linkRecordForm,
+						"linkRecord.commit.error");
 			}
 		return result;
 	}
@@ -186,25 +229,32 @@ public class LinkRecordController extends AbstractController {
 	// delete
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final LinkRecordForm linkRecordForm, final BindingResult binding) {
+	public ModelAndView delete(final LinkRecordForm linkRecordForm,
+			final BindingResult binding) {
 		ModelAndView result;
-		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordForm.getId());
-		Actor actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+		final LinkRecord linkRecord = this.linkRecordService
+				.findOne(linkRecordForm.getId());
+		Actor actor = this.actorService.findByUserAccount(LoginService
+				.getPrincipal());
 		try {
 			Assert.notNull(linkRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == linkRecord.getHistory().getBrotherhood().getId());
+			actor = this.actorService.findByUserAccount(LoginService
+					.getPrincipal());
+			Assert.isTrue(actor.getId() == linkRecord.getHistory()
+					.getBrotherhood().getId());
 			this.linkRecordService.delete(linkRecord);
 			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
-			result = this.editModelAndView(linkRecordForm, "linkRecord.commit.error");
+			result = this.editModelAndView(linkRecordForm,
+					"linkRecord.commit.error");
 		}
 		return result;
 	}
 
 	// CreateModelAndView
 
-	protected ModelAndView createModelAndView(final LinkRecordForm linkRecordForm) {
+	protected ModelAndView createModelAndView(
+			final LinkRecordForm linkRecordForm) {
 		ModelAndView result;
 
 		result = this.createModelAndView(linkRecordForm, null);
@@ -213,7 +263,8 @@ public class LinkRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView createModelAndView(final LinkRecordForm linkRecordForm, final String message) {
+	protected ModelAndView createModelAndView(
+			final LinkRecordForm linkRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("linkRecord/create");
@@ -222,8 +273,10 @@ public class LinkRecordController extends AbstractController {
 		result.addObject("isRead", false);
 
 		result.addObject("requestURI", "linkRecord/create.do");
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName",
+		// this.configurationService.findAll().iterator().next().getSystemName());
 		return result;
 	}
 
@@ -236,7 +289,8 @@ public class LinkRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView editModelAndView(final LinkRecordForm linkRecordForm, final String message) {
+	protected ModelAndView editModelAndView(
+			final LinkRecordForm linkRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("linkRecord/edit");
@@ -244,9 +298,12 @@ public class LinkRecordController extends AbstractController {
 		result.addObject("message", message);
 		result.addObject("isRead", false);
 
-		result.addObject("requestURI", "linkRecord/edit.do?linkRecordId=" + linkRecordForm.getId());
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", ((ActorService) this.configurationService).findAll().iterator().next().getSystemName());
+		result.addObject("requestURI", "linkRecord/edit.do?linkRecordId="
+				+ linkRecordForm.getId());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName", ((ActorService)
+		// this.configurationService).findAll().iterator().next().getSystemName());
 		return result;
 	}
 
@@ -259,7 +316,8 @@ public class LinkRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView showModelAndView(final LinkRecordForm linkRecordForm, final String message) {
+	protected ModelAndView showModelAndView(
+			final LinkRecordForm linkRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("linkRecord/show");
@@ -267,9 +325,12 @@ public class LinkRecordController extends AbstractController {
 		result.addObject("message", message);
 		result.addObject("isRead", true);
 
-		result.addObject("requestURI", "linkRecord/show.do?linkRecordId=" + linkRecordForm.getId());
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("requestURI", "linkRecord/show.do?linkRecordId="
+				+ linkRecordForm.getId());
+		// result.addObject("banner",
+		// this.configurationService.findAll().iterator().next().getBanner());
+		// result.addObject("systemName",
+		// this.configurationService.findAll().iterator().next().getSystemName());
 		return result;
 	}
 
