@@ -261,6 +261,114 @@ public class SegmentBrotherhoodController extends AbstractController {
 
 	}
 
+	// CREATE
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(final int segmentId,
+			final RedirectAttributes redirectAttrs) {
+		ModelAndView result;
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Segment segment = segmentService.findOne(segmentId);
+		try {
+			Assert.notNull(b);
+			Assert.notNull(segment);
+			Assert.isTrue(segment.getPath().getParade().getBrotherhood()
+					.equals(b));
+			Assert.isTrue(segment.getPath().getParade().isDraftMode());
+
+			SegmentForm segmentForm = new SegmentForm();
+
+			segmentForm.setPath(segment.getPath());
+			segmentForm.setApproximateTimeDes(segment.getApproximateTimeDes());
+			segmentForm.setApproximateTimeOri(segment.getApproximateTimeOri());
+			segmentForm
+					.setDestinationLatitude(segment.getDestinationLatitude());
+			segmentForm.setDestinationLongitude(segment
+					.getDestinationLongitude());
+			segmentForm.setId(segment.getId());
+			segmentForm.setOriginLatitude(segment.getOriginLatitude());
+			segmentForm.setOriginLongitude(segment.getOriginLongitude());
+
+			result = editModelAndView(segmentForm);
+
+		} catch (final Throwable e) {
+
+			result = new ModelAndView("redirect:/path/brotherhood/list.do");
+			if (segment == null)
+				redirectAttrs.addFlashAttribute("message",
+						"segment.error.segmentNotExists");
+			else if (!segment.getPath().getParade().getBrotherhood().equals(b)) {
+				redirectAttrs.addFlashAttribute("message",
+						"path.error.pathNotYours");
+			} else if (segment.getPath().getParade().isDraftMode() == false) {
+				result = new ModelAndView(
+						"redirect:/segment/brotherhood/list.do?pathId="
+								+ segment.getPath().getId());
+				redirectAttrs.addFlashAttribute("message",
+						"path.error.pathNotDraft");
+			} else {
+				redirectAttrs.addFlashAttribute("message", "commit.error");
+			}
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView save2(@Valid final SegmentForm segmentForm,
+			final BindingResult binding, final RedirectAttributes redirectAttrs) {
+		ModelAndView result;
+		Path path = pathService.findOne(segmentForm.getPath().getId());
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		if (binding.hasErrors())
+			result = this.editModelAndView(segmentForm, "commit.error");
+		else
+			try {
+				Assert.notNull(b);
+				Assert.notNull(path);
+				Assert.isTrue(path.getParade().getBrotherhood().equals(b));
+				Assert.isTrue(path.getParade().isDraftMode());
+
+				final Segment segment = this.segmentService.create();
+				segment.setApproximateTimeDes(segmentForm
+						.getApproximateTimeDes());
+				segment.setApproximateTimeOri(segmentForm
+						.getApproximateTimeOri());
+				segment.setDestinationLatitude(segmentForm
+						.getDestinationLatitude());
+				segment.setDestinationLongitude(segmentForm
+						.getDestinationLongitude());
+				segment.setOriginLatitude(segmentForm.getOriginLatitude());
+				segment.setOriginLongitude(segmentForm.getOriginLongitude());
+				segment.setPath(path);
+
+				this.segmentService.save(segment);
+
+				result = new ModelAndView(
+						"redirect:/segment/brotherhood/list.do?pathId="
+								+ segmentForm.getPath().getId());
+			} catch (final Throwable oops) {
+				result = this.createModelAndView(segmentForm, "commit.error");
+				if (path == null)
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotExists");
+				else if (!path.getParade().getBrotherhood().equals(b)) {
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotYours");
+				} else if (path.getParade().isDraftMode() == false) {
+					result = new ModelAndView(
+							"redirect:/segment/brotherhood/list.do?pathId="
+									+ segmentForm.getPath().getId());
+					redirectAttrs.addFlashAttribute("message",
+							"path.error.pathNotDraft");
+				} else {
+					redirectAttrs.addFlashAttribute("message", "commit.error");
+				}
+			}
+		return result;
+
+	}
+
 	@SuppressWarnings("rawtypes")
 	private Object getLastElement(final Collection c) {
 		final Iterator itr = c.iterator();
@@ -284,10 +392,39 @@ public class SegmentBrotherhoodController extends AbstractController {
 
 		result = new ModelAndView("segment/create");
 
+		Boolean isRead = false;
+		if (segmentForm.getOriginLatitude() != null) {
+			isRead = true;
+		}
+
 		result.addObject("message1", message);
 		result.addObject("requestURI", "segment/brotherhood/create.do");
 		result.addObject("segmentForm", segmentForm);
-		result.addObject("isRead", false);
+		result.addObject("isRead", isRead);
+		result.addObject("pathId", segmentForm.getPath().getId());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
+		return result;
+	}
+
+	protected ModelAndView editModelAndView(final SegmentForm segmentForm) {
+		ModelAndView result;
+		result = this.editModelAndView(segmentForm, null);
+		return result;
+	}
+
+	protected ModelAndView editModelAndView(final SegmentForm segmentForm,
+			final String message) {
+		final ModelAndView result;
+
+		result = new ModelAndView("segment/edit");
+
+		result.addObject("message1", message);
+		result.addObject("requestURI", "segment/brotherhood/edit.do?segmentId="
+				+ segmentForm.getId());
+		result.addObject("segmentForm", segmentForm);
 		result.addObject("pathId", segmentForm.getPath().getId());
 		result.addObject("banner", this.configurationService.findAll()
 				.iterator().next().getBanner());

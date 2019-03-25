@@ -25,6 +25,13 @@
 		titleKey="path.destinationLongitude" />
 	<display:column property="approximateTimeDes"
 		titleKey="path.approximateTimeDes" />
+	<display:column>
+		<jstl:if test="${draft}">
+			<a href="segment/brotherhood/edit.do?segmentId=${row.id}"> <spring:message
+					code="segment.edit" />
+			</a>
+		</jstl:if>
+	</display:column>
 </display:table>
 
 <br>

@@ -19,5 +19,10 @@
 		<put-attribute name="title" value="Create segment" />
 		<put-attribute name="body" value="/views/segment/edit.jsp" />
 	</definition>
+	
+	<definition name="segment/edit" extends="master.page">
+		<put-attribute name="title" value="Edit segment" />
+		<put-attribute name="body" value="/views/segment/edit2.jsp" />
+	</definition>
 
 </tiles-definitions>

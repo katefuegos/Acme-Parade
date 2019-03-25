@@ -14,10 +14,15 @@
 		<put-attribute name="title" value="Lista de segmentos" />
 		<put-attribute name="body" value="/views/segment/list.jsp" />
 	</definition>
-	
+
 	<definition name="segment/create" extends="master.page">
 		<put-attribute name="title" value="Crear segmento" />
 		<put-attribute name="body" value="/views/segment/edit.jsp" />
 	</definition>
-	
+
+	<definition name="segment/edit" extends="master.page">
+		<put-attribute name="title" value="Editar segmento" />
+		<put-attribute name="body" value="/views/segment/edit2.jsp" />
+	</definition>
+
 </tiles-definitions>

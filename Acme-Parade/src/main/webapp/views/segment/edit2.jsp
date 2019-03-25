@@ -25,31 +25,13 @@
 <form:form action="${requestURI}" modelAttribute="segmentForm">
 	<form:hidden path="path" />
 	<form:hidden path="id" />
+	<form:hidden path="originLatitude" />
+	<form:hidden path="originLongitude" />
+	<form:hidden path="destinationLatitude" />
+	<form:hidden path="destinationLongitude" />
 
-	<jstl:if test="${!isRead}">
-		<acme:textbox code="path.originLatitude" path="originLatitude" />
-		<acme:textbox code="path.originLongitude" path="originLongitude" />
-	</jstl:if>
-
-	<jstl:if test="${isRead}">
-		<form:label path="originLatitude">
-			<spring:message code="path.originLatitude" />:
-		</form:label>
-		<form:input path="originLatitude" readonly='true' />
-		<form:errors cssClass="error" path="originLatitude" />
-		<br>
-		<form:label path="originLongitude">
-			<spring:message code="path.originLongitude" />:
-		</form:label>
-		<form:input path="originLongitude" readonly='true' />
-		<form:errors cssClass="error" path="originLongitude" />
-	</jstl:if>
 
 	<acme:textbox code="path.approximateTimeOri" path="approximateTimeOri" />
-	<acme:textbox code="path.destinationLatitude"
-		path="destinationLatitude" />
-	<acme:textbox code="path.destinationLongitude"
-		path="destinationLongitude" />
 	<acme:textbox code="path.approximateTimeDes" path="approximateTimeDes" />
 
 	<acme:submit name="save" code="segment.save" />

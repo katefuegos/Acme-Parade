@@ -311,6 +311,8 @@
 			access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/segment/brotherhood/create.do"
 			access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/segment/brotherhood/edit.do"
+			access="hasRole('BROTHERHOOD')" />
 
 		<!-- HISTORY -->
 
@@ -361,7 +363,7 @@
 
 		<security:intercept-url pattern="/linkRecord/brotherhood/edit.do"
 			access="hasRole('BROTHERHOOD')" />
-			
+
 		<security:intercept-url pattern="/linkRecord/brotherhood/create.do"
 			access="hasRole('BROTHERHOOD')" />
 

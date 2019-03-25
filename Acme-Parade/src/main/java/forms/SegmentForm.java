@@ -18,8 +18,16 @@ public class SegmentForm {
 	private Double approximateTimeOri;
 	private Double approximateTimeDes;
 	private Path path;
+	private int id;
 
-	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@NotNull
 	@Valid
 	public Path getPath() {
