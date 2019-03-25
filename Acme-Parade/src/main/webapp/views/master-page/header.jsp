@@ -113,7 +113,7 @@
 								code="master.page.register.brotherhood" /></a></li>
 
 					<li><a href="register/actor.do?authority=CHAPTER"><spring:message
-								code="master.page.register" /></a></li>
+								code="master.page.registerChapter" /></a></li>
 
 					<security:authorize access="hasRole('ADMIN')">
 						<li><a
@@ -126,9 +126,9 @@
 			<li><a class="fNiv" href="brotherhood/list.do"><spring:message
 						code="master.page.brotherhood" /></a></li>
 		</security:authorize>
-		
+
 		<security:authorize access="hasRole('CHAPTER')">
-		<li><a class="fNiv" href="parade/chapter/list.do"><spring:message
+			<li><a class="fNiv" href="parade/chapter/list.do"><spring:message
 						code="master.page.myParades" /></a></li>
 		</security:authorize>
 
@@ -143,6 +143,8 @@
 						code="master.page.request" /></a></li>
 			<li><a class="fNiv" href="enrolment/brotherhood/list.do"><spring:message
 						code="master.page.enrolment" /></a></li>
+			<li><a class="fNiv" href="history/brotherhood/list.do"><spring:message
+						code="master.page.myHistory" /></a></li>
 
 		</security:authorize>
 

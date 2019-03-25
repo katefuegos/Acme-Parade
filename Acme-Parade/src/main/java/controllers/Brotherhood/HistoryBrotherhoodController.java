@@ -1,4 +1,3 @@
-
 package controllers.Brotherhood;
 
 import java.util.Collection;
@@ -12,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import security.LoginService;
 import services.BrotherhoodService;
+import services.ConfigurationService;
 import services.HistoryService;
 import controllers.AbstractController;
 import domain.Brotherhood;
@@ -21,37 +21,46 @@ import domain.History;
 @RequestMapping("/history/brotherhood")
 public class HistoryBrotherhoodController extends AbstractController {
 
-	//Services-----------------------------------------------------------
+	// Services-----------------------------------------------------------
 	@Autowired
-	private HistoryService		historyService;
+	private HistoryService historyService;
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
+	@Autowired
+	private ConfigurationService configurationService;
 
-	//Constructor---------------------------------------------------------
+	// Constructor---------------------------------------------------------
 
 	public HistoryBrotherhoodController() {
 		super();
 	}
 
-	//List
+	// List
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		final ModelAndView modelAndView;
-		final Brotherhood brotherhood = this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		final Brotherhood brotherhood = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		final int brotherhoodId = brotherhood.getId();
-		final Collection<History> historys = this.historyService.findByBrotherhoodId(brotherhoodId);
+		final Collection<History> historys = this.historyService
+				.findByBrotherhoodId(brotherhoodId);
 
 		modelAndView = new ModelAndView("history/list");
 		modelAndView.addObject("historys", historys);
-		modelAndView.addObject("requestURI", "/list.do?brotherhoodId=" + brotherhoodId);
+		modelAndView.addObject("requestURI", "/list.do?brotherhoodId="
+				+ brotherhoodId);
+		modelAndView.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		modelAndView.addObject("systemName", this.configurationService
+				.findAll().iterator().next().getSystemName());
 
 		return modelAndView;
 
 	}
 
-	//Delete
+	// Delete
 
 	@RequestMapping(value = "/delete")
 	public ModelAndView delete(@RequestParam final int historyId) {

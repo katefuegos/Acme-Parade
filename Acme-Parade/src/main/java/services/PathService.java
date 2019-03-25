@@ -50,7 +50,6 @@ public class PathService {
 	public Path findOne(final Integer pathId) {
 		Path path;
 		path = this.pathRepository.findOne(pathId);
-		Assert.notNull(path);
 
 		return path;
 	}

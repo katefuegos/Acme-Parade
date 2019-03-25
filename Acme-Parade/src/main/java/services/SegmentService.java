@@ -47,8 +47,6 @@ public class SegmentService {
 	public Segment findOne(final Integer segmentId) {
 		Segment segment;
 		segment = this.segmentRepository.findOne(segmentId);
-		Assert.notNull(segment);
-
 		return segment;
 	}
 

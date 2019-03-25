@@ -50,6 +50,8 @@
 	<display:column property="title" titleKey="parade.title" />
 
 	<display:column property="moment" titleKey="parade.moment" />
+	
+	<display:column property="reasonReject" titleKey="parade.reasonReject" />
 
 	<display:column property="status" class="${'RED'}" titleKey="parade.status" />
 

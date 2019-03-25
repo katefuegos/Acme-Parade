@@ -495,7 +495,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 			Parade copy = this.paradeService.create();
 			copy.setDescription(parade.getDescription());
-			copy.setFloats(parade.getFloats());
+			copy.getFloats().addAll(parade.getFloats());
 			copy.setMoment(parade.getMoment());
 			copy.setTitle(parade.getTitle());
 

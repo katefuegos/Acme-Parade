@@ -277,7 +277,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 			Assert.isTrue(segment.getPath().getParade().isDraftMode());
 
 			SegmentForm segmentForm = new SegmentForm();
-
+			segmentForm.setId(segment.getId());
 			segmentForm.setPath(segment.getPath());
 			segmentForm.setApproximateTimeDes(segment.getApproximateTimeDes());
 			segmentForm.setApproximateTimeOri(segment.getApproximateTimeOri());
@@ -320,28 +320,22 @@ public class SegmentBrotherhoodController extends AbstractController {
 		Path path = pathService.findOne(segmentForm.getPath().getId());
 		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
 				.getPrincipal().getId());
+		final Segment segment = this.segmentService
+				.findOne(segmentForm.getId());
 		if (binding.hasErrors())
 			result = this.editModelAndView(segmentForm, "commit.error");
 		else
 			try {
 				Assert.notNull(b);
+				Assert.notNull(segment);
 				Assert.notNull(path);
 				Assert.isTrue(path.getParade().getBrotherhood().equals(b));
 				Assert.isTrue(path.getParade().isDraftMode());
 
-				final Segment segment = this.segmentService.create();
 				segment.setApproximateTimeDes(segmentForm
 						.getApproximateTimeDes());
 				segment.setApproximateTimeOri(segmentForm
 						.getApproximateTimeOri());
-				segment.setDestinationLatitude(segmentForm
-						.getDestinationLatitude());
-				segment.setDestinationLongitude(segmentForm
-						.getDestinationLongitude());
-				segment.setOriginLatitude(segmentForm.getOriginLatitude());
-				segment.setOriginLongitude(segmentForm.getOriginLongitude());
-				segment.setPath(path);
-
 				this.segmentService.save(segment);
 
 				result = new ModelAndView(
@@ -349,7 +343,10 @@ public class SegmentBrotherhoodController extends AbstractController {
 								+ segmentForm.getPath().getId());
 			} catch (final Throwable oops) {
 				result = this.createModelAndView(segmentForm, "commit.error");
-				if (path == null)
+				if (segment == null)
+					redirectAttrs.addFlashAttribute("message",
+							"segment.error.segmentNotExists");
+				else if (path == null)
 					redirectAttrs.addFlashAttribute("message",
 							"path.error.pathNotExists");
 				else if (!path.getParade().getBrotherhood().equals(b)) {

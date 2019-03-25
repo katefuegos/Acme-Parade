@@ -75,15 +75,15 @@
 <h3>
 	<spring:message code="administrator.dashboard.C5" />
 </h3>
-<display:table name="processionsC5" id="row" class="displaytag">
+<display:table name="paradesC5" id="row" class="displaytag">
 	<display:column property="ticker"
-		titleKey="administrator.procession.ticker" />
+		titleKey="administrator.parade.ticker" />
 	<display:column property="title"
-		titleKey="administrator.procession.title" />
+		titleKey="administrator.parade.title" />
 	<display:column property="moment"
-		titleKey="administrator.procession.moment" />
+		titleKey="administrator.parade.moment" />
 	<display:column property="brotherhood.title"
-		titleKey="administrator.procession.procession.brotherhood" />
+		titleKey="administrator.parade.parade.brotherhood" />
 </display:table>
 
 <br />
