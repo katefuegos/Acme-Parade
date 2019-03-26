@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.Collection;
@@ -22,13 +23,14 @@ public class SocialProfileService {
 	// Repository
 
 	@Autowired
-	private SocialProfileRepository socialProfileRepository;
+	private SocialProfileRepository	socialProfileRepository;
 
 	@Autowired
-	private ActorService actorService;
+	private ActorService			actorService;
 
-	@Autowired
-	private Validator validator;
+	@Autowired(required = false)
+	private Validator				validator;
+
 
 	// Services
 
@@ -42,8 +44,7 @@ public class SocialProfileService {
 	// -------------------------------------------------------------------
 	public SocialProfile create() {
 		final SocialProfile profile = new SocialProfile();
-		profile.setActor(this.actorService.findByUserAccountId(LoginService
-				.getPrincipal().getId()));
+		profile.setActor(this.actorService.findByUserAccountId(LoginService.getPrincipal().getId()));
 		return profile;
 	}
 
@@ -85,24 +86,22 @@ public class SocialProfileService {
 	// Methods-----------------------------------------------------------------
 	public Boolean checkPrincipal(final SocialProfile profile) {
 		final UserAccount u = profile.getActor().getUserAccount();
-		Assert.isTrue(u.equals(LoginService.getPrincipal()),
-				"este perfil no corresponde con este actor");
+		Assert.isTrue(u.equals(LoginService.getPrincipal()), "este perfil no corresponde con este actor");
 		return true;
 	}
 
 	// como el actor se pasaría como hidden hay que hacer el reconstruct
 	// set --> los que no has modificado
 	// Los test no van a tirar por el autowired
-	public SocialProfile reconstruct(final SocialProfile socialProfile,
-			final BindingResult binding) {
+	public SocialProfile reconstruct(final SocialProfile socialProfile, final BindingResult binding) {
 		final SocialProfile result = socialProfile;
 		result.setActor(this.actorService.findPrincipal());
 		this.validator.validate(result, binding);
 		return result;
 	}
 
-	public Collection<SocialProfile> findByActor(Integer actorId) {
+	public Collection<SocialProfile> findByActor(final Integer actorId) {
 		Assert.notNull(actorId);
-		return socialProfileRepository.findByActor(actorId);
+		return this.socialProfileRepository.findByActor(actorId);
 	}
 }
