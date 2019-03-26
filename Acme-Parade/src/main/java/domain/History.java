@@ -40,6 +40,7 @@ public class History extends DomainEntity {
 	}
 
 	@URL
+	@NotBlank
 	public String getPhotos() {
 		return this.photos;
 	}

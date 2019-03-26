@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.Collection;
@@ -19,8 +18,7 @@ public class HistoryService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private HistoryRepository	historyRepository;
-
+	private HistoryRepository historyRepository;
 
 	// Services-------------------------------------------------
 
@@ -71,11 +69,16 @@ public class HistoryService {
 		this.historyRepository.delete(history);
 	}
 
-	//-----------Other ----------
+	// -----------Other ----------
 
 	public Collection<History> findByBrotherhoodId(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
 		return this.historyRepository.findByBrotherhoodId(brotherhoodId);
+	}
+
+	public History findByBrotherhoodIdSingle(int brotherhoodId) {
+		Assert.notNull(brotherhoodId);
+		return this.historyRepository.findByBrotherhoodIdSingle(brotherhoodId);
 	}
 
 }

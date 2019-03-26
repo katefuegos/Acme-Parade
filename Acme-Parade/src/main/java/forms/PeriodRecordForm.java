@@ -12,22 +12,9 @@ public class PeriodRecordForm extends EveryRecordForm {
 
 	// Attributes------------------------------------------------------------------
 
-	private int		id;
 	private Integer	startYear;
 	private Integer	endYear;
 	private String	photos;
-
-
-	@Override
-	@NotNull
-	public int getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(final int id) {
-		this.id = id;
-	}
 
 	@NotNull
 	public Integer getStartYear() {

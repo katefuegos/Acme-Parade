@@ -1,6 +1,6 @@
-
 package services;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -13,7 +13,6 @@ import repositories.EveryRecordRepository;
 import security.LoginService;
 import domain.EveryRecord;
 import domain.History;
-import domain.InceptionRecord;
 import domain.LegalRecord;
 import domain.LinkRecord;
 import domain.MiscellaneousRecord;
@@ -27,25 +26,21 @@ public class EveryRecordService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private EveryRecordRepository		everyRecordRepository;
+	private EveryRecordRepository everyRecordRepository;
 
 	// Services-------------------------------------------------
 
 	@Autowired
-	private InceptionRecordService		inceptionRecordService;
+	private MiscellaneousRecordService miscellaneousRecordService;
 
 	@Autowired
-	private MiscellaneousRecordService	miscellaneousRecordService;
+	private LegalRecordService legalRecordService;
 
 	@Autowired
-	private LegalRecordService			legalRecordService;
+	private LinkRecordService linkRecordService;
 
 	@Autowired
-	private LinkRecordService			linkRecordService;
-
-	@Autowired
-	private PeriodRecordService			periodRecordService;
-
+	private PeriodRecordService periodRecordService;
 
 	// Constructor----------------------------------------------
 
@@ -82,53 +77,51 @@ public class EveryRecordService {
 
 	// Other Methods--------------------------------------------
 	public void update(final EveryRecordForm everyRecordform) {
-		if (LoginService.getPrincipal().getAuthorities().contains("brotherhood")) {
+		if (LoginService.getPrincipal().getAuthorities()
+				.contains("brotherhood")) {
 			LegalRecord legalRecord = null;
-			InceptionRecord inceptionRecord = null;
 			LinkRecord linkRecord = null;
 			MiscellaneousRecord miscellaneousRecord = null;
 			PeriodRecord periodRecord = null;
 
 			if (everyRecordform.getId() != 0) {
-				legalRecord = this.legalRecordService.findOne(everyRecordform.getId());
-				inceptionRecord = this.inceptionRecordService.findOne(everyRecordform.getId());
-				linkRecord = this.linkRecordService.findOne(everyRecordform.getId());
-				miscellaneousRecord = this.miscellaneousRecordService.findOne(everyRecordform.getId());
-				legalRecord = this.legalRecordService.findOne(everyRecordform.getId());
+				legalRecord = this.legalRecordService.findOne(everyRecordform
+						.getId());
+				linkRecord = this.linkRecordService.findOne(everyRecordform
+						.getId());
+				miscellaneousRecord = this.miscellaneousRecordService
+						.findOne(everyRecordform.getId());
+				legalRecord = this.legalRecordService.findOne(everyRecordform
+						.getId());
 
 			} else {
 				legalRecord = this.legalRecordService.create();
-				inceptionRecord = this.inceptionRecordService.create();
 				linkRecord = this.linkRecordService.create();
 				miscellaneousRecord = this.miscellaneousRecordService.create();
 				periodRecord = this.periodRecordService.create();
 			}
 			legalRecord.setId(everyRecordform.getId());
-			legalRecord.setVersion(everyRecordform.getVersion());
 			legalRecord.setTitle(everyRecordform.getTitle());
 			legalRecord.setDescription(everyRecordform.getDescription());
 
-			inceptionRecord.setId(everyRecordform.getId());
-			inceptionRecord.setVersion(everyRecordform.getVersion());
-			inceptionRecord.setTitle(everyRecordform.getTitle());
-			inceptionRecord.setDescription(everyRecordform.getDescription());
-
 			linkRecord.setId(everyRecordform.getId());
-			linkRecord.setVersion(everyRecordform.getVersion());
 			linkRecord.setTitle(everyRecordform.getTitle());
 			linkRecord.setDescription(everyRecordform.getDescription());
 
 			miscellaneousRecord.setId(everyRecordform.getId());
-			miscellaneousRecord.setVersion(everyRecordform.getVersion());
 			miscellaneousRecord.setTitle(everyRecordform.getTitle());
-			miscellaneousRecord.setDescription(everyRecordform.getDescription());
+			miscellaneousRecord
+					.setDescription(everyRecordform.getDescription());
 
 			periodRecord.setId(everyRecordform.getId());
-			periodRecord.setVersion(everyRecordform.getVersion());
 			periodRecord.setTitle(everyRecordform.getTitle());
 			periodRecord.setDescription(everyRecordform.getDescription());
 
 		}
+	}
 
+	public Collection<EveryRecord> findByHistoryId(int historyId) {
+		Assert.notNull(historyId);
+		return everyRecordRepository.findByHistoryId(historyId);
 	}
 }
