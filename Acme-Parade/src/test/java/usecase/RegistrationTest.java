@@ -65,7 +65,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 8.1 - Register as a brotherhood
 			 * b) Positive tests
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -74,7 +74,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 8.1 - Register as a member
 			 * b) Negative tests - Business rule: Attribute title must not be null
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -84,7 +84,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 8.1 - Register as a member
 			 * b) Negative tests - Business rule: Attribute picture must not be null
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */{
 				actorFormB3, null, "area1", javax.validation.ConstraintViolationException.class
@@ -123,7 +123,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 8.1 - Register as a member
 			 * b) Positive tests
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -132,7 +132,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 8.1 - Register as a member
 			 * b) Negative tests - Business rule: Attribute name must not be null
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -142,7 +142,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 8.1 - Register as a member
 			 * b) Negative tests - Business rule: Attribute photo must be a url
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -182,7 +182,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 12.1 - Create a user accounts for a new administrator
 			 * b) Positive tests
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -191,7 +191,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 12.1 - Create a user accounts for a new administrator
 			 * b) Negative tests - Business rule: You must be authenticate as a administrator.
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 
@@ -201,7 +201,7 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 12.1 - Create a user accounts for a new administrator
 			 * b) Negative tests - Business rule: Attribute photo must be a url
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -239,9 +239,9 @@ public class RegistrationTest extends AbstractTest {
 		final Object testingData[][] = {
 
 			/*
-			 * a) Functional requirements 7.1 - Register as a chapter
+			 * a) Functional requirements 7.1 - Register as a chapter and 2.1 self-assigned area
 			 * b) Positive case
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -250,20 +250,20 @@ public class RegistrationTest extends AbstractTest {
 			/*
 			 * a) Functional requirements 7.1 - Register as a chapter
 			 * b) Case of negative tests - Business rule: Name of actor must not be null.
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
 				actorFormC2, null, "area4", javax.validation.ConstraintViolationException.class
 			},
 			/*
-			 * a) Functional requirements 7.1 - Register as a chapter
-			 * b) Case of negative tests - Business rule: Only a chapter can manage an specific area.
-			 * c) analysis of sentence coverage;
+			 * a) Functional requirements 7.1 - Register as a chapter and 2.1 self-assigned area
+			 * b) Case of negative tests - Business rule: Title of actor must not be null.
+			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
 			 */
 			{
-				actorFormC3, null, "area1", javax.validation.ConstraintViolationException.class
+				actorFormC3, null, "area4", javax.validation.ConstraintViolationException.class
 			}
 		};
 

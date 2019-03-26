@@ -58,7 +58,7 @@ public class SelfAssignedAreaChapter extends AbstractTest {
 			/*
 			 * a) Functional requirements - Self-assigned area
 			 * b) Positive tests
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 85.9%
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -67,7 +67,7 @@ public class SelfAssignedAreaChapter extends AbstractTest {
 			/*
 			 * a) Functional requirements - Self-assigned area
 			 * b) Negative tests - Business rule: it cannot be changed.
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 85.9%
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -139,7 +139,7 @@ public class SelfAssignedAreaChapter extends AbstractTest {
 			/*
 			 * a) Functional requirements 2.1 Self-assigned area
 			 * b) Positive case
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 92%
 			 * d) analysis of data coverage.
 			 */
 			{
@@ -148,7 +148,7 @@ public class SelfAssignedAreaChapter extends AbstractTest {
 			/*
 			 * a) Functional requirements 2.1 self-assigned area
 			 * b) Case of negative tests - Business rule: Only a chapter can manage an specific area.
-			 * c) analysis of sentence coverage;
+			 * c) analysis of sentence coverage: 92%
 			 * d) analysis of data coverage.
 			 */
 			{
