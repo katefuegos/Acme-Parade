@@ -53,7 +53,7 @@ public class AreaService {
 	public Area findOne(final Integer areaId) {
 		Area area;
 		area = this.areaRepository.findOne(areaId);
-		Assert.notNull(area);
+		//Assert.notNull(area);
 
 		return area;
 	}
