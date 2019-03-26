@@ -16,12 +16,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
-import services.ActorService;
+import services.BrotherhoodService;
 import services.ConfigurationService;
 import services.HistoryService;
 import services.MiscellaneousRecordService;
 import controllers.AbstractController;
-import domain.Actor;
+import domain.Brotherhood;
 import domain.History;
 import domain.MiscellaneousRecord;
 import forms.MiscellaneousRecordForm;
@@ -36,7 +36,7 @@ public class MiscellaneousRecordController extends AbstractController {
 	private MiscellaneousRecordService miscellaneousRecordService;
 
 	@Autowired
-	private ActorService actorService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
 	private HistoryService historyService;
@@ -67,31 +67,46 @@ public class MiscellaneousRecordController extends AbstractController {
 			modelAndView
 					.addObject("miscellaneousRecords", miscellaneousRecords);
 			modelAndView.addObject("historyId", historyId);
-			modelAndView.addObject("requestURI",
-					"/miscellaneousRecord/brotherhood/list.do");
 			modelAndView.addObject("banner", this.configurationService
 					.findAll().iterator().next().getBanner());
 			modelAndView.addObject("systemName", this.configurationService
 					.findAll().iterator().next().getSystemName());
+			modelAndView.addObject("requestURI",
+					"/miscellaneousRecord/brotherhood/list.do?historyId="
+							+ history.getId());
+
 		} catch (final Throwable e) {
 			modelAndView = new ModelAndView("redirect:/brotherhood/list.do");
 			if (history == null)
 				redirectAttrs.addFlashAttribute("message",
-						"history.error.unexist2");
+						"history.error.historyUnexists");
 		}
-		return modelAndView;
 
+		return modelAndView;
 	}
 
 	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create(@RequestParam final int historyId) {
+	public ModelAndView create(final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final MiscellaneousRecordForm miscellaneousRecordForm = new MiscellaneousRecordForm();
-		miscellaneousRecordForm.setId(0);
-		final History history = this.historyService.findOne(historyId);
-		miscellaneousRecordForm.setHistory(history);
-		result = this.createModelAndView(miscellaneousRecordForm);
+		try {
+			final MiscellaneousRecordForm miscellaneousRecordForm = new MiscellaneousRecordForm();
+			miscellaneousRecordForm.setId(0);
+			final Brotherhood b = this.brotherhoodService
+					.findByUserAccountId(LoginService.getPrincipal().getId());
+			Assert.notNull(b);
+			final History history = this.historyService
+					.findByBrotherhoodIdSingle(b.getId());
+			Assert.notNull(history);
+			miscellaneousRecordForm.setHistory(history);
+
+			result = this.createModelAndView(miscellaneousRecordForm);
+
+		} catch (final Throwable e) {
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
+			redirectAttrs.addFlashAttribute("message", "commit.error");
+		}
+
 		return result;
 	}
 
@@ -104,31 +119,35 @@ public class MiscellaneousRecordController extends AbstractController {
 		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService
 				.findOne(miscellaneousRecordId);
 		final MiscellaneousRecordForm miscellaneousRecordForm = new MiscellaneousRecordForm();
-		Actor actor = null;
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+
 		try {
 			Assert.notNull(miscellaneousRecord);
-			actor = this.actorService.findByUserAccount(LoginService
-					.getPrincipal());
-			Assert.isTrue(actor.getId() == miscellaneousRecord.getHistory()
+			Assert.isTrue(b.getId() == miscellaneousRecord.getHistory()
 					.getBrotherhood().getId());
+
 			miscellaneousRecordForm.setId(miscellaneousRecordId);
+			miscellaneousRecordForm
+					.setHistory(miscellaneousRecord.getHistory());
 			miscellaneousRecordForm.setTitle(miscellaneousRecord.getTitle());
 			miscellaneousRecordForm.setDescription(miscellaneousRecord
 					.getDescription());
+
 			result = this.showModelAndView(miscellaneousRecordForm);
+
 		} catch (final Throwable e) {
-			result = new ModelAndView(
-					"redirect:/miscellaneousRecord/brotherhood/list.do");
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
 			if (miscellaneousRecord == null)
 				redirectAttrs.addFlashAttribute("message",
 						"miscellaneousRecord.error.unexist");
-			else if (actor.getId() != miscellaneousRecord.getHistory()
+			else if (b.getId() != miscellaneousRecord.getHistory()
 					.getBrotherhood().getId())
 				redirectAttrs.addFlashAttribute("message",
 						"miscellaneousRecord.error.notFromActor");
 		}
-		return result;
 
+		return result;
 	}
 
 	// Edit ---------------------------------------------------------------
@@ -140,81 +159,39 @@ public class MiscellaneousRecordController extends AbstractController {
 		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService
 				.findOne(miscellaneousRecordId);
 		final MiscellaneousRecordForm miscellaneousRecordForm = new MiscellaneousRecordForm();
-		Actor actor = null;
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			Assert.notNull(miscellaneousRecord);
-			actor = this.actorService.findByUserAccount(LoginService
-					.getPrincipal());
-			Assert.isTrue(actor.getId() == miscellaneousRecord.getHistory()
-					.getBrotherhood().getId());
+			Assert.notNull(b);
+			Assert.isTrue(miscellaneousRecord.getHistory().getBrotherhood()
+					.getId() == b.getId());
+			miscellaneousRecordForm.setId(miscellaneousRecordId);
 			miscellaneousRecordForm
 					.setHistory(miscellaneousRecord.getHistory());
-			miscellaneousRecordForm.setId(miscellaneousRecordId);
 			miscellaneousRecordForm.setTitle(miscellaneousRecord.getTitle());
 			miscellaneousRecordForm.setDescription(miscellaneousRecord
 					.getDescription());
+
 			result = this.editModelAndView(miscellaneousRecordForm);
+
 		} catch (final Throwable e) {
-			result = new ModelAndView(
-					"redirect:/miscellaneousRecord/brotherhood/list.do?historyId="
-							+ miscellaneousRecord.getHistory().getId());
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
 			if (miscellaneousRecord == null)
 				redirectAttrs.addFlashAttribute("message",
 						"miscellaneousRecord.error.unexist");
-			else if (actor.getId() != miscellaneousRecord.getHistory()
+			else if (b.getId() != miscellaneousRecord.getHistory()
 					.getBrotherhood().getId())
 				redirectAttrs.addFlashAttribute("message",
 						"miscellaneousRecord.error.notFromActor");
 		}
+
 		return result;
 	}
 
 	// Save
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(
-			@Valid final MiscellaneousRecordForm miscellaneousRecordForm,
-			final BindingResult binding) {
-		ModelAndView result;
-		Actor actor = new Actor();
-		MiscellaneousRecord miscellaneousRecord;
-		if (miscellaneousRecordForm.getId() != 0)
-			miscellaneousRecord = this.miscellaneousRecordService
-					.findOne(miscellaneousRecordForm.getId());
-		else
-			miscellaneousRecord = new MiscellaneousRecord();
-		if (binding.hasErrors())
-			result = this.editModelAndView(miscellaneousRecordForm);
-		else
-			try {
-				System.out.println("owo" + miscellaneousRecord);
-				Assert.notNull(miscellaneousRecord);
-				System.out.println("uwu" + miscellaneousRecord);
-				actor = this.actorService.findByUserAccount(LoginService
-						.getPrincipal());
-				// Assert.isTrue(actor.getId() ==
-				// miscellaneousRecord.getHistory().getBrotherhood().getId());
-				System.out.println("iwi" + miscellaneousRecord);
-				miscellaneousRecord.setHistory(miscellaneousRecordForm
-						.getHistory());
-				miscellaneousRecord
-						.setTitle(miscellaneousRecordForm.getTitle());
-				miscellaneousRecord.setDescription(miscellaneousRecordForm
-						.getDescription());
-				this.miscellaneousRecordService.save(miscellaneousRecord);
-
-				result = new ModelAndView(
-						"redirect:/miscellaneousRecord/brotherhood/list.do?historyId="
-								+ miscellaneousRecord.getHistory().getId());
-			} catch (final Throwable oops) {
-				oops.printStackTrace();
-				result = this.editModelAndView(miscellaneousRecordForm,
-						"miscellaneousRecord.commit.error");
-			}
-		return result;
-	}
-
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
-	public ModelAndView save2(
+	public ModelAndView save(
 			@Valid final MiscellaneousRecordForm miscellaneousRecordForm,
 			final BindingResult binding) {
 
@@ -222,19 +199,66 @@ public class MiscellaneousRecordController extends AbstractController {
 		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService
 				.create();
 		if (binding.hasErrors())
-			result = this.createModelAndView(miscellaneousRecordForm);
+			result = this.createModelAndView(miscellaneousRecordForm,
+					"commit.error");
 		else
 			try {
 				miscellaneousRecord
 						.setTitle(miscellaneousRecordForm.getTitle());
 				miscellaneousRecord.setDescription(miscellaneousRecordForm
 						.getDescription());
+				miscellaneousRecord.setHistory(miscellaneousRecordForm
+						.getHistory());
+
 				this.miscellaneousRecordService.save(miscellaneousRecord);
+
 				result = new ModelAndView(
-						"redirect:/miscellaneousRecord/brotherhood/list.do");
+						"redirect:/miscellaneousRecord/brotherhood/list.do?historyId="
+								+ miscellaneousRecord.getHistory().getId());
+
 			} catch (final Throwable oops) {
 				result = this.createModelAndView(miscellaneousRecordForm,
-						"miscellaneousRecord.commit.error");
+						"commit.error");
+			}
+
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView save2(
+			@Valid final MiscellaneousRecordForm miscellaneousRecordForm,
+			final BindingResult binding) {
+
+		ModelAndView result;
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+		MiscellaneousRecord miscellaneousRecord = miscellaneousRecordService
+				.findOne(miscellaneousRecordForm.getId());
+
+		if (binding.hasErrors())
+			result = this.editModelAndView(miscellaneousRecordForm,
+					"commit.error");
+		else
+			try {
+				Assert.notNull(miscellaneousRecord);
+				Assert.notNull(b);
+				Assert.isTrue(b.getId() == miscellaneousRecord.getHistory()
+						.getBrotherhood().getId());
+
+				miscellaneousRecord
+						.setTitle(miscellaneousRecordForm.getTitle());
+				miscellaneousRecord.setDescription(miscellaneousRecordForm
+						.getDescription());
+
+				this.miscellaneousRecordService.save(miscellaneousRecord);
+
+				result = new ModelAndView(
+						"redirect:/miscellaneousRecord/brotherhood/list.do?historyId="
+								+ miscellaneousRecord.getHistory().getId());
+
+			} catch (final Throwable oops) {
+				result = this.editModelAndView(miscellaneousRecordForm,
+						"commit.error");
 			}
 		return result;
 	}
@@ -245,22 +269,23 @@ public class MiscellaneousRecordController extends AbstractController {
 	public ModelAndView delete(
 			final MiscellaneousRecordForm miscellaneousRecordForm,
 			final BindingResult binding) {
+
 		ModelAndView result;
 		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService
 				.findOne(miscellaneousRecordForm.getId());
-		Actor actor = this.actorService.findByUserAccount(LoginService
-				.getPrincipal());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+
 		try {
 			Assert.notNull(miscellaneousRecord);
-			actor = this.actorService.findByUserAccount(LoginService
-					.getPrincipal());
-			Assert.isTrue(actor.getId() == miscellaneousRecord.getHistory()
+			Assert.isTrue(b.getId() == miscellaneousRecord.getHistory()
 					.getBrotherhood().getId());
 			this.miscellaneousRecordService.delete(miscellaneousRecord);
-			result = new ModelAndView("redirect:list.do");
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
+
 		} catch (final Throwable oops) {
 			result = this.editModelAndView(miscellaneousRecordForm,
-					"miscellaneousRecord.commit.error");
+					"commit.error");
 		}
 		return result;
 	}
@@ -286,12 +311,12 @@ public class MiscellaneousRecordController extends AbstractController {
 		result.addObject("miscellaneousRecordForm", miscellaneousRecordForm);
 		result.addObject("message", message);
 		result.addObject("isRead", false);
-
-		result.addObject("requestURI", "miscellaneousRecord/create.do");
-		// result.addObject("banner",
-		// this.configurationService.findAll().iterator().next().getBanner());
-		// result.addObject("systemName",
-		// this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("requestURI",
+				"miscellaneousRecord/brotherhood/create.do");
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 
@@ -314,14 +339,13 @@ public class MiscellaneousRecordController extends AbstractController {
 		result.addObject("miscellaneousRecordForm", miscellaneousRecordForm);
 		result.addObject("message", message);
 		result.addObject("isRead", false);
-
 		result.addObject("requestURI",
-				"miscellaneousRecord/edit.do?miscellaneousRecordId="
+				"miscellaneousRecord/brotherhood/edit.do?miscellaneousRecordId="
 						+ miscellaneousRecordForm.getId());
-		// result.addObject("banner",
-		// this.configurationService.findAll().iterator().next().getBanner());
-		// result.addObject("systemName", ((ActorService)
-		// this.configurationService).findAll().iterator().next().getSystemName());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", (this.configurationService).findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 
@@ -344,15 +368,13 @@ public class MiscellaneousRecordController extends AbstractController {
 		result.addObject("miscellaneousRecordForm", miscellaneousRecordForm);
 		result.addObject("message", message);
 		result.addObject("isRead", true);
-
 		result.addObject("requestURI",
-				"miscellaneousRecord/show.do?miscellaneousRecordId="
+				"miscellaneousRecord/brotherhood/show.do?miscellaneousRecordId="
 						+ miscellaneousRecordForm.getId());
-		// result.addObject("banner",
-		// this.configurationService.findAll().iterator().next().getBanner());
-		// result.addObject("systemName",
-		// this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
-
 }

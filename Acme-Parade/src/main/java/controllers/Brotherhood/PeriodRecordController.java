@@ -57,12 +57,8 @@ public class PeriodRecordController extends AbstractController {
 			final RedirectAttributes redirectAttrs) {
 		ModelAndView modelAndView;
 		History history = historyService.findOne(historyId);
-		final Brotherhood b = this.brotherhoodService
-				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			Assert.notNull(history);
-			Assert.notNull(b);
-			Assert.isTrue(history.getBrotherhood().getId() == b.getId());
 			final Collection<PeriodRecord> periodRecords = new ArrayList<>(
 					this.periodRecordService
 							.findPeriodRecordByHistoryId(historyId));
@@ -77,15 +73,14 @@ public class PeriodRecordController extends AbstractController {
 			modelAndView.addObject("requestURI",
 					"/periodRecord/brotherhood/list.do");
 		} catch (final Throwable e) {
-			modelAndView = new ModelAndView("redirect:/history/brotherhood/list.do");
-			if (history == null){
+			modelAndView = new ModelAndView(
+					"redirect:/history/brotherhood/list.do");
+			if (history == null) {
 				redirectAttrs.addFlashAttribute("message",
 						"history.error.unexist2");
-		} else if(history.getBrotherhood().getId() != b.getId())
-			redirectAttrs.addFlashAttribute("message",
-					"history.error.nobrotherhood");
+			}
 		}
-		
+
 		return modelAndView;
 	}
 
@@ -252,7 +247,6 @@ public class PeriodRecordController extends AbstractController {
 								+ periodRecord.getHistory().getId());
 
 			} catch (final Throwable oops) {
-				oops.printStackTrace();
 				result = this
 						.editModelAndView(periodRecordForm, "commit.error");
 			}

@@ -18,17 +18,21 @@
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 
-<form:form action="${requestURI}"
-	modelAttribute="historyForm">
+<form:form action="linkRecord/brotherhood/create.do"
+	modelAttribute="linkRecordForm">
 
 	<form:hidden path="id" />
-	<form:hidden path="brotherhood" />
+	<form:hidden path="history" />
 
-	<acme:textbox code="history.title" path="title" />
-	<acme:textbox code="history.description" path="description" />
-	<acme:textbox code="history.photos" path="photos" />
-
-	<acme:submit name="save" code="history.save" />
-	<acme:cancel url="history/brotherhood/list.do"
-		code="history.cancel" />
+	<acme:textbox code="linkRecord.title" path="title" />
+	<acme:textbox code="linkRecord.description" path="description" />
+	<spring:message code="linkRecord.brotherhood" />
+	<form:select id="brotherhoods" path="brotherhood">
+		<form:options items="${brotherhoods}" itemValue="id"
+			itemLabel="userAccount.username" />
+	</form:select>
+	<form:errors cssClass="error" path="brotherhood" />
+	<br>
+	<acme:submit name="save" code="linkRecord.save" />
+	<acme:cancel url="history/brotherhood/list.do" code="linkRecord.cancel" />
 </form:form>

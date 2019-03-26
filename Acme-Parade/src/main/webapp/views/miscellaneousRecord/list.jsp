@@ -23,21 +23,13 @@
 	<display:column property="description"
 		titleKey="miscellaneousRecord.description" />
 
+
 	<security:authorize access="hasRole('BROTHERHOOD')">
 		<display:column>
 			<a
 				href="miscellaneousRecord/brotherhood/edit.do?miscellaneousRecordId=${row.id}">
 				<spring:message code="miscellaneousRecord.edit" />
 			</a>
-		</display:column>
-	</security:authorize>
-
-
-	<security:authorize access="hasRole('BROTHERHOOD')">
-		<display:column titleKey="miscellaneousRecord.delete">
-			<a
-				href="miscellaneousRecord/brotherhood/delete.do?miscellaneousRecordId=${row.id}"><spring:message
-					code="miscellaneousRecord.delete" /></a>
 		</display:column>
 	</security:authorize>
 

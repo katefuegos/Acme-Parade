@@ -21,6 +21,6 @@
 	
 	<definition name="legalRecord/create" extends="master.page">
 		<put-attribute name="title" value="Create legal record" />
-		<put-attribute name="body" value="/views/legalRecord/edit.jsp" />
+		<put-attribute name="body" value="/views/legalRecord/create.jsp" />
 	</definition>
 </tiles-definitions>

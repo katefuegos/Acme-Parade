@@ -19,6 +19,14 @@
 
 	<display:column property="photos" titleKey="history.photos" />
 
+	<security:authorize access="hasRole('BROTHERHOOD')">
+		<display:column>
+			<a href="history/brotherhood/edit.do?historyId=${row.id}"> <spring:message
+					code="history.edit" />
+			</a>
+		</display:column>
+	</security:authorize>
+
 </display:table>
 
 

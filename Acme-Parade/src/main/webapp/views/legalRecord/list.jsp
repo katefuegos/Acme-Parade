@@ -19,14 +19,6 @@
 <display:table name="legalRecords" id="row" requestURI="${requestURI}"
 	pagesize="5" class="displaytag">
 
-	<security:authorize access="hasRole('BROTHERHOOD')">
-		<display:column>
-			<a href="legalRecord/brotherhood/edit.do?legalRecordId=${row.id}">
-				<spring:message code="legalRecord.edit" />
-			</a>
-		</display:column>
-	</security:authorize>
-
 	<display:column property="title" titleKey="legalRecord.title" />
 
 	<display:column property="description"
@@ -40,9 +32,10 @@
 		titleKey="legalRecord.applicableLaws" />
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
-		<display:column titleKey="legalRecord.delete">
-			<a href="legalRecord/brotherhood/delete.do?legalRecordId=${row.id}"><spring:message
-					code="legalRecord.delete" /></a>
+		<display:column>
+			<a href="legalRecord/brotherhood/edit.do?legalRecordId=${row.id}">
+				<spring:message code="legalRecord.edit" />
+			</a>
 		</display:column>
 	</security:authorize>
 

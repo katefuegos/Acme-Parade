@@ -171,7 +171,75 @@ public class HistoryBrotherhoodController extends AbstractController {
 			} catch (final Throwable oops) {
 				result = this.createModelAndView(historyForm, "commit.error");
 			}
-		
+
+		return result;
+	}
+
+	// EDIT
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam final int historyId,
+			final RedirectAttributes redirectAttrs) {
+		ModelAndView result;
+		final History history = this.historyService.findOne(historyId);
+		final HistoryForm historyForm = new HistoryForm();
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+		try {
+			Assert.notNull(history);
+			Assert.notNull(b);
+			Assert.isTrue(history.getBrotherhood().getId() == b.getId());
+			historyForm.setId(history.getId());
+			historyForm.setPhotos(history.getPhotos());
+			historyForm.setTitle(history.getTitle());
+			historyForm.setDescription(history.getDescription());
+			historyForm.setBrotherhood(history.getBrotherhood());
+
+			result = this.editModelAndView(historyForm);
+
+		} catch (final Throwable e) {
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
+			if (history == null)
+				redirectAttrs.addFlashAttribute("message",
+						"history.error.historyUnexists");
+			else if (b.getId() != history.getBrotherhood().getId())
+				redirectAttrs.addFlashAttribute("message",
+						"history.error.nobrotherhood");
+			else
+				redirectAttrs.addFlashAttribute("message", "commit.error");
+		}
+
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView save2(@Valid final HistoryForm historyForm,
+			final BindingResult binding) {
+
+		ModelAndView result;
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+		History history = historyService.findOne(historyForm.getId());
+
+		if (binding.hasErrors())
+			result = this.editModelAndView(historyForm, "commit.error");
+		else
+			try {
+				Assert.notNull(history);
+				Assert.notNull(b);
+				Assert.isTrue(b.getId() == history.getBrotherhood().getId());
+
+				history.setPhotos(historyForm.getPhotos());
+				history.setTitle(historyForm.getTitle());
+				history.setDescription(historyForm.getDescription());
+				this.historyService.save(history);
+
+				result = new ModelAndView(
+						"redirect:/history/brotherhood/list.do");
+
+			} catch (final Throwable oops) {
+				result = this.editModelAndView(historyForm, "commit.error");
+			}
+
 		return result;
 	}
 
@@ -198,6 +266,33 @@ public class HistoryBrotherhoodController extends AbstractController {
 		result.addObject("banner", this.configurationService.findAll()
 				.iterator().next().getBanner());
 		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
+		return result;
+	}
+
+	protected ModelAndView editModelAndView(final HistoryForm historyForm) {
+		ModelAndView result;
+
+		result = this.editModelAndView(historyForm, null);
+
+		return result;
+
+	}
+
+	protected ModelAndView editModelAndView(final HistoryForm historyForm,
+			final String message) {
+		final ModelAndView result;
+
+		result = new ModelAndView("history/edit");
+		result.addObject("historyForm", historyForm);
+		result.addObject("message", message);
+		result.addObject("isRead", false);
+
+		result.addObject("requestURI", "history/brotherhood/edit.do?historyId="
+				+ historyForm.getId());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", (this.configurationService).findAll()
 				.iterator().next().getSystemName());
 		return result;
 	}

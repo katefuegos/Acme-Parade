@@ -19,14 +19,6 @@
 <display:table name="linkRecords" id="row" requestURI="${requestURI}"
 	pagesize="5" class="displaytag">
 
-	<security:authorize access="hasRole('BROTHERHOOD')">
-		<display:column>
-			<a href="linkRecord/brotherhood/edit.do?linkRecordId=${row.id}">
-				<spring:message code="linkRecord.edit" />
-			</a>
-		</display:column>
-	</security:authorize>
-
 	<display:column property="title" titleKey="linkRecord.title" />
 
 	<display:column property="description"
@@ -34,11 +26,12 @@
 
 	<display:column property="brotherhood.title"
 		titleKey="linkRecord.brotherhood" />
-
-	<security:authorize access="hasRole('BROTHERHOOD')">
-		<display:column titleKey="linkRecord.delete">
-			<a href="linkRecord/brotherhood/delete.do?linkRecordId=${row.id}"><spring:message
-					code="linkRecord.delete" /></a>
+		
+		<security:authorize access="hasRole('BROTHERHOOD')">
+		<display:column>
+			<a href="linkRecord/brotherhood/edit.do?linkRecordId=${row.id}">
+				<spring:message code="linkRecord.edit" />
+			</a>
 		</display:column>
 	</security:authorize>
 
