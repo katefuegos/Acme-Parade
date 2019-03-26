@@ -58,6 +58,9 @@ public class ActorService {
 	@Autowired
 	private AdministratorService	administratorService;
 
+	@Autowired
+	private ServiceUtils			serviceUtils;
+
 
 	// Constructor----------------------------------------------
 
@@ -261,7 +264,8 @@ public class ActorService {
 			else {
 				memb = this.memberService.create();
 				memb.setUserAccount(actorform.getUserAccount());
-				// TODO adaptar a requisitos
+				//Assert.isTrue(LoginService.getPrincipal() == null);
+				Assert.isTrue(this.serviceUtils.checkAuthorityBoolean(null));
 			}
 			memb.setId(actorform.getId());
 			memb.setVersion(actorform.getVersion());
@@ -283,7 +287,8 @@ public class ActorService {
 			else {
 				brother = this.brotherhoodService.create();
 				brother.setUserAccount(actorform.getUserAccount());
-
+				//Assert.isTrue(LoginService.getPrincipal() == null);
+				Assert.isTrue(this.serviceUtils.checkAuthorityBoolean(null));
 			}
 
 			brother.setId(actorform.getId());
@@ -305,11 +310,16 @@ public class ActorService {
 
 		} else if (authorities.contains(chapter)) {
 			domain.Chapter chapterr = null;
+
 			if (actorform.getId() != 0)
 				chapterr = this.chapterService.findOne(actorform.getId());
+
 			else {
 				chapterr = this.chapterService.create();
 				chapterr.setUserAccount(actorform.getUserAccount());
+				//				UserAccount account =LoginService.getPrincipal();
+				//				Assert.isTrue( account== null);
+				Assert.isTrue(this.serviceUtils.checkAuthorityBoolean(null));
 
 			}
 
@@ -333,11 +343,15 @@ public class ActorService {
 
 		} else if (authorities.contains(admin)) {
 			Administrator administrator = null;
+
+			Assert.isTrue(this.serviceUtils.checkAuthorityBoolean("ADMIN"));
+
 			if (actorform.getId() != 0)
 				administrator = this.administratorService.findOne(actorform.getId());
 			else {
 				administrator = this.administratorService.create();
 				administrator.setUserAccount(actorform.getUserAccount());
+
 			}
 
 			administrator.setId(actorform.getId());
