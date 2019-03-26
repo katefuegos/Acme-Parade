@@ -26,7 +26,7 @@
 
 	<acme:textbox code="history.title" path="title" />
 	<acme:textbox code="history.description" path="description" />
-	<acme:textbox code="history.photos" path="startYear" />
+	<acme:textbox code="history.photos" path="photos" />
 
 	<acme:submit name="save" code="history.save" />
 	<acme:cancel url="history/brotherhood/list.do"

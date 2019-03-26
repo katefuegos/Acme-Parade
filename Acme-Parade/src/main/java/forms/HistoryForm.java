@@ -47,6 +47,7 @@ public class HistoryForm extends EveryRecordForm {
 	}
 
 	@URL
+	@NotBlank
 	public String getPhotos() {
 		return this.photos;
 	}
