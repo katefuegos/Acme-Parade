@@ -8,7 +8,7 @@
  * http://www.tdg-seville.info/License.html
  */
 
-package usecase;
+package services;
 
 import javax.transaction.Transactional;
 
