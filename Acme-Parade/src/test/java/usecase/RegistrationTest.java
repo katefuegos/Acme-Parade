@@ -63,13 +63,30 @@ public class RegistrationTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			/*
-			 * Brotherhood
+			 * a) Functional requirements 8.1 - Register as a brotherhood
+			 * b) Positive tests
+			 * c) analysis of sentence coverage;
+			 * d) analysis of data coverage.
 			 */
 			{
 				actorFormB1, null, "area1", null
-			}, {
+			},
+			/*
+			 * a) Functional requirements 8.1 - Register as a member
+			 * b) Negative tests - Business rule: Attribute title must not be null
+			 * c) analysis of sentence coverage;
+			 * d) analysis of data coverage.
+			 */
+			{
 				actorFormB2, null, "area1", javax.validation.ConstraintViolationException.class
-			}, {
+			},
+
+			/*
+			 * a) Functional requirements 8.1 - Register as a member
+			 * b) Negative tests - Business rule: Attribute picture must not be null
+			 * c) analysis of sentence coverage;
+			 * d) analysis of data coverage.
+			 */{
 				actorFormB3, null, "area1", javax.validation.ConstraintViolationException.class
 			}
 
@@ -104,13 +121,31 @@ public class RegistrationTest extends AbstractTest {
 		final Object testingData[][] = {
 
 			/*
-			 * Member
+			 * a) Functional requirements 8.1 - Register as a member
+			 * b) Positive tests
+			 * c) analysis of sentence coverage;
+			 * d) analysis of data coverage.
 			 */
 			{
 				actorFormM1, null, null, null
-			}, {
+			},
+			/*
+			 * a) Functional requirements 8.1 - Register as a member
+			 * b) Negative tests - Business rule: Attribute name must not be null
+			 * c) analysis of sentence coverage;
+			 * d) analysis of data coverage.
+			 */
+			{
 				actorFormM2, null, null, javax.validation.ConstraintViolationException.class
-			}, {
+			},
+
+			/*
+			 * a) Functional requirements 8.1 - Register as a member
+			 * b) Negative tests - Business rule: Attribute photo must be a url
+			 * c) analysis of sentence coverage;
+			 * d) analysis of data coverage.
+			 */
+			{
 				actorFormM3, null, null, javax.validation.ConstraintViolationException.class
 			}
 
@@ -145,25 +180,17 @@ public class RegistrationTest extends AbstractTest {
 		final Object testingData[][] = {
 
 			/*
-			 * a) Functional requirements
-			 * b) in the case of negative tests, the business rule that is intended to be bro-ken;
+			 * a) Functional requirements 12.1 - Create a user accounts for a new administrator
+			 * b) Positive tests
 			 * c) analysis of sentence coverage;
 			 * d) analysis of data coverage.
 			 */
-
-			/*
-			 * a) Functional requirements
-			 * b) in the case of negative tests, the business rule that is intended to be bro-ken;
-			 * c) analysis of sentence coverage;
-			 * d) analysis of data coverage.
-			 */
-
 			{
 				actorFormA1, "admin", null, null
 			},
 			/*
-			 * a) Functional requirements
-			 * b) in the case of negative tests, the business rule that is intended to be bro-ken;
+			 * a) Functional requirements 12.1 - Create a user accounts for a new administrator
+			 * b) Negative tests - Business rule: You must be authenticate as a administrator.
 			 * c) analysis of sentence coverage;
 			 * d) analysis of data coverage.
 			 */
@@ -172,8 +199,8 @@ public class RegistrationTest extends AbstractTest {
 				actorFormA2, null, null, IllegalArgumentException.class
 			},
 			/*
-			 * a) Functional requirements
-			 * b) in the case of negative tests, the business rule that is intended to be bro-ken;
+			 * a) Functional requirements 12.1 - Create a user accounts for a new administrator
+			 * b) Negative tests - Business rule: Attribute photo must be a url
 			 * c) analysis of sentence coverage;
 			 * d) analysis of data coverage.
 			 */

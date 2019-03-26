@@ -60,10 +60,15 @@ public class AreaService {
 
 	public Area save(final Area area) {
 		Assert.notNull(area);
+
+		if (area.getId() != 0) {
+			final Area oldArea = this.findOne(area.getId());
+			Assert.isTrue(oldArea.getChapter().equals(area.getChapter()), "Area.error.change.chapter");
+		}
+
 		final Area saved = this.areaRepository.save(area);
 		return saved;
 	}
-
 	public void delete(final Area area) {
 		Assert.notNull(area);
 
@@ -75,7 +80,10 @@ public class AreaService {
 		this.areaRepository.delete(area);
 	}
 	// Other Methods--------------------------------------------
+	public void flush() {
+		this.areaRepository.flush();
 
+	}
 	public Collection<domain.Area> findAreasNotAssigned() {
 		final Collection<domain.Area> areas = this.areaRepository.findAreasNotAssigned();
 
