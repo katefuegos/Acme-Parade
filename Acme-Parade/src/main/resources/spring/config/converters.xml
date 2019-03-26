@@ -70,9 +70,6 @@
 		<bean class="converters.LegalRecordToStringConverter" />
 		<bean class="converters.StringToLegalRecordConverter" />
 		
-		<bean class="converters.InceptionRecordToStringConverter" />
-		<bean class="converters.StringToInceptionRecordConverter" />
-		
 		<bean class="converters.LinkRecordToStringConverter" />
 		<bean class="converters.StringToLinkRecordConverter" />
 		

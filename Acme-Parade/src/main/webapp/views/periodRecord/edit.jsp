@@ -7,26 +7,32 @@
  * http://www.tdg-seville.info/License.html
  --%>
 
-<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="security"
+	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 
-<form:form action="periodRecord/brotherhood/edit.do" modelAttribute="periodRecordForm">
+<form:form action="periodRecord/brotherhood/edit.do"
+	modelAttribute="periodRecordForm">
+
 	<form:hidden path="id" />
 	<form:hidden path="history" />
-	
-	<acme:textbox code="periodRecord.title" path="title"/>
-	<acme:textbox code="periodRecord.description" path="description"/>
-	<acme:textbox code="periodRecord.startYear" path="startYear"/>
-	<acme:textbox code="periodRecord.endYear" path="endYear"/>
-	<acme:textarea code="periodRecord.photos" path="photos"/>
-	
-	<acme:submit name="save" code="periodRecord.save"/>
-	<acme:cancel url="history/brotherhood/list.do" code="periodRecord.cancel"/>
-	<acme:delete confirmDelete="periodRecord.confirmDelete" name="delete" code="periodRecord.delete"/>
+
+	<acme:textbox code="periodRecord.title" path="title" />
+	<acme:textbox code="periodRecord.description" path="description" />
+	<acme:textbox code="periodRecord.startYear" path="startYear" />
+	<acme:textbox code="periodRecord.endYear" path="endYear" />
+	<acme:textarea code="periodRecord.photos" path="photos" />
+
+	<acme:submit name="save" code="periodRecord.save" />
+	<acme:cancel url="history/brotherhood/list.do"
+		code="periodRecord.cancel" />
+	<acme:delete confirmDelete="periodRecord.confirmDelete" name="delete"
+		code="periodRecord.delete" />
 </form:form>

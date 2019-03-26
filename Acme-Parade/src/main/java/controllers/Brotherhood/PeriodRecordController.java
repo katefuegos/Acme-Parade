@@ -1,4 +1,3 @@
-
 package controllers.Brotherhood;
 
 import java.util.ArrayList;
@@ -17,12 +16,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import security.LoginService;
-import services.ActorService;
+import services.BrotherhoodService;
 import services.ConfigurationService;
 import services.HistoryService;
 import services.PeriodRecordService;
 import controllers.AbstractController;
-import domain.Actor;
+import domain.Brotherhood;
 import domain.History;
 import domain.PeriodRecord;
 import forms.PeriodRecordForm;
@@ -31,111 +30,146 @@ import forms.PeriodRecordForm;
 @RequestMapping("/periodRecord/brotherhood")
 public class PeriodRecordController extends AbstractController {
 
-	//Service----------------------------------------------------------------
+	// Service----------------------------------------------------------------
 
 	@Autowired
-	private PeriodRecordService	periodRecordService;
+	private PeriodRecordService periodRecordService;
 
 	@Autowired
-	private ActorService		actorService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
-	private HistoryService		historyService;
-	
+	private HistoryService historyService;
+
 	@Autowired
-	private ConfigurationService		configurationService;
+	private ConfigurationService configurationService;
 
-
-	//Constructor--------------------------------------------------------------
+	// Constructor--------------------------------------------------------------
 
 	public PeriodRecordController() {
 		super();
 	}
 
-	//Listing----------------------------------------------------------------------------
+	// Listing----------------------------------------------------------------------------
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam final int historyId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView list(@RequestParam final int historyId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView modelAndView;
 		History history = historyService.findOne(historyId);
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			Assert.notNull(history);
-			final Collection<PeriodRecord> periodRecords = new ArrayList<>(this.periodRecordService.findPeriodRecordByHistoryId(historyId));
+			Assert.notNull(b);
+			Assert.isTrue(history.getBrotherhood().getId() == b.getId());
+			final Collection<PeriodRecord> periodRecords = new ArrayList<>(
+					this.periodRecordService
+							.findPeriodRecordByHistoryId(historyId));
 			modelAndView = new ModelAndView("periodRecord/list");
 			modelAndView.addObject("periodRecords", periodRecords);
 			modelAndView.addObject("historyId", historyId);
-			modelAndView.addObject("banner", this.configurationService.findAll()
-					.iterator().next().getBanner());
-			modelAndView.addObject("systemName", this.configurationService.findAll()
-					.iterator().next().getSystemName());
+			modelAndView.addObject("banner", this.configurationService
+					.findAll().iterator().next().getBanner());
+			modelAndView.addObject("systemName", this.configurationService
+					.findAll().iterator().next().getSystemName());
 
-			modelAndView.addObject("requestURI", "/periodRecord/brotherhood/list.do");
+			modelAndView.addObject("requestURI",
+					"/periodRecord/brotherhood/list.do");
 		} catch (final Throwable e) {
-			modelAndView = new ModelAndView("redirect:/brotherhood/list.do");
-			if (history == null)
+			modelAndView = new ModelAndView("redirect:/history/brotherhood/list.do");
+			if (history == null){
 				redirectAttrs.addFlashAttribute("message",
 						"history.error.unexist2");
+		} else if(history.getBrotherhood().getId() != b.getId())
+			redirectAttrs.addFlashAttribute("message",
+					"history.error.nobrotherhood");
 		}
-		 
+		
 		return modelAndView;
-
 	}
 
 	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create(@RequestParam final int historyId) {
+	public ModelAndView create(final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final PeriodRecordForm periodRecordForm = new PeriodRecordForm();
-		periodRecordForm.setId(0);
-		final History history = this.historyService.findOne(historyId);
-		periodRecordForm.setHistory(history);
+		try {
+			final PeriodRecordForm periodRecordForm = new PeriodRecordForm();
+			periodRecordForm.setId(0);
+			final Brotherhood b = this.brotherhoodService
+					.findByUserAccountId(LoginService.getPrincipal().getId());
+			Assert.notNull(b);
+			final History history = this.historyService
+					.findByBrotherhoodIdSingle(b.getId());
+			Assert.notNull(history);
+			periodRecordForm.setHistory(history);
 
-		result = this.createModelAndView(periodRecordForm);
+			result = this.createModelAndView(periodRecordForm);
+
+		} catch (final Throwable e) {
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
+			redirectAttrs.addFlashAttribute("message", "commit.error");
+		}
+
 		return result;
 	}
 
 	// Show------------------------------------------------------------
 
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam final int periodRecordId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView show(@RequestParam final int periodRecordId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
+		final PeriodRecord periodRecord = this.periodRecordService
+				.findOne(periodRecordId);
 		final PeriodRecordForm periodRecordForm = new PeriodRecordForm();
-		Actor actor = null;
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+
 		try {
 			Assert.notNull(periodRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == periodRecord.getHistory().getBrotherhood().getId());
+			Assert.isTrue(b.getId() == periodRecord.getHistory()
+					.getBrotherhood().getId());
+
 			periodRecordForm.setId(periodRecordId);
 			periodRecordForm.setStartYear(periodRecord.getStartYear());
 			periodRecordForm.setEndYear(periodRecord.getEndYear());
 			periodRecordForm.setPhotos(periodRecord.getPhotos());
 			periodRecordForm.setTitle(periodRecord.getTitle());
 			periodRecordForm.setDescription(periodRecord.getDescription());
-			result = this.showModelAndView(periodRecordForm);
-		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/periodRecord/brotherhood/list.do");
-			if (periodRecord == null)
-				redirectAttrs.addFlashAttribute("message", "periodRecord.error.unexist");
-			else if (actor.getId() != periodRecord.getHistory().getBrotherhood().getId())
-				redirectAttrs.addFlashAttribute("message", "periodRecord.error.notFromActor");
-		}
-		return result;
 
+			result = this.showModelAndView(periodRecordForm);
+
+		} catch (final Throwable e) {
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
+			if (periodRecord == null)
+				redirectAttrs.addFlashAttribute("message",
+						"periodRecord.error.unexist");
+			else if (b.getId() != periodRecord.getHistory().getBrotherhood()
+					.getId())
+				redirectAttrs.addFlashAttribute("message",
+						"periodRecord.error.notFromActor");
+		}
+
+		return result;
 	}
 
 	// Edit ---------------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int periodRecordId, final RedirectAttributes redirectAttrs) {
+	public ModelAndView edit(@RequestParam final int periodRecordId,
+			final RedirectAttributes redirectAttrs) {
 		ModelAndView result;
-		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
+		final PeriodRecord periodRecord = this.periodRecordService
+				.findOne(periodRecordId);
 		final PeriodRecordForm periodRecordForm = new PeriodRecordForm();
-		Actor actor = null;
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
 			Assert.notNull(periodRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == periodRecord.getHistory().getBrotherhood().getId());
+			Assert.notNull(b);
+			Assert.isTrue(periodRecord.getHistory().getBrotherhood().getId() == b
+					.getId());
 			periodRecordForm.setId(periodRecordId);
 			periodRecordForm.setHistory(periodRecord.getHistory());
 			periodRecordForm.setStartYear(periodRecord.getStartYear());
@@ -145,56 +179,28 @@ public class PeriodRecordController extends AbstractController {
 			periodRecordForm.setDescription(periodRecord.getDescription());
 			result = this.editModelAndView(periodRecordForm);
 		} catch (final Throwable e) {
-			result = new ModelAndView("redirect:/periodRecord/brotherhood/list.do?historyId=" + periodRecord.getHistory().getId());
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
 			if (periodRecord == null)
-				redirectAttrs.addFlashAttribute("message", "periodRecord.error.unexist");
-			else if (actor.getId() != periodRecord.getHistory().getBrotherhood().getId())
-				redirectAttrs.addFlashAttribute("message", "periodRecord.error.notFromActor");
+				redirectAttrs.addFlashAttribute("message",
+						"periodRecord.error.unexist");
+			else if (b.getId() != periodRecord.getHistory().getBrotherhood()
+					.getId())
+				redirectAttrs.addFlashAttribute("message",
+						"periodRecord.error.notFromActor");
 		}
-		return result;
-	}
-	// Save
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final PeriodRecordForm periodRecordForm, final BindingResult binding) {
-		ModelAndView result;
-		Actor actor = new Actor();
-		PeriodRecord periodRecord;
-		if (periodRecordForm.getId() != 0)
-			periodRecord = this.periodRecordService.findOne(periodRecordForm.getId());
-		else
-			periodRecord = this.periodRecordService.create();
-		if (binding.hasErrors())
-			result = this.editModelAndView(periodRecordForm);
-		else
-			try {
-				System.out.println("owo" + periodRecord);
-				Assert.notNull(periodRecord);
-				System.out.println("uwu" + periodRecord);
-				actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-				//Assert.isTrue(actor.getId() == periodRecord.getHistory().getBrotherhood().getId());
-				System.out.println("iwi" + periodRecord);
-				periodRecord.setStartYear(periodRecordForm.getStartYear());
-				periodRecord.setHistory(periodRecordForm.getHistory());
-				periodRecord.setEndYear(periodRecordForm.getEndYear());
-				periodRecord.setPhotos(periodRecordForm.getPhotos());
-				periodRecord.setTitle(periodRecordForm.getTitle());
-				periodRecord.setDescription(periodRecordForm.getDescription());
-				this.periodRecordService.save(periodRecord);
 
-				result = new ModelAndView("redirect:/periodRecord/brotherhood/list.do?historyId=" + periodRecord.getHistory().getId());
-			} catch (final Throwable oops) {
-				oops.printStackTrace();
-				result = this.editModelAndView(periodRecordForm, "periodRecord.commit.error");
-			}
 		return result;
 	}
+
+	// Save
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
-	public ModelAndView save2(@Valid final PeriodRecordForm periodRecordForm, final BindingResult binding) {
+	public ModelAndView save(@Valid final PeriodRecordForm periodRecordForm,
+			final BindingResult binding) {
 
 		ModelAndView result;
 		final PeriodRecord periodRecord = this.periodRecordService.create();
 		if (binding.hasErrors())
-			result = this.createModelAndView(periodRecordForm);
+			result = this.createModelAndView(periodRecordForm, "commit.error");
 		else
 			try {
 				periodRecord.setStartYear(periodRecordForm.getStartYear());
@@ -202,10 +208,53 @@ public class PeriodRecordController extends AbstractController {
 				periodRecord.setPhotos(periodRecordForm.getPhotos());
 				periodRecord.setTitle(periodRecordForm.getTitle());
 				periodRecord.setDescription(periodRecordForm.getDescription());
+				periodRecord.setHistory(periodRecordForm.getHistory());
 				this.periodRecordService.save(periodRecord);
-				result = new ModelAndView("redirect:/periodRecord/brotherhood/list.do");
+				result = new ModelAndView(
+						"redirect:/periodRecord/brotherhood/list.do?historyId="
+								+ periodRecord.getHistory().getId());
+
 			} catch (final Throwable oops) {
-				result = this.createModelAndView(periodRecordForm, "periodRecord.commit.error");
+				result = this.createModelAndView(periodRecordForm,
+						"commit.error");
+			}
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView save2(@Valid final PeriodRecordForm periodRecordForm,
+			final BindingResult binding) {
+
+		ModelAndView result;
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+		PeriodRecord periodRecord = periodRecordService
+				.findOne(periodRecordForm.getId());
+
+		if (binding.hasErrors())
+			result = this.editModelAndView(periodRecordForm, "commit.error");
+		else
+			try {
+				Assert.notNull(periodRecord);
+				Assert.notNull(b);
+				Assert.isTrue(b.getId() == periodRecord.getHistory()
+						.getBrotherhood().getId());
+
+				periodRecord.setStartYear(periodRecordForm.getStartYear());
+				periodRecord.setEndYear(periodRecordForm.getEndYear());
+				periodRecord.setPhotos(periodRecordForm.getPhotos());
+				periodRecord.setTitle(periodRecordForm.getTitle());
+				periodRecord.setDescription(periodRecordForm.getDescription());
+				this.periodRecordService.save(periodRecord);
+
+				result = new ModelAndView(
+						"redirect:/periodRecord/brotherhood/list.do?historyId="
+								+ periodRecord.getHistory().getId());
+
+			} catch (final Throwable oops) {
+				oops.printStackTrace();
+				result = this
+						.editModelAndView(periodRecordForm, "commit.error");
 			}
 		return result;
 	}
@@ -213,25 +262,32 @@ public class PeriodRecordController extends AbstractController {
 	// delete
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final PeriodRecordForm periodRecordForm, final BindingResult binding) {
+	public ModelAndView delete(final PeriodRecordForm periodRecordForm,
+			final BindingResult binding) {
+
 		ModelAndView result;
-		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordForm.getId());
-		Actor actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
+		final PeriodRecord periodRecord = this.periodRecordService
+				.findOne(periodRecordForm.getId());
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+
 		try {
 			Assert.notNull(periodRecord);
-			actor = this.actorService.findByUserAccount(LoginService.getPrincipal());
-			Assert.isTrue(actor.getId() == periodRecord.getHistory().getBrotherhood().getId());
+			Assert.isTrue(b.getId() == periodRecord.getHistory()
+					.getBrotherhood().getId());
 			this.periodRecordService.delete(periodRecord);
-			result = new ModelAndView("redirect:list.do");
+			result = new ModelAndView("redirect:/history/brotherhood/list.do");
+
 		} catch (final Throwable oops) {
-			result = this.editModelAndView(periodRecordForm, "periodRecord.commit.error");
+			result = this.editModelAndView(periodRecordForm, "commit.error");
 		}
 		return result;
 	}
 
 	// CreateModelAndView
 
-	protected ModelAndView createModelAndView(final PeriodRecordForm periodRecordForm) {
+	protected ModelAndView createModelAndView(
+			final PeriodRecordForm periodRecordForm) {
 		ModelAndView result;
 
 		result = this.createModelAndView(periodRecordForm, null);
@@ -240,7 +296,8 @@ public class PeriodRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView createModelAndView(final PeriodRecordForm periodRecordForm, final String message) {
+	protected ModelAndView createModelAndView(
+			final PeriodRecordForm periodRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("periodRecord/create");
@@ -248,13 +305,16 @@ public class PeriodRecordController extends AbstractController {
 		result.addObject("message", message);
 		result.addObject("isRead", false);
 
-		result.addObject("requestURI", "periodRecord/create.do");
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("requestURI", "periodRecord/brotherhood/create.do");
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 
-	protected ModelAndView editModelAndView(final PeriodRecordForm periodRecordForm) {
+	protected ModelAndView editModelAndView(
+			final PeriodRecordForm periodRecordForm) {
 		ModelAndView result;
 
 		result = this.editModelAndView(periodRecordForm, null);
@@ -263,7 +323,8 @@ public class PeriodRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView editModelAndView(final PeriodRecordForm periodRecordForm, final String message) {
+	protected ModelAndView editModelAndView(
+			final PeriodRecordForm periodRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("periodRecord/edit");
@@ -271,13 +332,18 @@ public class PeriodRecordController extends AbstractController {
 		result.addObject("message", message);
 		result.addObject("isRead", false);
 
-		result.addObject("requestURI", "periodRecord/edit.do?periodRecordId=" + periodRecordForm.getId());
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", ((ActorService) this.configurationService).findAll().iterator().next().getSystemName());
+		result.addObject("requestURI",
+				"periodRecord/brotherhood/edit.do?periodRecordId="
+						+ periodRecordForm.getId());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", (this.configurationService).findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 
-	protected ModelAndView showModelAndView(final PeriodRecordForm periodRecordForm) {
+	protected ModelAndView showModelAndView(
+			final PeriodRecordForm periodRecordForm) {
 		ModelAndView result;
 
 		result = this.showModelAndView(periodRecordForm, null);
@@ -286,17 +352,21 @@ public class PeriodRecordController extends AbstractController {
 
 	}
 
-	protected ModelAndView showModelAndView(final PeriodRecordForm periodRecordForm, final String message) {
+	protected ModelAndView showModelAndView(
+			final PeriodRecordForm periodRecordForm, final String message) {
 		final ModelAndView result;
 
 		result = new ModelAndView("periodRecord/show");
 		result.addObject("periodRecordForm", periodRecordForm);
 		result.addObject("message", message);
 		result.addObject("isRead", true);
-
-		result.addObject("requestURI", "periodRecord/show.do?periodRecordId=" + periodRecordForm.getId());
-		//result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		//result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("requestURI",
+				"periodRecord/brotherhood/show.do?periodRecordId="
+						+ periodRecordForm.getId());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 

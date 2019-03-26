@@ -3,6 +3,7 @@ package forms;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -14,7 +15,6 @@ public class EveryRecordForm {
 	private String	title;
 	private String	description;
 	private int		id;
-	private int		version;
 	private History	history;
 
 
@@ -36,20 +36,13 @@ public class EveryRecordForm {
 		this.description = description;
 	}
 
+	@NotNull
 	public int getId() {
 		return this.id;
 	}
 
 	public void setId(final int id) {
 		this.id = id;
-	}
-
-	public int getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(final int version) {
-		this.version = version;
 	}
 
 	public History getHistory() {

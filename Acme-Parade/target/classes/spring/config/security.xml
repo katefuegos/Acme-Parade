@@ -322,6 +322,9 @@
 		<security:intercept-url pattern="/history/brotherhood/list.do"
 			access="hasRole('BROTHERHOOD')" />
 
+		<security:intercept-url pattern="/history/brotherhood/delete.do"
+			access="hasRole('BROTHERHOOD')" />
+
 		<security:intercept-url pattern="/periodRecord/brotherhood/list.do"
 			access="permitAll" />
 
@@ -329,15 +332,6 @@
 			access="hasRole('BROTHERHOOD')" />
 
 		<security:intercept-url pattern="/periodRecord/brotherhood/create.do"
-			access="hasRole('BROTHERHOOD')" />
-
-		<security:intercept-url pattern="/inceptionRecord/brotherhood/list.do"
-			access="permitAll" />
-
-		<security:intercept-url pattern="/inceptionRecord/brotherhood/edit.do"
-			access="hasRole('BROTHERHOOD')" />
-
-		<security:intercept-url pattern="/inceptionRecord/brotherhood/create.do"
 			access="hasRole('BROTHERHOOD')" />
 
 		<security:intercept-url pattern="/miscellaneousRecord/brotherhood/list.do"

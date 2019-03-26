@@ -38,21 +38,14 @@
 
 	<display:column property="photos" titleKey="periodRecord.photos" />
 
-	<security:authorize access="hasRole('BROTHERHOOD')">
-		<display:column titleKey="periodRecord.delete">
-			<a href="periodRecord/brotherhood/delete.do?periodRecordId=${row.id}"><spring:message
-					code="periodRecord.delete" /></a>
-		</display:column>
-	</security:authorize>
-
 </display:table>
 
 
 
 <security:authorize access="hasRole('BROTHERHOOD')">
 	<div>
-		<a href="periodRecord/brotherhood/create.do?historyId=${historyId}">
-			<spring:message code="periodRecord.create" />
+		<a href="periodRecord/brotherhood/create.do"> <spring:message
+				code="periodRecord.create" />
 		</a>
 	</div>
 </security:authorize>
