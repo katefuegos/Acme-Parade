@@ -104,6 +104,10 @@ public class ActorService {
 
 	// Other Methods--------------------------------------------
 
+	public void flush() {
+		this.actorRepository.flush();
+	}
+
 	public Actor findActorByUsername(final String username) {
 		final Actor actor = this.actorRepository.findActorByUsername(username);
 		return actor;
