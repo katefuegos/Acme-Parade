@@ -19,16 +19,16 @@
 
 
 <form:form action="${requestURI}"
-	modelAttribute="historyForm">
+	modelAttribute="miscellaneousRecordForm">
 
 	<form:hidden path="id" />
-	<form:hidden path="brotherhood" />
+	<form:hidden path="history" />
 
-	<acme:textbox code="history.title" path="title" />
-	<acme:textbox code="history.description" path="description" />
-	<acme:textbox code="history.photos" path="photos" />
+	<acme:textbox code="miscellaneousRecord.title" path="title" />
+	<acme:textbox code="miscellaneousRecord.description" path="description" />
 
-	<acme:submit name="save" code="history.save" />
+	<br>
+	<acme:submit name="save" code="miscellaneousRecord.save" />
 	<acme:cancel url="history/brotherhood/list.do"
-		code="history.cancel" />
+		code="miscellaneousRecord.cancel" />
 </form:form>

@@ -19,6 +19,11 @@
 		<put-attribute name="title" value="Create history" />
 		<put-attribute name="body" value="/views/history/create.jsp" />
 	</definition>
+	
+	<definition name="history/edit" extends="master.page">
+		<put-attribute name="title" value="Edit history" />
+		<put-attribute name="body" value="/views/history/edit.jsp" />
+	</definition>
 
 
 </tiles-definitions>

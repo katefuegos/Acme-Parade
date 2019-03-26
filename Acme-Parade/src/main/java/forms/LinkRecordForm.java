@@ -1,27 +1,27 @@
-
 package forms;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import domain.Brotherhood;
 
 @Access(AccessType.PROPERTY)
 public class LinkRecordForm extends EveryRecordForm {
 
 	// Attributes------------------------------------------------------------------
 
-	private int	id;
+	private Brotherhood brotherhood;
 
-
-	@Override
+	@Valid
 	@NotNull
-	public int getId() {
-		return this.id;
+	public Brotherhood getBrotherhood() {
+		return brotherhood;
 	}
 
-	@Override
-	public void setId(final int id) {
-		this.id = id;
+	public void setBrotherhood(Brotherhood brotherhood) {
+		this.brotherhood = brotherhood;
 	}
 
 }

@@ -1260,7 +1260,6 @@
 		<property name="floats">
 			<list>
 				<ref bean="float1" />
-				<ref bean="float3" />
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
@@ -1277,7 +1276,6 @@
 		<property name="floats">
 			<list>
 				<ref bean="float2" />
-				<ref bean="float4" />
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood2" />
@@ -1294,9 +1292,7 @@
 		<property name="draftMode" value="false" />
 		<property name="floats">
 			<list>
-				<ref bean="float2" />
 				<ref bean="float3" />
-				<ref bean="float4" />
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood3" />
@@ -1312,7 +1308,7 @@
 		<property name="draftMode" value="true" />
 		<property name="floats">
 			<list>
-				<ref bean="float1" />
+				<ref bean="float4" />
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood4" />

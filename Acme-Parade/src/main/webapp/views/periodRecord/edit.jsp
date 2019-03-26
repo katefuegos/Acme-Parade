@@ -18,7 +18,7 @@
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 
-<form:form action="periodRecord/brotherhood/edit.do"
+<form:form action="${requestURI}"
 	modelAttribute="periodRecordForm">
 
 	<form:hidden path="id" />
