@@ -105,6 +105,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 		final Brotherhood b = this.brotherhoodService
 				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
+			Assert.notNull(paradeId);
 			parade = this.paradeService.findOne(paradeId);
 			Assert.notNull(parade);
 			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
@@ -151,6 +152,10 @@ public class ParadeBrotherhoodController extends AbstractController {
 			result = new ModelAndView("floaat/manage");
 			result.addObject("parades", parade);
 			result.addObject("floaatForm", collection);
+			result.addObject("banner", this.configurationService.findAll()
+					.iterator().next().getBanner());
+			result.addObject("systemName", this.configurationService.findAll()
+					.iterator().next().getSystemName());
 
 		} catch (final Throwable e) {
 
@@ -181,6 +186,8 @@ public class ParadeBrotherhoodController extends AbstractController {
 		final Brotherhood b = this.brotherhoodService
 				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
+			Assert.notNull(floatId);
+			Assert.notNull(paradeId);
 			parade = this.paradeService.findOne(paradeId);
 			Assert.notNull(parade);
 			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
@@ -210,6 +217,9 @@ public class ParadeBrotherhoodController extends AbstractController {
 			if (this.paradeService.findOne(paradeId) == null)
 				redirectAttrs.addFlashAttribute("message",
 						"parade.error.unexist");
+			else if (this.floaatService.findOne(floatId) == null)
+				redirectAttrs.addFlashAttribute("message",
+						"floaat.error.unexist");
 			else if (this.paradeService.findOne(paradeId).isDraftMode() == false)
 				redirectAttrs.addFlashAttribute("message",
 						"parade.error.notDraftMode");
@@ -243,6 +253,8 @@ public class ParadeBrotherhoodController extends AbstractController {
 		final Brotherhood b = this.brotherhoodService
 				.findByUserAccountId(LoginService.getPrincipal().getId());
 		try {
+			Assert.notNull(floatId);
+			Assert.notNull(paradeId);
 			parade = this.paradeService.findOne(paradeId);
 			Assert.notNull(parade);
 			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
@@ -271,6 +283,9 @@ public class ParadeBrotherhoodController extends AbstractController {
 			if (this.paradeService.findOne(paradeId) == null)
 				redirectAttrs.addFlashAttribute("message",
 						"parade.error.unexist");
+			else if (this.floaatService.findOne(floatId) == null)
+				redirectAttrs.addFlashAttribute("message",
+						"floaat.error.unexist");
 			else if (this.paradeService.findOne(paradeId).isDraftMode() == false)
 				redirectAttrs.addFlashAttribute("message",
 						"parade.error.notDraftMode");
