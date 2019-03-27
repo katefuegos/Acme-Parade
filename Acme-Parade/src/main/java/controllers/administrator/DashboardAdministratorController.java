@@ -96,6 +96,10 @@ public class DashboardAdministratorController extends AbstractController {
 			modelAndView.addObject("idLargest", idLargest);
 			modelAndView.addObject("nameLargest", nameLargest);
 			modelAndView.addObject("countLargest", countLargest);
+		} else {
+			modelAndView.addObject("idLargest", nulo);
+			modelAndView.addObject("nameLargest", nulo);
+			modelAndView.addObject("countLargest", nulo);
 		}
 
 		// QueryC3 - The smallest brotherhood, minimum 1
@@ -116,6 +120,10 @@ public class DashboardAdministratorController extends AbstractController {
 			modelAndView.addObject("idSmallest", idSmallest);
 			modelAndView.addObject("nameSmallest", nameSmallest);
 			modelAndView.addObject("countSmallest", countSmallest);
+		} else {
+			modelAndView.addObject("idSmallest", nulo);
+			modelAndView.addObject("nameSmallest", nulo);
+			modelAndView.addObject("countSmallest", nulo);
 		}
 
 		// QueryC4 - The ratio of requests to march in a parade, grouped by
@@ -125,7 +133,10 @@ public class DashboardAdministratorController extends AbstractController {
 			for (final Object[] resultC : this.administratorService.queryC4())
 				statusCount.put(((String) resultC[0]).toUpperCase(), df.format(resultC[1]));
 
-			modelAndView.addObject("statusCount", statusCount);
+			if (statusCount.isEmpty())
+				modelAndView.addObject("statusCount", nulo);
+			else
+				modelAndView.addObject("statusCount", statusCount);
 
 		} catch (final Exception e) {
 			modelAndView.addObject("sizeC4", 0);
@@ -150,7 +161,7 @@ public class DashboardAdministratorController extends AbstractController {
 			modelAndView.addObject("excM", e.getMessage());
 		}
 
-		// QueryC8
+		//QueryC8
 
 		final Collection<PositionCountForm> queryC8 = this.administratorService.queryC8();
 
