@@ -507,42 +507,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 			Assert.notNull(parade);
 			Assert.isTrue(this.paradeService.findOne(paradeId).getBrotherhood()
 					.equals(b));
-
-			Parade copy = this.paradeService.create();
-			copy.setDescription(parade.getDescription());
-			copy.getFloats().addAll(parade.getFloats());
-			copy.setMoment(parade.getMoment());
-			copy.setTitle(parade.getTitle());
-
-			copy = this.paradeService.save(copy);
-
-			final Path pathOriginal = this.pathService.findByParadeId(parade
-					.getId());
-			if (pathOriginal != null) {
-				Path copyPath = this.pathService.create();
-				copyPath.setParade(copy);
-				copyPath = pathService.save(copyPath);
-
-				Collection<Segment> segmentsOriginal = segmentService
-						.findByPathId(pathOriginal.getId());
-				if (!segmentsOriginal.isEmpty()) {
-					for (Segment s : segmentsOriginal) {
-						Segment copySegment = segmentService.create();
-						copySegment.setApproximateTimeDes(s
-								.getApproximateTimeDes());
-						copySegment.setApproximateTimeOri(s
-								.getApproximateTimeOri());
-						copySegment.setDestinationLatitude(s
-								.getDestinationLatitude());
-						copySegment.setDestinationLongitude(s
-								.getDestinationLongitude());
-						copySegment.setOriginLatitude(s.getOriginLatitude());
-						copySegment.setOriginLongitude(s.getOriginLongitude());
-						copySegment.setPath(copyPath);
-						copySegment = this.segmentService.save(copySegment);
-					}
-				}
-			}
+			paradeService.copy(parade);
 
 			result = new ModelAndView("redirect:/parade/brotherhood/list.do");
 
