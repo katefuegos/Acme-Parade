@@ -43,35 +43,35 @@ public class PathSegmentTest extends AbstractTest {
 		final Object testingData[][] = {
 				/*
 				 * a) Functional requirements - 3.3 Create a path. b) Positive
-				 * test c) analysis of sentence coverage: d) analysis of data
+				 * test c) analysis of sentence coverage: 98.2% d) analysis of data
 				 * coverage.
 				 */
 				{ paradeId, "brotherhood1", 0, 0.0, 0.0, 0, 0, 0, null },
 				/*
 				 * a) Functional requirements - 3.3 Create a path. b) Negative
 				 * test - Business rule: Cannot create a path for a foreign
-				 * parade. c) analysis of sentence coverage: d) analysis of data
+				 * parade. c) analysis of sentence coverage: 98.2% d) analysis of data
 				 * coverage.
 				 */
 				{ paradeId, "brotherhood2", 0, 0.0, 0.0, 0, 0, 0,
 						java.lang.IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 3.3 Delete a path. b) Positive
-				 * test c) analysis of sentence coverage: d) analysis of data
+				 * test c) analysis of sentence coverage: 98.2% d) analysis of data
 				 * coverage.
 				 */
 				{ 0, "brotherhood1", pathId, 0.0, 0.0, 0, 0, 0, null },
 				/*
 				 * a) Functional requirements - 3.3 Delete a path. b) Negative
 				 * test - Business rule: Cannot delete a path of a foreign
-				 * parade. c) analysis of sentence coverage: d) analysis of data
+				 * parade. c) analysis of sentence coverage: 98.2% d) analysis of data
 				 * coverage.
 				 */
 				{ 0, "brotherhood2", pathId, 0.0, 0.0, 0, 0, 0,
 						java.lang.IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 3.3 create a segment. b)
-				 * Positive test c) analysis of sentence coverage: d) analysis
+				 * Positive test c) analysis of sentence coverage: 98.2% d) analysis
 				 * of data coverage.
 				 */
 				{ 0, "brotherhood1", 0, latitudeLongitude, aproxTime,
@@ -79,7 +79,7 @@ public class PathSegmentTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 3.3 Create a segment. b)
 				 * Negative test - Business rule: Cannot create a segment of a
-				 * foreign path c) analysis of sentence coverage: d) analysis of
+				 * foreign path c) analysis of sentence coverage: 98.2% d) analysis of
 				 * data coverage.
 				 */
 				{ 0, "brotherhood2", 0, latitudeLongitude, aproxTime,
@@ -87,28 +87,28 @@ public class PathSegmentTest extends AbstractTest {
 						java.lang.IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 3.3 Edit a segment. b) Positive
-				 * test c) analysis of sentence coverage: d) analysis of data
+				 * test c) analysis of sentence coverage: 98.2% d) analysis of data
 				 * coverage.
 				 */
 				{ 0, "brotherhood1", 0, 0.0, 0.0, 0, segmentIdForEdit, 0, null },
 				/*
 				 * a) Functional requirements - 3.3 Edit a segment. b) Negative
 				 * test - Business rule: Cannot edit a segment of a foreign path
-				 * c) analysis of sentence coverage: d) analysis of data
+				 * c) analysis of sentence coverage: 98.2% d) analysis of data
 				 * coverage.
 				 */
 				{ 0, "brotherhood2", 0, 0.0, 0.0, 0, segmentIdForEdit, 0,
 						java.lang.IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 3.3 Delete a segment. b)
-				 * Positive test c) analysis of sentence coverage: d) analysis
+				 * Positive test c) analysis of sentence coverage: 98.2% d) analysis
 				 * of data coverage.
 				 */
 				{ 0, "brotherhood1", 0, 0.0, 0.0, 0, 0, segmentIdForDelete, null },
 				/*
 				 * a) Functional requirements - 3.3 Delete a segment. b)
 				 * Negative test - Business rule: Cannot delete a segment of a
-				 * foreign path c) analysis of sentence coverage: d) analysis of
+				 * foreign path c) analysis of sentence coverage: 98.2% d) analysis of
 				 * data coverage.
 				 */
 				{ 0, "brotherhood2", 0, 0.0, 0.0, 0, 0, segmentIdForDelete,
@@ -173,6 +173,8 @@ public class PathSegmentTest extends AbstractTest {
 			}
 
 			super.unauthenticate();
+			this.pathService.flush();
+			this.segmentService.flush();
 			this.paradeService.flush();
 
 			super.flushTransaction();

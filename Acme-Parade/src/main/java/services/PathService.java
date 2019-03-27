@@ -83,6 +83,10 @@ public class PathService {
 		}
 		this.pathRepository.delete(path);
 	}
+	
+	public void flush() {
+		this.pathRepository.flush();
+	}
 
 	// Other Methods--------------------------------------------
 	
