@@ -75,6 +75,10 @@ public class SegmentService {
 
 		this.segmentRepository.delete(segment);
 	}
+	
+	public void flush() {
+		this.segmentRepository.flush();
+	}
 
 	// Other Methods--------------------------------------------
 
