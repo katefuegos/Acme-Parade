@@ -1595,7 +1595,7 @@
 	<!-- CONFIGURATION -->
 	<bean id="configuration1" class="domain.Configuration">
 		<property name="countryCode" value="+34" />
-		<property name="banner" value="http://www.tinyurl.com/acme-madruga" />
+		<property name="banner" value="https://drive.google.com/uc?export=download&id=1upm4NO42bifq-s1LX5gOzisnyFfdftcx" />
 		<property name="welcomeMessage">
 			<map>
 				<entry>

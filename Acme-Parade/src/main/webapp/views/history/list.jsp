@@ -28,7 +28,7 @@
 	</security:authorize>
 
 </display:table>
-
+<br>
 
 <display:table name="historys" id="row" requestURI="${requestURI}"
 	pagesize="4" class="displaytag">
