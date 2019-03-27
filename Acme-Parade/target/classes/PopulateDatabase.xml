@@ -1314,6 +1314,21 @@
 		<property name="brotherhood" ref="brotherhood4" />
 		<property name="status" value="PENDING" />
 	</bean>
+	
+	<bean id="parade5" class="domain.Parade">
+		<property name="ticker" value="190419-STOEN" />   <!-- ticker: "YYMMDD-XXXXX" -->
+		<property name="title" value="El Santo" />
+		<property name="description"
+			value="Procesion donde se representa al defunto" />
+		<property name="moment" value="2019/11/19 15:21" />
+		<property name="draftMode" value="true" />
+		<property name="floats">
+			<list>
+			</list>
+		</property>
+		<property name="brotherhood" ref="brotherhood1" />
+		<property name="status" value="PENDING" />
+	</bean>
 
 
 	<!-- FLOAAT -->
