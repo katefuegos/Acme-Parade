@@ -234,7 +234,7 @@ Our website uses cookies. A cookie is a file containing an identifier (a string 
 	a.we use Google Analytics and Adwords on our website to recognize a computer when a user visits the website / track users as they navigate the website / enable the use of a shopping cart on the website / improve the website’s usability / analyze the use of the website / administer the website / prevent fraud and improve the security of the website / personalize the website for each user / target advertisements which may be of particular interest to specific users / describe purpose(s);
 <br>
 	<br>
-2.Most browsers allow you to refuse to accept cookies—for example:
+2.Most browsers allow you to refuse to accept cookies, for example:
 <br>
 	<br>
 	a.in Internet Explorer (version 10) you can block cookies using the cookie handling override settings available by clicking 'Tools,' 'Internet Options,' 'Privacy,' and then 'Advanced';
@@ -247,7 +247,7 @@ Our website uses cookies. A cookie is a file containing an identifier (a string 
 Blocking all cookies will have a negative impact upon the usability of many websites. If you block cookies, you will not be able to use all the features on our website.
 <br>
 	<br>
-3.You can delete cookies already stored on your computer—for example:
+3.You can delete cookies already stored on your computer, for example:
 <br>
 	<br>
 	a.in Internet Explorer (version 10), you must manually delete cookie files (you can find instructions for doing so at http://support.microsoft.com/kb/278835 );
@@ -260,9 +260,12 @@ Blocking all cookies will have a negative impact upon the usability of many webs
 4.Deleting cookies will have a negative impact on the usability of many websites.
 <br>
 	<br>
-<h2>N. Additional note</h2>
+<h2>N. Additional notes</h2>
 	<br>
-	Acme Madrugá, Inc. is the company that provides the service and Acme Parade is the name of the service.
+	1.Acme Madrugá, Inc. is the company that provides the service and Acme Parade is the name of the service.
+	<br>
+	<br>
+	2.The deletion of personal data exclusively affects the data referring to social profiles and user profile data.
 	<br>
 	<br>
 </jstl:if>
@@ -499,9 +502,12 @@ Nuestro sitio web usa cookies. Una cookie es un fichero que contiene un identifi
 4.Eliminar las cookies tendrá un impacto negativo en la usabilidad de muchos sitios web.
 <br>
 	<br>
-	<h2>N. Nota adicional</h2>
+	<h2>N. Notas adicionales</h2>
 	<br>
-	Acme Madrugá, Inc. es la empresa proveedora del servicio y Acme Parade es el nombre del servicio mismo.
+	1.Acme Madrugá, Inc. es la empresa proveedora del servicio y Acme Parade es el nombre del servicio mismo.
+	<br>
+	<br>
+	2.El borrado de datos personales afecta exclusivamente a los datos referentes a los perfiles sociales y datos de perfil del usuario.
 	<br>
 	<br>
 </jstl:if>
