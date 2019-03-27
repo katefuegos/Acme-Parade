@@ -31,6 +31,9 @@ public class ParadeService {
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
+	@Autowired
+	private ChapterService		chapterService;
+
 
 	// Constructor----------------------------------------------
 
@@ -49,7 +52,7 @@ public class ParadeService {
 		res.setBrotherhood(this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId()));
 		res.setFloats(floaats);
 		res.setStatus("PENDING");
-		System.out.println(ticker);
+		//System.out.println(ticker);
 		return res;
 	}
 
@@ -74,6 +77,8 @@ public class ParadeService {
 	}
 
 	public void delete(final Parade parade) {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("BROTHERHOOD"), "SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PARADE");
+
 		this.paradeRepository.delete(parade);
 	}
 
@@ -82,6 +87,7 @@ public class ParadeService {
 	public Parade changeStatus(final Parade parade) {
 		Assert.notNull(parade, "chapter.parade.error.null");
 		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("CHAPTER"), "chapter.parade.error.noChapter");
+		Assert.isTrue(parade.getBrotherhood().getArea().getChapter().getId() == this.chapterService.findByUserAccountId(LoginService.getPrincipal().getId()).getId());
 		Assert.isTrue(parade.isDraftMode() == false, "chapter.parade.error.DraftMode");
 
 		final Parade saved = this.paradeRepository.save(parade);
@@ -106,12 +112,11 @@ public class ParadeService {
 	}
 
 	private String generateStringAux() {
-		final int length = 6;
+		final int length = 5;
 		final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		final Random rng = new Random();
 		final char[] text = new char[length];
-		text[0] = String.valueOf(rng.nextInt(9)).charAt(0);
-		for (int i = 1; i < 6; i++)
+		for (int i = 0; i < 5; i++)
 			text[i] = characters.charAt(rng.nextInt(characters.length()));
 		return new String(text);
 	}

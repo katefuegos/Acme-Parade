@@ -46,7 +46,7 @@ public class Parade extends DomainEntity {
 
 	@Column(unique = true)
 	@NotBlank
-	@Pattern(regexp = "^\\d{6}-(\\d?\\w){5}$")
+	@Pattern(regexp = "^\\d{6}-(\\w){5}$")
 	public String getTicker() {
 		return this.ticker;
 	}

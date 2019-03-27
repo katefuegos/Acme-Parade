@@ -10,7 +10,8 @@
 
 package services;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -21,65 +22,64 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import utilities.AbstractTest;
+import domain.Position;
 
 @ContextConfiguration(locations = {
 	"classpath:spring/junit.xml"
 })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class BrotherhoodManageParadeTest extends AbstractTest {
+public class PositionTest extends AbstractTest {
 
 	// System Under Test ------------------------------------------------------
 
 	@Autowired
-	private ParadeService	paradeService;
+	private PositionService	positionService;
 
 
-	@Autowired
 	// Tests ------------------------------------------------------------------
 	@Test
-	public void driverManageParade() {
-		this.authenticate("brotherhood1");
-		final domain.Parade paradeCreated = this.paradeService.create();
+	public void driverManagePosition() {
+		final Position position = this.positionService.create();
 
 		final Object testingData[][] = {
 			/*
-			 * a) Functional requirements - 10.2 Manage Parade - Create a Parade
+			 * a) Functional requirements - 12.2 Manage Position - Create a Position
 			 * b) Positive tests
 			 * c) analysis of sentence coverage: 92.3%
 			 * d) analysis of data coverage.
 			 */
 			{
-				null, paradeCreated, "brotherhood1", "new title", null
+				null, position, "admin", "new position", null
 			},
 			/*
-			 * a) Functional requirements - 10.2 Manage Parade - Create a Parade
-			 * b) Negative tests - Business rule: It can not be modified by another brotherhood.
+			 * a) Functional requirements - 12.2 Manage Position - Create a Position
+			 * b) Negative tests - Business rule: Only administrators can modify it.
 			 * c) analysis of sentence coverage: 92.3%
 			 * d) analysis of data coverage.
 			 */
 			{
-				null, paradeCreated, "brotherhood2", "new title", IllegalArgumentException.class
+				null, position, "brotherhood2", "new position", IllegalArgumentException.class
 			},
 
 			/*
-			 * a) Functional requirements - 10.2 Manage Parade - Edit a Parade
+			 * a) Functional requirements - 12.2 Manage Position - Edit a Position
 			 * b) Positive tests -
 			 * c) analysis of sentence coverage: 92.3%
 			 * d) analysis of data coverage.
 			 */
 			{
-				"parade1", null, "brotherhood1", "new title", null
+				"position1", null, "admin", "new position", null
 			},
 
 			/*
-			 * a) Functional requirements - 10.2 Manage Parade - Edit a Parade
-			 * b) Negative tests - Business rule: It can not be modified by another brotherhood.
+			 * a) Functional requirements - 12.2 Manage Position - Edit a Position
+			 * b) Negative tests - Business rule: Only administrators can modify it.
 			 * c) analysis of sentence coverage: 92.3%
 			 * d) analysis of data coverage.
 			 */
 			{
-				"parade1", null, "brotherhood2", "new title", IllegalArgumentException.class
+				"position1", null, "brotherhood2", "new position", IllegalArgumentException.class
 			},
 
 		};
@@ -87,7 +87,7 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.templateManage((String) testingData[i][0], (domain.Parade) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
+				this.templateManage((String) testingData[i][0], (domain.Position) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -97,9 +97,9 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateManage(final String nameParade, final domain.Parade newParade, final String username, final String newTitle, final Class<?> expected) {
+	protected void templateManage(final String namePosition, final domain.Position newPosition, final String username, final String newTitle, final Class<?> expected) {
 		Class<?> caught;
-		final int paradeId;
+		final int positionId;
 
 		caught = null;
 		try {
@@ -108,21 +108,22 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 			else
 				super.unauthenticate();
 
-			domain.Parade parade;
-			if (newParade == null) {
-				paradeId = super.getEntityId(nameParade);
-				parade = this.paradeService.findOne(paradeId);
+			domain.Position position;
+			if (newPosition == null) {
+				positionId = super.getEntityId(namePosition);
+				position = this.positionService.findOne(positionId);
 			} else
-				parade = newParade;
+				position = newPosition;
 
-			parade.setTitle(newTitle);
-			parade.setDescription("description1");
-			parade.setMoment(new Date(new Date().getTime() + 315360000000L));
+			final Map<String, String> map = new HashMap<String, String>();
+			map.put("EN", newTitle);
+			map.put("ES", newTitle);
+			position.setName(map);
 
-			this.paradeService.save(parade);
+			this.positionService.save(position);
 
 			super.unauthenticate();
-			this.paradeService.flush();
+			this.positionService.flush();
 
 			super.flushTransaction();
 		} catch (final Throwable oops) {
@@ -133,28 +134,28 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 	}
 
 	@Test
-	public void driverDeleteParade() {
+	public void driverDeletePosition() {
 
 		final Object testingData[][] = {
 
 			/*
-			 * a) Functional requirements - 12.2 Manage Position - Delete a parade
+			 * a) Functional requirements - 12.2 Manage Position - Delete a Position
 			 * b) Positive tests -
 			 * c) analysis of sentence coverage: 92.3%
 			 * d) analysis of data coverage.
 			 */
 			{
-				"parade5", "brotherhood1", null
+				"position1", "admin", null
 			},
 
 			/*
-			 * a) Functional requirements - 12.2 Manage Position - Delete a parade
-			 * b) Negative tests - Business rule: Only brotherhood can delete it.
+			 * a) Functional requirements - 12.2 Manage Position - Delete a Position
+			 * b) Negative tests - Business rule: Only administrators can modify it.
 			 * c) analysis of sentence coverage: 92.3%
 			 * d) analysis of data coverage.
 			 */
 			{
-				"parade5", "admin", IllegalArgumentException.class
+				"position1", "brotherhood2", IllegalArgumentException.class
 			},
 
 		};
@@ -172,7 +173,7 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateDelete(final String nameParade, final String username, final Class<?> expected) {
+	protected void templateDelete(final String namePosition, final String username, final Class<?> expected) {
 		Class<?> caught;
 
 		caught = null;
@@ -182,11 +183,11 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 			else
 				super.unauthenticate();
 
-			final domain.Parade parade = this.paradeService.findOne(super.getEntityId(nameParade));
+			final domain.Position position = this.positionService.findOne(super.getEntityId(namePosition));
 
-			this.paradeService.delete(parade);
+			this.positionService.delete(position);
 
-			this.paradeService.flush();
+			this.positionService.flush();
 			super.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -194,5 +195,4 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 
 		super.checkExceptions(expected, caught);
 	}
-
 }

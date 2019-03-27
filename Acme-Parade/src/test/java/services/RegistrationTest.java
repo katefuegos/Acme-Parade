@@ -21,9 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import security.UserAccount;
 import security.UserAccountService;
-import services.ActorService;
-import services.AreaService;
-import services.BrotherhoodService;
 import utilities.AbstractTest;
 import domain.Brotherhood;
 import forms.ActorForm;
@@ -114,7 +111,7 @@ public class RegistrationTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			/*
-			 * a) Functional requirements 8.1 - Register as a brotherhood
+			 * a) Functional requirements 8.1 - Register as a brotherhood and Requirement 20.1 Select area
 			 * b) Positive tests
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
@@ -123,7 +120,7 @@ public class RegistrationTest extends AbstractTest {
 				actorFormB1, null, "area1", null
 			},
 			/*
-			 * a) Functional requirements 8.1 - Register as a member
+			 * a) Functional requirements 8.1 - Register as a brothergood and Requirement 20.1 Select area
 			 * b) Negative tests - Business rule: Attribute title must not be null
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
@@ -133,7 +130,7 @@ public class RegistrationTest extends AbstractTest {
 			},
 
 			/*
-			 * a) Functional requirements 8.1 - Register as a member
+			 * a) Functional requirements 8.1 - Register as a brotherhood
 			 * b) Negative tests - Business rule: Attribute picture must not be null
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.

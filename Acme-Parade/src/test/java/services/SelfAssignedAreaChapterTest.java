@@ -8,7 +8,7 @@
  * http://www.tdg-seville.info/License.html
  */
 
-package usecase;
+package services;
 
 import javax.transaction.Transactional;
 
@@ -21,9 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import security.UserAccount;
 import security.UserAccountService;
-import services.ActorService;
-import services.AreaService;
-import services.ChapterService;
 import utilities.AbstractTest;
 import forms.ActorForm;
 
