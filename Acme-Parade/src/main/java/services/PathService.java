@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.PathRepository;
+import security.LoginService;
+import domain.Brotherhood;
 import domain.Path;
 import domain.Segment;
 
@@ -24,6 +26,9 @@ public class PathService {
 	// Services-------------------------------------------------
 	@Autowired
 	private SegmentService segmentService;
+	
+	@Autowired
+	private BrotherhoodService brotherhoodService;
 
 	// Constructor----------------------------------------------
 
@@ -56,12 +61,19 @@ public class PathService {
 
 	public Path save(final Path path) {
 		Assert.notNull(path);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		Assert.notNull(b);
+		Assert.isTrue(path.getParade().getBrotherhood().equals(b));
 		final Path saved = this.pathRepository.save(path);
 		return saved;
 	}
 
 	public void delete(final Path path) {
 		Assert.notNull(path);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId());
+		Assert.notNull(b);
+		Assert.isTrue(path.getParade().getBrotherhood().equals(b));
+		
 		Collection<Segment> segments = segmentService
 				.findByPathId(path.getId());
 		if (!segments.isEmpty()) {
