@@ -97,4 +97,7 @@ public class MemberService {
 	public Collection<Request> findRequestsByMemberId(final int memberId) {
 		return this.memberRepository.findRequestsByMemberId(memberId);
 	}
+	public void flush() {
+		this.memberRepository.flush();
+	}
 }

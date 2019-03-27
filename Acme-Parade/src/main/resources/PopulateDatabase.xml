@@ -1589,8 +1589,6 @@
 
 
 
-
-
 	<!-- CONFIGURATION -->
 	<bean id="configuration1" class="domain.Configuration">
 		<property name="countryCode" value="+34" />
