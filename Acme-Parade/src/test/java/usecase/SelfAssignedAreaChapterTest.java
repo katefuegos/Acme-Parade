@@ -32,7 +32,7 @@ import forms.ActorForm;
 })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class SelfAssignedAreaChapter extends AbstractTest {
+public class SelfAssignedAreaChapterTest extends AbstractTest {
 
 	// System Under Test ------------------------------------------------------
 

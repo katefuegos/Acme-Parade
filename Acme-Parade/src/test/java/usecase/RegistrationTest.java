@@ -23,7 +23,9 @@ import security.UserAccount;
 import security.UserAccountService;
 import services.ActorService;
 import services.AreaService;
+import services.BrotherhoodService;
 import utilities.AbstractTest;
+import domain.Brotherhood;
 import forms.ActorForm;
 
 @ContextConfiguration(locations = {
@@ -39,6 +41,9 @@ public class RegistrationTest extends AbstractTest {
 	private ActorService		actorService;
 
 	@Autowired
+	private BrotherhoodService	brotherhoodService;
+
+	@Autowired
 	private UserAccountService	accountService;
 
 	@Autowired
@@ -48,18 +53,64 @@ public class RegistrationTest extends AbstractTest {
 	// Tests ------------------------------------------------------------------
 
 	@Test
+	public void driverEditPersonalData() {
+
+		final Integer id = this.getEntityId("brotherhood1");
+
+		final Brotherhood brotherhood = this.brotherhoodService.findOne(id);
+
+		final ActorForm actorForm1 = this.constructActor(brotherhood.getUserAccount(), brotherhood.getId(), "BROTHERHOOD", brotherhood.getName(), brotherhood.getMiddleName(), brotherhood.getSurname(), brotherhood.getPhoto(), brotherhood.getEmail(),
+			brotherhood.getPhone(), brotherhood.getAddress(), brotherhood.getTitle(), brotherhood.getPictures());
+
+		final ActorForm actorForm2 = this.constructActor(brotherhood.getUserAccount(), brotherhood.getId(), "BROTHERHOOD", brotherhood.getName(), brotherhood.getMiddleName(), brotherhood.getSurname(), brotherhood.getPhoto(), brotherhood.getEmail(),
+			brotherhood.getPhone(), brotherhood.getAddress(), null, brotherhood.getPictures());
+
+		final Object testingData[][] = {
+			/*
+			 * a) Functional requirements 9.2 - Edit personal data
+			 * b) Positive tests
+			 * c) analysis of sentence coverage: 93% with eclemma
+			 * d) analysis of data coverage.
+			 */
+			{
+				actorForm1, "brotherhood1", "area1", null
+			},
+			/*
+			 * a) Functional requirements 9.2 - Edit personal data
+			 * b) Negative tests - Business rule: Attribute title must not be null
+			 * c) analysis of sentence coverage: 93% with eclemma
+			 * d) analysis of data coverage.
+			 */
+			{
+				actorForm2, "brotherhood1", "area1", javax.validation.ConstraintViolationException.class
+			},
+
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.template((ActorForm) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Class<?>) testingData[i][3]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
+
+	@Test
 	public void driverBrotherhood() {
 		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
 		UserAccount userAccount = null;
 		// Brotherhood
 		userAccount = this.accountService.create("Joseph", encoder.encodePassword("jojo12345", null), "BROTHERHOOD");
-		final ActorForm actorFormB1 = this.constructActor(userAccount, "BROTHERHOOD", "Joseph", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", "JoJo's Bizarre Adventure", "http://www.picture.com");
+		final ActorForm actorFormB1 = this.constructActor(userAccount, 0, "BROTHERHOOD", "Joseph", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", "JoJo's Bizarre Adventure", "http://www.picture.com");
 
 		userAccount = this.accountService.create("Joseph", encoder.encodePassword("jojo12345", null), "BROTHERHOOD");
-		final ActorForm actorFormB2 = this.constructActor(userAccount, "BROTHERHOOD", "Joseph", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, "http://www.picture.com");
+		final ActorForm actorFormB2 = this.constructActor(userAccount, 0, "BROTHERHOOD", "Joseph", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, "http://www.picture.com");
 
 		userAccount = this.accountService.create("Joseph", encoder.encodePassword("jojo12345", null), "BROTHERHOOD");
-		final ActorForm actorFormB3 = this.constructActor(userAccount, "BROTHERHOOD", "Joseph", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", "JoJo's Bizarre Adventure", null);
+		final ActorForm actorFormB3 = this.constructActor(userAccount, 0, "BROTHERHOOD", "Joseph", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", "JoJo's Bizarre Adventure", null);
 
 		final Object testingData[][] = {
 			/*
@@ -110,13 +161,13 @@ public class RegistrationTest extends AbstractTest {
 
 		//Member
 		userAccount = this.accountService.create("Jotaro", encoder.encodePassword("jojo12345", null), "MEMBER");
-		final ActorForm actorFormM1 = this.constructActor(userAccount, "MEMBER", "Jotaro", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
+		final ActorForm actorFormM1 = this.constructActor(userAccount, 0, "MEMBER", "Jotaro", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
 
 		userAccount = this.accountService.create("Jotaro", encoder.encodePassword("jojo12345", null), "MEMBER");
-		final ActorForm actorFormM2 = this.constructActor(userAccount, "MEMBER", null, "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
+		final ActorForm actorFormM2 = this.constructActor(userAccount, 0, "MEMBER", null, "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
 
 		userAccount = this.accountService.create("Jotaro", encoder.encodePassword("jojo12345", null), "MEMBER");
-		final ActorForm actorFormM3 = this.constructActor(userAccount, "MEMBER", "Jotaro", "Joestar", "Joestar", "photo", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
+		final ActorForm actorFormM3 = this.constructActor(userAccount, 0, "MEMBER", "Jotaro", "Joestar", "Joestar", "photo", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
 
 		final Object testingData[][] = {
 
@@ -169,13 +220,13 @@ public class RegistrationTest extends AbstractTest {
 
 		//Administrator
 		userAccount = this.accountService.create("Jonathan", encoder.encodePassword("jojo12345", null), "ADMIN");
-		final ActorForm actorFormA1 = this.constructActor(userAccount, "ADMIN", "Jonathan", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
+		final ActorForm actorFormA1 = this.constructActor(userAccount, 0, "ADMIN", "Jonathan", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
 
 		userAccount = this.accountService.create("Jonathan", encoder.encodePassword("jojo12345", null), "ADMIN");
-		final ActorForm actorFormA2 = this.constructActor(userAccount, "ADMIN", "Jonathan", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
+		final ActorForm actorFormA2 = this.constructActor(userAccount, 0, "ADMIN", "Jonathan", "Joestar", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
 
 		userAccount = this.accountService.create("Jonathan", encoder.encodePassword("jojo12345", null), "ADMIN");
-		final ActorForm actorFormA3 = this.constructActor(userAccount, "ADMIN", "Jonathan", "Joestar", "Joestar", "photo", "jojo@hotmail.com", "uno dos tres cuatro", "Calle falsa 123", null, null);
+		final ActorForm actorFormA3 = this.constructActor(userAccount, 0, "ADMIN", "Jonathan", "Joestar", "Joestar", "photo", "jojo@hotmail.com", "uno dos tres cuatro", "Calle falsa 123", null, null);
 
 		final Object testingData[][] = {
 
@@ -228,13 +279,13 @@ public class RegistrationTest extends AbstractTest {
 
 		//Chapter
 		userAccount = this.accountService.create("Josuke", encoder.encodePassword("jojo12345", null), "CHAPTER");
-		final ActorForm actorFormC1 = this.constructActor(userAccount, "CHAPTER", "Dio", "Josuke", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", "JoJo's Bizarre Adventure", null);
+		final ActorForm actorFormC1 = this.constructActor(userAccount, 0, "CHAPTER", "Dio", "Josuke", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", "JoJo's Bizarre Adventure", null);
 
 		userAccount = this.accountService.create("Josuke", encoder.encodePassword("jojo12345", null), "CHAPTER");
-		final ActorForm actorFormC2 = this.constructActor(userAccount, "CHAPTER", null, "Josuke", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
+		final ActorForm actorFormC2 = this.constructActor(userAccount, 0, "CHAPTER", null, "Josuke", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", null, null);
 
 		userAccount = this.accountService.create("Josuke", encoder.encodePassword("jojo12345", null), "CHAPTER");
-		final ActorForm actorFormC3 = this.constructActor(userAccount, "CHAPTER", "Dio", "Josuke", "Joestar", "http://photo.com", "jojo@hotmail.com", "uno dos tres cuatro", "Calle falsa 123", null, null);
+		final ActorForm actorFormC3 = this.constructActor(userAccount, 0, "CHAPTER", "Dio", "Josuke", "Joestar", "http://photo.com", "jojo@hotmail.com", "uno dos tres cuatro", "Calle falsa 123", null, null);
 
 		final Object testingData[][] = {
 
@@ -308,11 +359,10 @@ public class RegistrationTest extends AbstractTest {
 		super.checkExceptions(expected, caught);
 	}
 
-	private ActorForm constructActor(final UserAccount userAccount, final String auth, final String name, final String middleName, final String surname, final String photo, final String email, final String phone, final String address, final String title,
-		final String pictures) {
+	private ActorForm constructActor(final UserAccount userAccount, final int id, final String auth, final String name, final String middleName, final String surname, final String photo, final String email, final String phone, final String address,
+		final String title, final String pictures) {
 		final ActorForm result = new ActorForm();
 
-		final int id = 0;
 		final int version = 0;
 
 		result.setId(id);

@@ -53,6 +53,8 @@ public class FloaatService {
 	public Floaat save(final Floaat floaat) {
 		Assert.notNull(floaat);
 		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("BROTHERHOOD"), "SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PROCESSION");
+		Assert.isTrue(floaat.getBrotherhood().equals(this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId())));
+
 		final Floaat saved = this.repository.save(floaat);
 		return saved;
 	}
@@ -68,4 +70,7 @@ public class FloaatService {
 		return this.repository.findByBrotherhoodId(brotherhoodId);
 	}
 
+	public void flush() {
+		this.repository.flush();
+	}
 }

@@ -49,6 +49,7 @@ public class ParadeService {
 		res.setBrotherhood(this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId()));
 		res.setFloats(floaats);
 		res.setStatus("PENDING");
+		System.out.println(ticker);
 		return res;
 	}
 
@@ -63,6 +64,7 @@ public class ParadeService {
 	public Parade save(final Parade parade) {
 		Assert.notNull(parade);
 		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("BROTHERHOOD"), "SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PARADE");
+		Assert.isTrue(parade.getBrotherhood().equals(this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId())));
 
 		if (parade.isDraftMode() == false)
 			parade.setStatus("SUBMITTED");
@@ -108,7 +110,8 @@ public class ParadeService {
 		final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		final Random rng = new Random();
 		final char[] text = new char[length];
-		for (int i = 0; i < 6; i++)
+		text[0] = String.valueOf(rng.nextInt(9)).charAt(0);
+		for (int i = 1; i < 6; i++)
 			text[i] = characters.charAt(rng.nextInt(characters.length()));
 		return new String(text);
 	}
@@ -160,6 +163,10 @@ public class ParadeService {
 	public Collection<Parade> findByChapterId(final int chapterId) {
 		return this.paradeRepository.findByChapterId(chapterId);
 
+	}
+
+	public void flush() {
+		this.paradeRepository.flush();
 	}
 
 }
