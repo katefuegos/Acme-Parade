@@ -64,10 +64,11 @@
 <h3>
 	<spring:message code="administrator.dashboard.C4" />
 </h3>
+<jstl:if test="${statusCount!='n/a'}">
 <jstl:forEach var="entry" items="${statusCount}">
 	<jstl:out value="${entry.key}" /> --- <jstl:out value="${entry.value}" />
 	<br>
-</jstl:forEach>
+</jstl:forEach></jstl:if><jstl:if test="${statusCount=='n/a'}">&nbsp;&nbsp;&nbsp;<jstl:out value="${statusCount}" /></jstl:if>
 <br />
 <br />
 
@@ -101,7 +102,7 @@
 </display:table>
 <br />
 <br />
-<h3>
+ <h3>
 	<spring:message code="administrator.dashboard.C8" />
 </h3>
 <display:table name="position" id="row" class="displaytag">

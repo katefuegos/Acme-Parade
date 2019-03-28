@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.ArrayList;
@@ -15,8 +14,11 @@ import org.springframework.util.Assert;
 
 import repositories.ParadeRepository;
 import security.LoginService;
+import domain.Brotherhood;
 import domain.Floaat;
 import domain.Parade;
+import domain.Path;
+import domain.Segment;
 
 @Service
 @Transactional
@@ -25,15 +27,20 @@ public class ParadeService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private ParadeRepository	paradeRepository;
+	private ParadeRepository paradeRepository;
 
 	// Services-------------------------------------------------
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
-	private ChapterService		chapterService;
+	private ChapterService chapterService;
 
+	@Autowired
+	private SegmentService segmentService;
+
+	@Autowired
+	private PathService pathService;
 
 	// Constructor----------------------------------------------
 
@@ -49,10 +56,11 @@ public class ParadeService {
 		final Collection<Floaat> floaats = new ArrayList<>();
 		res.setTicker(ticker);
 		res.setDraftMode(true);
-		res.setBrotherhood(this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId()));
+		res.setBrotherhood(this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId()));
 		res.setFloats(floaats);
 		res.setStatus("PENDING");
-		//System.out.println(ticker);
+		// System.out.println(ticker);
 		return res;
 	}
 
@@ -66,8 +74,12 @@ public class ParadeService {
 
 	public Parade save(final Parade parade) {
 		Assert.notNull(parade);
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("BROTHERHOOD"), "SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PARADE");
-		Assert.isTrue(parade.getBrotherhood().equals(this.brotherhoodService.findByUserAccountId(LoginService.getPrincipal().getId())));
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
+				.contains("BROTHERHOOD"),
+				"SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PARADE");
+		Assert.isTrue(parade.getBrotherhood().equals(
+				this.brotherhoodService.findByUserAccountId(LoginService
+						.getPrincipal().getId())));
 
 		if (parade.isDraftMode() == false)
 			parade.setStatus("SUBMITTED");
@@ -77,18 +89,68 @@ public class ParadeService {
 	}
 
 	public void delete(final Parade parade) {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("BROTHERHOOD"), "SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PARADE");
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
+				.contains("BROTHERHOOD"),
+				"SOLO UN BROTHERHOOD PUEDE CREAR/EDITAR PARADE");
 
 		this.paradeRepository.delete(parade);
 	}
 
 	// Other Methods--------------------------------------------
+	public void copy(final Parade parade) {
+		Assert.notNull(parade);
+		final Brotherhood b = this.brotherhoodService
+				.findByUserAccountId(LoginService.getPrincipal().getId());
+		Assert.notNull(b);
+		Assert.isTrue(parade.getBrotherhood()
+				.equals(b));
+		
+		Parade copy = this.create();
+		copy.setDescription(parade.getDescription());
+		copy.getFloats().addAll(parade.getFloats());
+		copy.setMoment(parade.getMoment());
+		copy.setTitle(parade.getTitle());
+
+		copy = this.save(copy);
+
+		final Path pathOriginal = this.pathService.findByParadeId(parade
+				.getId());
+		if (pathOriginal != null) {
+			Path copyPath = this.pathService.create();
+			copyPath.setParade(copy);
+			copyPath = pathService.save(copyPath);
+
+			Collection<Segment> segmentsOriginal = segmentService
+					.findByPathId(pathOriginal.getId());
+			if (!segmentsOriginal.isEmpty()) {
+				for (Segment s : segmentsOriginal) {
+					Segment copySegment = segmentService.create();
+					copySegment
+							.setApproximateTimeDes(s.getApproximateTimeDes());
+					copySegment
+							.setApproximateTimeOri(s.getApproximateTimeOri());
+					copySegment.setDestinationLatitude(s
+							.getDestinationLatitude());
+					copySegment.setDestinationLongitude(s
+							.getDestinationLongitude());
+					copySegment.setOriginLatitude(s.getOriginLatitude());
+					copySegment.setOriginLongitude(s.getOriginLongitude());
+					copySegment.setPath(copyPath);
+					copySegment = this.segmentService.save(copySegment);
+				}
+			}
+		}
+	}
 
 	public Parade changeStatus(final Parade parade) {
 		Assert.notNull(parade, "chapter.parade.error.null");
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString().contains("CHAPTER"), "chapter.parade.error.noChapter");
-		Assert.isTrue(parade.getBrotherhood().getArea().getChapter().getId() == this.chapterService.findByUserAccountId(LoginService.getPrincipal().getId()).getId());
-		Assert.isTrue(parade.isDraftMode() == false, "chapter.parade.error.DraftMode");
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
+				.contains("CHAPTER"), "chapter.parade.error.noChapter");
+		Assert.isTrue(parade.getBrotherhood().getArea().getChapter().getId() == this.chapterService
+				.findByUserAccountId(LoginService.getPrincipal().getId())
+				.getId());
+		Assert.isTrue(parade.isDraftMode() == false,
+				"chapter.parade.error.DraftMode");
 
 		final Parade saved = this.paradeRepository.save(parade);
 		return saved;
@@ -121,9 +183,11 @@ public class ParadeService {
 		return new String(text);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndNotDraft(final int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndNotDraft(
+			final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return this.paradeRepository.findByBrotherhoodIdAndNotDraft(brotherhoodId);
+		return this.paradeRepository
+				.findByBrotherhoodIdAndNotDraft(brotherhoodId);
 	}
 
 	public Collection<Parade> findByBrotherhoodId(final int brotherhoodId) {
@@ -136,33 +200,43 @@ public class ParadeService {
 		return this.paradeRepository.findByFloaat(floaat);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndNotDraftAndAccepted(final int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndNotDraftAndAccepted(
+			final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return this.paradeRepository.findByBrotherhoodIdAndNotDraftAndAccepted(brotherhoodId);
+		return this.paradeRepository
+				.findByBrotherhoodIdAndNotDraftAndAccepted(brotherhoodId);
 	}
 
 	public Collection<Parade> findAccepted() {
 		return this.paradeRepository.findAccepted();
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndAccepted(final int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndAccepted(
+			final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return this.paradeRepository.findByBrotherhoodIdAndAccepted(brotherhoodId);
+		return this.paradeRepository
+				.findByBrotherhoodIdAndAccepted(brotherhoodId);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndRejected(final int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndRejected(
+			final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return this.paradeRepository.findByBrotherhoodIdAndRejected(brotherhoodId);
+		return this.paradeRepository
+				.findByBrotherhoodIdAndRejected(brotherhoodId);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndSubmitted(final int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndSubmitted(
+			final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return this.paradeRepository.findByBrotherhoodIdAndSubmitted(brotherhoodId);
+		return this.paradeRepository
+				.findByBrotherhoodIdAndSubmitted(brotherhoodId);
 	}
 
-	public Collection<Parade> findByBrotherhoodIdAndPending(final int brotherhoodId) {
+	public Collection<Parade> findByBrotherhoodIdAndPending(
+			final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
-		return this.paradeRepository.findByBrotherhoodIdAndPending(brotherhoodId);
+		return this.paradeRepository
+				.findByBrotherhoodIdAndPending(brotherhoodId);
 	}
 
 	public Collection<Parade> findByChapterId(final int chapterId) {

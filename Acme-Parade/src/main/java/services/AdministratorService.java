@@ -268,11 +268,11 @@ public class AdministratorService {
 		final Collection<domain.Brotherhood> result2 = this.administratorRepository.queryNewC2();
 
 		final Collection<domain.Brotherhood> result = new ArrayList<>();
-		result.add(result2.iterator().next());
+		if (!result2.isEmpty())
+			result.add(result2.iterator().next());
 
 		return result;
 	}
-
 	public Collection<Brotherhood> queryNewC3() {
 		final Collection<domain.Brotherhood> result = this.administratorRepository.queryNewC3();
 

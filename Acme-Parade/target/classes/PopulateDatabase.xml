@@ -201,9 +201,9 @@
 		<property name="surname" value="admin" />
 		<property name="photo"
 			value="https://cdn.pixabay.com/photo/2017/06/26/02/47/people-2442565_960_720.jpg" />
-		<property name="email" value="elena@gmail.com" />
+		<property name="email" value="admin@gmail.com" />
 		<property name="phone" value="+34(456)123456789" />
-		<property name="address" value="C/Calle, 54" />
+		<property name="address" value="C/Calle, 1" />
 		<property name="isSpammer" value="false" />
 		<property name="isBanned" value="false" />
 		<property name="polarityScore" value="0.0" />
@@ -1314,12 +1314,11 @@
 		<property name="brotherhood" ref="brotherhood4" />
 		<property name="status" value="PENDING" />
 	</bean>
-	
+
 	<bean id="parade5" class="domain.Parade">
 		<property name="ticker" value="190419-STOEN" />   <!-- ticker: "YYMMDD-XXXXX" -->
 		<property name="title" value="El Santo" />
-		<property name="description"
-			value="Procesion donde se representa al defunto" />
+		<property name="description" value="Procesion donde se representa al defunto" />
 		<property name="moment" value="2019/11/19 15:21" />
 		<property name="draftMode" value="true" />
 		<property name="floats">
@@ -1396,14 +1395,14 @@
 			value="http://practicopedia.lainformacion.com/files/jueves_santo_madrugada.jpg" />
 		<property name="chapter" ref="chapter1" />
 	</bean>
-	
+
 	<bean id="area4" class="domain.Area">
 		<property name="name" value="Los remedios" />
 		<property name="pictures"
 			value="https://sevilla.abc.es/media/sevilla/2016/01/19/s/sevilla-remedios-republica-argentina--620x349.jpg" />
 		<property name="chapter" ref="chapter1" />
 	</bean>
-	
+
 	<bean id="area5" class="domain.Area">
 		<property name="name" value="Bellavista" />
 		<property name="pictures"
@@ -1590,12 +1589,11 @@
 
 
 
-
-
 	<!-- CONFIGURATION -->
 	<bean id="configuration1" class="domain.Configuration">
 		<property name="countryCode" value="+34" />
-		<property name="banner" value="https://drive.google.com/uc?export=download&id=1upm4NO42bifq-s1LX5gOzisnyFfdftcx" />
+		<property name="banner"
+			value="http://i66.tinypic.com/16jdit.png"/>
 		<property name="welcomeMessage">
 			<map>
 				<entry>
@@ -1817,19 +1815,19 @@
 	<bean id="path1" class="domain.Path">
 		<property name="parade" ref="parade1" />
 	</bean>
-	
+
 	<bean id="path2" class="domain.Path">
 		<property name="parade" ref="parade2" />
 	</bean>
-	
+
 	<bean id="path3" class="domain.Path">
 		<property name="parade" ref="parade3" />
 	</bean>
-	
+
 	<bean id="path4" class="domain.Path">
 		<property name="parade" ref="parade4" />
 	</bean>
-	
+
 	<!-- SEGMENT -->
 	<bean id="segment1" class="domain.Segment">
 		<property name="originLatitude" value="37.389091" />
@@ -1840,7 +1838,7 @@
 		<property name="approximateTimeDes" value="2.5" />
 		<property name="path" ref="path1" />
 	</bean>
-	
+
 	<bean id="segment2" class="domain.Segment">
 		<property name="originLatitude" value="37.381561" />
 		<property name="originLongitude" value="-5.983332" />
@@ -1850,7 +1848,7 @@
 		<property name="approximateTimeDes" value="1.54" />
 		<property name="path" ref="path1" />
 	</bean>
-	
+
 	<bean id="segment3" class="domain.Segment">
 		<property name="originLatitude" value="37.399565" />
 		<property name="originLongitude" value="-5.925075" />
@@ -1860,7 +1858,7 @@
 		<property name="approximateTimeDes" value="4.25" />
 		<property name="path" ref="path2" />
 	</bean>
-	
+
 	<bean id="segment4" class="domain.Segment">
 		<property name="originLatitude" value="37.390209" />
 		<property name="originLongitude" value="-5.948827" />
