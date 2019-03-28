@@ -60,6 +60,14 @@
 		<put-attribute name="body"
 			value="/views/message/broadcastMessage.jsp" />
 	</definition>
+	
+	<definition name="message/administrator/broadcastMessageChapters"
+		extends="master.page">
+		<put-attribute name="title"
+			value="Notificar brecha de seguridad a cabildos" />
+		<put-attribute name="body"
+			value="/views/message/broadcastMessage.jsp" />
+	</definition>
 
 	<definition name="message/actor/show" extends="master.page">
 		<put-attribute name="title" value="Mostrar mensaje" />

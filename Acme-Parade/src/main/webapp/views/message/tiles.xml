@@ -27,6 +27,7 @@
 		<put-attribute name="body" value="/views/message/exchangeMessage.jsp" />
 	</definition>
 
+
 	<definition name="message/actor/list" extends="master.page">
 		<put-attribute name="title" value="List of messages" />
 		<put-attribute name="body" value="/views/message/list.jsp" />
@@ -57,6 +58,14 @@
 		extends="master.page">
 		<put-attribute name="title"
 			value="Notify breach of security to brotherhoods" />
+		<put-attribute name="body"
+			value="/views/message/broadcastMessage.jsp" />
+	</definition>
+
+	<definition name="message/administrator/broadcastMessageChapters"
+		extends="master.page">
+		<put-attribute name="title"
+			value="Notify breach of security to chapters" />
 		<put-attribute name="body"
 			value="/views/message/broadcastMessage.jsp" />
 	</definition>

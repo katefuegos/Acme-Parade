@@ -21,6 +21,7 @@ import security.UserAccount;
 import domain.Actor;
 import domain.Box;
 import domain.Brotherhood;
+import domain.Chapter;
 import domain.Configuration;
 import domain.Member;
 import domain.Message;
@@ -46,6 +47,9 @@ public class MessageService {
 	
 	@Autowired
 	private BrotherhoodService			brotherhoodService;
+	
+	@Autowired
+	private ChapterService			chapterService;
 	
 	@Autowired
 	private ConfigurationService	configurationService;
@@ -269,6 +273,38 @@ public class MessageService {
 		Assert.isTrue(userAccount.getAuthorities().contains(authority), "Solo los administradores pueden realizar mensajes de difusión");
 
 		final Collection<Brotherhood> allActor = this.brotherhoodService.findAll();
+
+		final Collection<Message> messages = new ArrayList<>();
+
+		for (final Actor recipient : allActor) {
+			final Message message2 = this.copyMessage(message);
+			message2.setRecipient(recipient);
+			Box box;
+			if (this.isSpam(message2))
+				box = this.boxService.findBoxByActorIdAndName(recipient.getId(), "spam box");
+			else
+				box = this.boxService.findBoxByActorIdAndName(recipient.getId(), "notification box");
+			message2.setBox(box);
+			messages.add(message2);
+
+		}
+
+		this.messageRepository.save(messages);
+
+	}
+	
+	public void broadcastMessageChapters(final Message message) {
+		this.checkPriorities(message);
+		final UserAccount userAccount = LoginService.getPrincipal();
+
+		Assert.notNull(userAccount, "Debe estar logeado en el sistema para crear una carpeta");
+
+		final Authority authority = new Authority();
+		authority.setAuthority("ADMIN");
+
+		Assert.isTrue(userAccount.getAuthorities().contains(authority), "Solo los administradores pueden realizar mensajes de difusión");
+
+		final Collection<Chapter> allActor = this.chapterService.findAll();
 
 		final Collection<Message> messages = new ArrayList<>();
 

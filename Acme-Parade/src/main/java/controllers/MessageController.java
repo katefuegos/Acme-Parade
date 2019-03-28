@@ -19,12 +19,14 @@ import security.UserAccount;
 import services.ActorService;
 import services.BoxService;
 import services.BrotherhoodService;
+import services.ChapterService;
 import services.ConfigurationService;
 import services.MemberService;
 import services.MessageService;
 import domain.Actor;
 import domain.Box;
 import domain.Brotherhood;
+import domain.Chapter;
 import domain.Member;
 import domain.Message;
 import forms.MessageForm;
@@ -47,6 +49,9 @@ public class MessageController extends AbstractController {
 
 	@Autowired
 	private BrotherhoodService brotherhoodService;
+
+	@Autowired
+	private ChapterService chapterService;
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -224,6 +229,54 @@ public class MessageController extends AbstractController {
 				result = this.createEditModelAndViewBrotherhoods(messageForm,
 						"message.commit.error");
 				result.setViewName("message/administrator/broadcastMessageBrotherhoods");
+			}
+		return result;
+	}
+
+	// Create
+	@RequestMapping(value = "/administrator/broadcastMessageChapters", method = RequestMethod.GET)
+	public ModelAndView broadcastMessageChapters() {
+		final ModelAndView modelAndView;
+
+		final Message message = this.messageService.create();
+		final MessageForm messageForm = new MessageForm();
+
+		message.setRecipient(this.actorService.findByUserAccount(LoginService
+				.getPrincipal()));
+		message.setBody("SECURITY BREATCH DETECTED / BRECHA DE SEGURIDAD DETECTADA");
+		message.setSubject("SECURITY BREACH / BRECHA DE SEGURIDAD");
+		message.setTags("breach,security");
+
+		messageForm.setMessage(message);
+
+		modelAndView = this.createEditModelAndViewChapters(messageForm);
+
+		modelAndView
+				.setViewName("message/administrator/broadcastMessageChapters");
+		return modelAndView;
+	}
+
+	// Save
+	@RequestMapping(value = "/administrator/broadcastMessageChapters", method = RequestMethod.POST, params = "save")
+	public ModelAndView saveBroadcastChapters(
+			@Valid final MessageForm messageForm, final BindingResult binding) {
+
+		ModelAndView result;
+
+		if (binding.hasErrors()) {
+			result = this.createEditModelAndViewChapters(messageForm);
+			result.setViewName("message/administrator/broadcastMessageChapters");
+		} else
+			try {
+				final Message message = messageForm.getMessage();
+
+				this.messageService.broadcastMessageChapters(message);
+				result = new ModelAndView("redirect:/box/actor/list.do");
+			} catch (final Throwable oops) {
+
+				result = this.createEditModelAndViewChapters(messageForm,
+						"message.commit.error");
+				result.setViewName("message/administrator/broadcastMessageChapters");
 			}
 		return result;
 	}
@@ -515,4 +568,35 @@ public class MessageController extends AbstractController {
 		return result;
 	}
 
+	protected ModelAndView createEditModelAndViewChapters(
+			final MessageForm messageForm) {
+		ModelAndView result;
+
+		result = this.createEditModelAndViewChapters(messageForm, null);
+
+		return result;
+
+	}
+
+	protected ModelAndView createEditModelAndViewChapters(
+			final MessageForm entityMessage, final String message) {
+		ModelAndView result;
+		final Collection<Chapter> actors = this.chapterService.findAll();
+		final Collection<String> priorities = this.configurationService
+				.findAll().iterator().next().getPriorities();
+		final String action = "message/administrator/broadcastMessageBrotherhoods.do";
+
+		result = new ModelAndView("message/actor/exchangeMessageChapters");
+		result.addObject("messageForm", entityMessage);
+		result.addObject("message", message);
+		result.addObject("receivers", actors);
+		result.addObject("priorities", priorities);
+		result.addObject("isRead", false);
+		result.addObject("action", action);
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
+		return result;
+	}
 }
