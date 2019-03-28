@@ -25,7 +25,7 @@
 	3- Desplegamos la aplicaci\'f3n\
 		3.1- Nos creamos una carpeta en el escritorio mismo donde tienen que estar el archivo WAR y una carpeta llamada "clevercloud" la cual contendr\'e1 un archivo war.json con el siguiente contenido\
 		\
-\{\
+\{\bgok6roalxbimulzt42s
 	"deploy":\{\
 		"container": "TOMCAT7",\
 		"war": [\{\
@@ -48,7 +48,7 @@
 		3.5- Navegamos en el gitBash hasta la ruta de la carpeta del escritorio del paso 3.1 --> cd "C:\\Documents and Settings\\Student\\Desktop\\carpetaDeTurno"\
 			Ejecutamos los siguientes comandos\
 				git init\
-				git add clevercloud/war.json Acme-Handy-Worker.war\
+				git add clevercloud/war.json Acme-Parade.war\
 				git commit \'96m \'93v1.0.0\'94 --> (puede que haya que meterlo a mano)\
 			El pr\'f3ximo comando hay que sacarlo de CleverCloud en Application->Information->Push to Clever Cloud\
 				git remote add clever git+ssh://git@push-par-clevercloud-customers.services.clever-cloud.com/app_d1c5f7d0-3876-402d-b404-c96107974945.git\
