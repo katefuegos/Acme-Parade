@@ -74,4 +74,8 @@ public class MiscellaneousRecordService {
 		return this.miscellaneousRecordRepository.findMiscellaneousRecordByHistoryId(historyId);
 	}
 
+	public void flush() {
+		this.miscellaneousRecordRepository.flush();
+	}
+
 }
