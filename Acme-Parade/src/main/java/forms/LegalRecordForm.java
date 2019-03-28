@@ -1,3 +1,4 @@
+
 package forms;
 
 import javax.persistence.Access;
@@ -5,17 +6,20 @@ import javax.persistence.AccessType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 
 @Access(AccessType.PROPERTY)
 public class LegalRecordForm extends EveryRecordForm {
 
 	// Attributes------------------------------------------------------------------
 
-	private Integer VATnumber;
-	private String legalName;
-	private String applicableLaws;
+	private Integer	VATnumber;
+	private String	legalName;
+	private String	applicableLaws;
+
 
 	@NotNull
+	@Range(min = 0, max = 100)
 	public Integer getVATnumber() {
 		return this.VATnumber;
 	}
