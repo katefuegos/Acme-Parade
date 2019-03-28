@@ -1408,6 +1408,12 @@
 		<property name="pictures"
 			value="http://sevillaciudad.sevilla.abc.es/wp-content/uploads/2014/07/rotanda-bellavista.jpg" />
 	</bean>
+	
+	<bean id="area6" class="domain.Area">
+		<property name="name" value="Santa Justa" />
+		<property name="pictures"
+			value="http://sevillaciudad.sevilla.abc.es/wp-content/uploads/2014/07/rotanda-bellavista.jpg" />
+	</bean>
 
 
 	<!-- REQUEST -->

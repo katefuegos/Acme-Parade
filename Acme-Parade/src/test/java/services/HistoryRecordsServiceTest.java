@@ -54,7 +54,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage MiscellaneousRecord
 				 * - Create b) Positive tests c) analysis of sentence coverage:
-				 * XXXXX% d) analysis of data coverage - se crea un
+				 * 95.8% d) analysis of data coverage - se crea un
 				 * miscellaneousRecord con title="title" y
 				 * description="description", para history1 siendo brotherhood1.
 				 */
@@ -63,7 +63,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				 * a) Functional requirements - 10.2 Manage MiscellaneousRecord
 				 * - Create b) Negative tests - Business rule: It can not be
 				 * modified by another brotherhood. c) analysis of sentence
-				 * coverage: XXXXX% d) analysis of data coverage - se intenta
+				 * coverage: 95.8% d) analysis of data coverage - se intenta
 				 * crear un miscellaneousRecord para history1 siendo
 				 * brotherhood2.
 				 */
@@ -73,7 +73,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage MiscellaneousRecord
 				 * - Edit b) Positive tests - c) analysis of sentence coverage:
-				 * XXXXX% d) analysis of data coverage - se edita
+				 * 95.8% d) analysis of data coverage - se edita
 				 * miscellaneousRecord1 cambiando su title a "newTitle" siendo
 				 * brotherhood1.
 				 */
@@ -82,7 +82,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				 * a) Functional requirements - 10.2 Manage MiscellaneousRecord
 				 * - Edit b) Negative tests - Business rule: It can not be
 				 * modified by another brotherhood. c) analysis of sentence
-				 * coverage: XXXXX% d) analysis of data coverage - se intenta
+				 * coverage: 95.8% d) analysis of data coverage - se intenta
 				 * editar el atributo title de miscellaneousRecordId1 a
 				 * "newTitle" siendo brotherhood2.
 				 */
@@ -91,7 +91,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage MiscellaneousRecord
 				 * - Edit b) Positive test c) analysis of sentence coverage:
-				 * XXXXX% d) analysis of data coverage - se elimina
+				 * 95.8% d) analysis of data coverage - se elimina
 				 * miscellaneousRecord1 siendo brotherhood1.
 				 */
 				{ miscellaneousRecordId, 0, miscellaneousRecordId,
@@ -100,7 +100,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				 * a) Functional requirements - 10.2 Manage MiscellaneousRecord
 				 * - Edit b) Negative tests - Business rule: It can not be
 				 * deleted by another brotherhood. c) analysis of sentence
-				 * coverage: XXXXX% d) analysis of data coverage - se intenta
+				 * coverage: 95.8% d) analysis of data coverage - se intenta
 				 * eliminar miscellaneousRecord1 siendo brotherhood2.
 				 */
 				{ miscellaneousRecordId, 0, miscellaneousRecordId,
@@ -131,7 +131,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Create
-				 * b) Positive tests c) analysis of sentence coverage: XXXXX% d)
+				 * b) Positive tests c) analysis of sentence coverage: 95.8% d)
 				 * analysis of data coverage - se crea un legalRecord con
 				 * title="title" y description="description", VATNumber=21,
 				 * laws="laws", legalName="legal name", para history1 siendo
@@ -141,7 +141,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord- Create
 				 * b) Negative tests - Business rule: It can not be modified by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta crear un
 				 * legalRecord para history1 siendo brotherhood2.
 				 */
@@ -150,7 +150,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Edit
-				 * b) Positive tests - c) analysis of sentence coverage: XXXXX%
+				 * b) Positive tests - c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se edita legalRecord1
 				 * cambiando su title a "newTitle" siendo brotherhood1.
 				 */
@@ -158,7 +158,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Edit
 				 * b) Negative tests - Business rule: It can not be modified by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta editar el atributo
 				 * title de legalRecord1 a "newTitle" siendo brotherhood2.
 				 */
@@ -166,7 +166,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 						IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Edit
-				 * b) Positive test c) analysis of sentence coverage: XXXXX% d)
+				 * b) Positive test c) analysis of sentence coverage: 95.8% d)
 				 * analysis of data coverage - se elimina legalRecord1 siendo
 				 * brotherhood1.
 				 */
@@ -174,7 +174,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Edit
 				 * b) Negative tests - Business rule: It can not be deleted by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta eliminar
 				 * legalRecord1 siendo brotherhood2.
 				 */
@@ -207,7 +207,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage PeriodRecord -
 				 * Create b) Positive tests c) analysis of sentence coverage:
-				 * XXXXX% d) analysis of data coverage - se crea un periodRecord
+				 * 95.8% d) analysis of data coverage - se crea un periodRecord
 				 * con title="title" ,description="description", startYear=2018,
 				 * endYear=2019, para history1 siendo brotherhood1.
 				 */
@@ -215,7 +215,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage PeriodRecord- Create
 				 * b) Negative tests - Business rule: It can not be modified by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta crear un
 				 * periodRecord para history1 siendo brotherhood2.
 				 */
@@ -224,7 +224,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 
 				/*
 				 * a) Functional requirements - 10.2 Manage PeriodRecord - Edit
-				 * b) Positive tests - c) analysis of sentence coverage: XXXXX%
+				 * b) Positive tests - c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se edita periodRecord1
 				 * cambiando su title a "newTitle" siendo brotherhood1.
 				 */
@@ -232,7 +232,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage PeriodRecord - Edit
 				 * b) Negative tests - Business rule: It can not be modified by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta editar el atributo
 				 * title de periodRecord1 a "newTitle" siendo brotherhood2.
 				 */
@@ -240,7 +240,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 						IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Edit
-				 * b) Positive test c) analysis of sentence coverage: XXXXX% d)
+				 * b) Positive test c) analysis of sentence coverage: 95.8% d)
 				 * analysis of data coverage - se elimina periodRecord1 siendo
 				 * brotherhood1.
 				 */
@@ -248,7 +248,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Edit
 				 * b) Negative tests - Business rule: It can not be deleted by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta eliminar
 				 * periodRecord1 siendo brotherhood2.
 				 */
@@ -278,7 +278,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				/*
 				 * a) Functional requirements - 10.2 Manage LinkRecord - Create
-				 * b) Positive tests c) analysis of sentence coverage: XXXXX% d)
+				 * b) Positive tests c) analysis of sentence coverage: 95.8% d)
 				 * analysis of data coverage - se crea un linkRecord con
 				 * title="title" ,description="description",
 				 * brotherhood=brotherhood1, para history1 siendo brotherhood1.
@@ -287,7 +287,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage LinkRecord- Create
 				 * b) Negative tests - Business rule: It can not be modified by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta crear un linkRecord
 				 * para history1 siendo brotherhood2.
 				 */
@@ -296,7 +296,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 
 				/*
 				 * a) Functional requirements - 10.2 Manage LinkRecord - Edit b)
-				 * Positive tests - c) analysis of sentence coverage: XXXXX% d)
+				 * Positive tests - c) analysis of sentence coverage: 95.8% d)
 				 * analysis of data coverage - se edita linkRecord1 cambiando su
 				 * title a "newTitle" siendo brotherhood1.
 				 */
@@ -304,7 +304,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage LinkRecord - Edit b)
 				 * Negative tests - Business rule: It can not be modified by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta editar el atributo
 				 * title de linkRecord1 a "newTitle" siendo brotherhood2.
 				 */
@@ -312,7 +312,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 						IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Edit
-				 * b) Positive test c) analysis of sentence coverage: XXXXX% d)
+				 * b) Positive test c) analysis of sentence coverage: 95.8% d)
 				 * analysis of data coverage - se elimina linkRecord1 siendo
 				 * brotherhood1.
 				 */
@@ -320,7 +320,7 @@ public class HistoryRecordsServiceTest extends AbstractTest {
 				/*
 				 * a) Functional requirements - 10.2 Manage LegalRecord - Edit
 				 * b) Negative tests - Business rule: It can not be deleted by
-				 * another brotherhood. c) analysis of sentence coverage: XXXXX%
+				 * another brotherhood. c) analysis of sentence coverage: 95.8%
 				 * d) analysis of data coverage - se intenta eliminar
 				 * linkRecord1 siendo brotherhood2.
 				 */
