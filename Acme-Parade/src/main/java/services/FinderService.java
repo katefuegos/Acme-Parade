@@ -42,7 +42,7 @@ public class FinderService {
 	private MemberService			memberService;
 
 	@Autowired
-	private ParadeService		paradeService;
+	private ParadeService			paradeService;
 
 
 	// Constructor----------------------------------------------
@@ -107,6 +107,7 @@ public class FinderService {
 	}
 
 	public Finder clear(final Finder f) {
+		this.check(f);
 		final Date currentDate = new Date();
 		f.setKeyword("");
 		f.setNameArea("");
