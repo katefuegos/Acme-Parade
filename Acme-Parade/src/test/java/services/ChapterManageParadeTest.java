@@ -20,9 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import utilities.AbstractTest;
 
-@ContextConfiguration(locations = {
-	"classpath:spring/junit.xml"
-})
+@ContextConfiguration(locations = { "classpath:spring/junit.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class ChapterManageParadeTest extends AbstractTest {
@@ -30,60 +28,53 @@ public class ChapterManageParadeTest extends AbstractTest {
 	// System Under Test ------------------------------------------------------
 
 	@Autowired
-	private ParadeService	paradeService;
-
+	private ParadeService paradeService;
 
 	@Autowired
 	// Tests ------------------------------------------------------------------
 	@Test
 	public void driverManageParade() {
 		this.authenticate("chapter1");
-		final domain.Parade paradeCreated = this.paradeService.create();
 
 		final Object testingData[][] = {
 
-			/*
-			 * a) Functional requirements - 2.2 - Manage Parade by chapter
-			 * b) Positive tests -
-			 * c) analysis of sentence coverage: 89.2%
-			 * d) analysis of data coverage.
-			 * The parade parade1 is being modified with the following data: status = "ACCEPTED", draft mode = "false"
-			 * The actor in charge is: chapter1
-			 */
-			{
-				"parade1", "chapter1", null
-			},
+		/*
+		 * a) Functional requirements - 2.2 - Manage Parade by chapter b)
+		 * Positive tests - c) analysis of sentence coverage: 89.2% d) analysis
+		 * of data coverage. The parade parade1 is being modified with the
+		 * following data: status = "ACCEPTED", draft mode = "false" The actor
+		 * in charge is: chapter1
+		 */
+		{ "parade1", "chapter1", null },
 
-			/*
-			 * a) Functional requirements - 2.2 - Manage Parade by chapter
-			 * b) Negative tests - Business rule: It can not be modified by another chapter.
-			 * c) analysis of sentence coverage: 89.2%
-			 * d) analysis of data coverage.
-			 * The parade parade1 is being modified with the following data: status = "ACCEPTED", draft mode = "false"
-			 * The actor in charge is: chapter2
-			 */
-			{
-				"parade1", "chapter2", IllegalArgumentException.class
-			},
+		/*
+		 * a) Functional requirements - 2.2 - Manage Parade by chapter b)
+		 * Negative tests - Business rule: It can not be modified by another
+		 * chapter. c) analysis of sentence coverage: 89.2% d) analysis of data
+		 * coverage. The parade parade1 is being modified with the following
+		 * data: status = "ACCEPTED", draft mode = "false" The actor in charge
+		 * is: chapter2
+		 */
+		{ "parade1", "chapter2", IllegalArgumentException.class },
 
-			/*
-			 * a) Functional requirements - 2.2 - Manage Parade by chapter
-			 * b) Negative tests - Business rule: It can not be modified by another chapter.
-			 * c) analysis of sentence coverage: 89.2%
-			 * d) analysis of data coverage.
-			 * The parade parade1 is being modified with the following data: status = "ACCEPTED", draft mode = "false"
-			 * The actor in charge is: brotherhood2
-			 */
-			{
-				"parade1", "brotherhood2", IllegalArgumentException.class
-			},
+		/*
+		 * a) Functional requirements - 2.2 - Manage Parade by chapter b)
+		 * Negative tests - Business rule: It can not be modified by another
+		 * chapter. c) analysis of sentence coverage: 89.2% d) analysis of data
+		 * coverage. The parade parade1 is being modified with the following
+		 * data: status = "ACCEPTED", draft mode = "false" The actor in charge
+		 * is: brotherhood2
+		 */
+		{ "parade1", "brotherhood2", IllegalArgumentException.class },
 
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.templateManage((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+				this.templateManage((String) testingData[i][0],
+						(String) testingData[i][1],
+						(Class<?>) testingData[i][2]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -93,7 +84,8 @@ public class ChapterManageParadeTest extends AbstractTest {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateManage(final String nameParade, final String username, final Class<?> expected) {
+	protected void templateManage(final String nameParade,
+			final String username, final Class<?> expected) {
 		Class<?> caught;
 		final int paradeId;
 

@@ -24,9 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import utilities.AbstractTest;
 import domain.Position;
 
-@ContextConfiguration(locations = {
-	"classpath:spring/junit.xml"
-})
+@ContextConfiguration(locations = { "classpath:spring/junit.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class PositionTest extends AbstractTest {
@@ -34,8 +32,7 @@ public class PositionTest extends AbstractTest {
 	// System Under Test ------------------------------------------------------
 
 	@Autowired
-	private PositionService	positionService;
-
+	private PositionService positionService;
 
 	// Tests ------------------------------------------------------------------
 	@Test
@@ -43,51 +40,50 @@ public class PositionTest extends AbstractTest {
 		final Position position = this.positionService.create();
 
 		final Object testingData[][] = {
-			/*
-			 * a) Functional requirements - 12.2 Manage Position - Create a Position
-			 * b) Positive tests
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				null, position, "admin", "new position", null
-			},
-			/*
-			 * a) Functional requirements - 12.2 Manage Position - Create a Position
-			 * b) Negative tests - Business rule: Only administrators can modify it.
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				null, position, "brotherhood2", "new position", IllegalArgumentException.class
-			},
+				/*
+				 * a) Functional requirements - 12.2 Manage Position - Create a
+				 * Position b) Positive tests c) analysis of sentence coverage:
+				 * 92.3% d) analysis of data coverage - se crea un position con
+				 * valores "new position" siendo admin.
+				 */
+				{ null, position, "admin", "new position", null },
+				/*
+				 * a) Functional requirements - 12.2 Manage Position - Create a
+				 * Position b) Negative tests - Business rule: Only
+				 * administrators can modify it. c) analysis of sentence
+				 * coverage: 92.3% d) analysis of data coverage - se intenta
+				 * crear un position siendo brotherhood2.
+				 */
+				{ null, position, "brotherhood2", "new position",
+						IllegalArgumentException.class },
 
-			/*
-			 * a) Functional requirements - 12.2 Manage Position - Edit a Position
-			 * b) Positive tests -
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				"position1", null, "admin", "new position", null
-			},
+				/*
+				 * a) Functional requirements - 12.2 Manage Position - Edit a
+				 * Position b) Positive tests - c) analysis of sentence
+				 * coverage: 92.3% d) analysis of data coverage - se edita
+				 * position1 con valor = "new position" siendo admin.
+				 */
+				{ "position1", null, "admin", "new position", null },
 
-			/*
-			 * a) Functional requirements - 12.2 Manage Position - Edit a Position
-			 * b) Negative tests - Business rule: Only administrators can modify it.
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				"position1", null, "brotherhood2", "new position", IllegalArgumentException.class
-			},
+				/*
+				 * a) Functional requirements - 12.2 Manage Position - Edit a
+				 * Position b) Negative tests - Business rule: Only
+				 * administrators can modify it. c) analysis of sentence
+				 * coverage: 92.3% d) analysis of data coverage - se intenta
+				 * editar position1 siendo brotherhood2.
+				 */
+				{ "position1", null, "brotherhood2", "new position",
+						IllegalArgumentException.class },
 
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.templateManage((String) testingData[i][0], (domain.Position) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
+				this.templateManage((String) testingData[i][0],
+						(domain.Position) testingData[i][1],
+						(String) testingData[i][2], (String) testingData[i][3],
+						(Class<?>) testingData[i][4]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -97,7 +93,9 @@ public class PositionTest extends AbstractTest {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateManage(final String namePosition, final domain.Position newPosition, final String username, final String newTitle, final Class<?> expected) {
+	protected void templateManage(final String namePosition,
+			final domain.Position newPosition, final String username,
+			final String newTitle, final Class<?> expected) {
 		Class<?> caught;
 		final int positionId;
 
@@ -138,32 +136,29 @@ public class PositionTest extends AbstractTest {
 
 		final Object testingData[][] = {
 
-			/*
-			 * a) Functional requirements - 12.2 Manage Position - Delete a Position
-			 * b) Positive tests -
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				"position1", "admin", null
-			},
+		/*
+		 * a) Functional requirements - 12.2 Manage Position - Delete a Position
+		 * b) Positive tests - c) analysis of sentence coverage: 92.3% d)
+		 * analysis of data coverage - se elimina position1 siendo admin.
+		 */
+		{ "position1", "admin", null },
 
-			/*
-			 * a) Functional requirements - 12.2 Manage Position - Delete a Position
-			 * b) Negative tests - Business rule: Only administrators can modify it.
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				"position1", "brotherhood2", IllegalArgumentException.class
-			},
+		/*
+		 * a) Functional requirements - 12.2 Manage Position - Delete a Position
+		 * b) Negative tests - Business rule: Only administrators can modify it.
+		 * c) analysis of sentence coverage: 92.3% d) analysis of data coverage
+		 * - se intenta eliminar position1 siendo brotherhood2.
+		 */
+		{ "position1", "brotherhood2", IllegalArgumentException.class },
 
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.templateDelete((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+				this.templateDelete((String) testingData[i][0],
+						(String) testingData[i][1],
+						(Class<?>) testingData[i][2]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -173,7 +168,8 @@ public class PositionTest extends AbstractTest {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateDelete(final String namePosition, final String username, final Class<?> expected) {
+	protected void templateDelete(final String namePosition,
+			final String username, final Class<?> expected) {
 		Class<?> caught;
 
 		caught = null;
@@ -183,7 +179,8 @@ public class PositionTest extends AbstractTest {
 			else
 				super.unauthenticate();
 
-			final domain.Position position = this.positionService.findOne(super.getEntityId(namePosition));
+			final domain.Position position = this.positionService.findOne(super
+					.getEntityId(namePosition));
 
 			this.positionService.delete(position);
 

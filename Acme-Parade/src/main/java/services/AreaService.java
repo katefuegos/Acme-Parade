@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.Collection;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.AreaRepository;
+import security.LoginService;
 import domain.Area;
 import domain.Brotherhood;
 
@@ -20,11 +20,10 @@ public class AreaService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private AreaRepository		areaRepository;
+	private AreaRepository areaRepository;
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
+	private BrotherhoodService brotherhoodService;
 
 	// Services-------------------------------------------------
 
@@ -37,6 +36,8 @@ public class AreaService {
 	// Simple CRUD----------------------------------------------
 
 	public Area create() {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
+				.contains("ADMIN"));
 		final Area res = new Area();
 		return res;
 	}
@@ -53,39 +54,44 @@ public class AreaService {
 	public Area findOne(final Integer areaId) {
 		Area area;
 		area = this.areaRepository.findOne(areaId);
-		//Assert.notNull(area);
+		// Assert.notNull(area);
 
 		return area;
 	}
 
 	public Area save(final Area area) {
 		Assert.notNull(area);
-
-		if (area.getId() != 0) {
-			final Area oldArea = this.findOne(area.getId());
-			Assert.isTrue(oldArea.getChapter().equals(area.getChapter()), "Area.error.change.chapter");
-		}
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
+				.contains("ADMIN")
+				|| LoginService.getPrincipal().getAuthorities().toString()
+						.contains("CHAPTER"));
 
 		final Area saved = this.areaRepository.save(area);
 		return saved;
 	}
+
 	public void delete(final Area area) {
 		Assert.notNull(area);
-
-		final Collection<Brotherhood> brotherhoods = this.brotherhoodService.findByBrotherhood(area.getId());
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
+				.contains("ADMIN"));
+		final Collection<Brotherhood> brotherhoods = this.brotherhoodService
+				.findByBrotherhood(area.getId());
 
 		Assert.notNull(brotherhoods, "area.error.used");
 		Assert.isTrue(brotherhoods.isEmpty(), "area.error.used");
 
 		this.areaRepository.delete(area);
 	}
+
 	// Other Methods--------------------------------------------
 	public void flush() {
 		this.areaRepository.flush();
 
 	}
+
 	public Collection<domain.Area> findAreasNotAssigned() {
-		final Collection<domain.Area> areas = this.areaRepository.findAreasNotAssigned();
+		final Collection<domain.Area> areas = this.areaRepository
+				.findAreasNotAssigned();
 
 		return areas;
 	}

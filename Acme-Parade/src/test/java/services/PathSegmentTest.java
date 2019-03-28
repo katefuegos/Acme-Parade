@@ -43,77 +43,88 @@ public class PathSegmentTest extends AbstractTest {
 		final Object testingData[][] = {
 				/*
 				 * a) Functional requirements - 3.3 Create a path. b) Positive
-				 * test c) analysis of sentence coverage: 98.2% d) analysis of data
-				 * coverage.
+				 * test c) analysis of sentence coverage: 98.2% d) analysis of
+				 * data coverage - se crea un path de parade1 siendo
+				 * brotherhood1.
 				 */
 				{ paradeId, "brotherhood1", 0, 0.0, 0.0, 0, 0, 0, null },
 				/*
 				 * a) Functional requirements - 3.3 Create a path. b) Negative
 				 * test - Business rule: Cannot create a path for a foreign
-				 * parade. c) analysis of sentence coverage: 98.2% d) analysis of data
-				 * coverage.
+				 * parade. c) analysis of sentence coverage: 98.2% d) analysis
+				 * of data coverage - se intenta crear un path de parade1 siendo
+				 * brotherhood2.
 				 */
 				{ paradeId, "brotherhood2", 0, 0.0, 0.0, 0, 0, 0,
 						java.lang.IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 3.3 Delete a path. b) Positive
-				 * test c) analysis of sentence coverage: 98.2% d) analysis of data
-				 * coverage.
+				 * test c) analysis of sentence coverage: 98.2% d) analysis of
+				 * data coverage - se elimina path1 siendo brotherhood1.
 				 */
 				{ 0, "brotherhood1", pathId, 0.0, 0.0, 0, 0, 0, null },
 				/*
 				 * a) Functional requirements - 3.3 Delete a path. b) Negative
 				 * test - Business rule: Cannot delete a path of a foreign
-				 * parade. c) analysis of sentence coverage: 98.2% d) analysis of data
-				 * coverage.
+				 * parade. c) analysis of sentence coverage: 98.2% d) analysis
+				 * of data coverage - se intenta eliminar path1 siendo
+				 * brotherhood2.
 				 */
 				{ 0, "brotherhood2", pathId, 0.0, 0.0, 0, 0, 0,
 						java.lang.IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 3.3 create a segment. b)
-				 * Positive test c) analysis of sentence coverage: 98.2% d) analysis
-				 * of data coverage.
+				 * Positive test c) analysis of sentence coverage: 98.2% d)
+				 * analysis of data coverage - se crea un segment con todas las
+				 * longitudes y latitudes = 12345.12345 y todos los tiempor
+				 * aproximados = 1.5, todo ello para el path1 siendo
+				 * brotherhood1.
 				 */
 				{ 0, "brotherhood1", 0, latitudeLongitude, aproxTime,
 						pathIdForSegment, 0, 0, null },
 				/*
 				 * a) Functional requirements - 3.3 Create a segment. b)
 				 * Negative test - Business rule: Cannot create a segment of a
-				 * foreign path c) analysis of sentence coverage: 98.2% d) analysis of
-				 * data coverage.
+				 * foreign path c) analysis of sentence coverage: 98.2% d)
+				 * analysis of data coverage - se intenta crear un segment para
+				 * el path1 siendo brotherhood2.
 				 */
 				{ 0, "brotherhood2", 0, latitudeLongitude, aproxTime,
 						pathIdForSegment, 0, 0,
 						java.lang.IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 3.3 Edit a segment. b) Positive
-				 * test c) analysis of sentence coverage: 98.2% d) analysis of data
-				 * coverage.
+				 * test c) analysis of sentence coverage: 98.2% d) analysis of
+				 * data coverage - se edita segment1 con aproxTime = 1.5 siendo
+				 * brotherhood1.
 				 */
-				{ 0, "brotherhood1", 0, 0.0, 0.0, 0, segmentIdForEdit, 0, null },
+				{ 0, "brotherhood1", 0, 0.0, aproxTime, 0, segmentIdForEdit, 0,
+						null },
 				/*
 				 * a) Functional requirements - 3.3 Edit a segment. b) Negative
 				 * test - Business rule: Cannot edit a segment of a foreign path
 				 * c) analysis of sentence coverage: 98.2% d) analysis of data
-				 * coverage.
+				 * coverage - se intenta editar segment1 siendo brotherhood2.
 				 */
 				{ 0, "brotherhood2", 0, 0.0, 0.0, 0, segmentIdForEdit, 0,
 						java.lang.IllegalArgumentException.class },
 				/*
 				 * a) Functional requirements - 3.3 Delete a segment. b)
-				 * Positive test c) analysis of sentence coverage: 98.2% d) analysis
-				 * of data coverage.
+				 * Positive test c) analysis of sentence coverage: 98.2% d)
+				 * analysis of data coverage - se elimina segment1 siendo
+				 * brotherhood1.
 				 */
-				{ 0, "brotherhood1", 0, 0.0, 0.0, 0, 0, segmentIdForDelete, null },
+				{ 0, "brotherhood1", 0, 0.0, 0.0, 0, 0, segmentIdForDelete,
+						null },
 				/*
 				 * a) Functional requirements - 3.3 Delete a segment. b)
 				 * Negative test - Business rule: Cannot delete a segment of a
-				 * foreign path c) analysis of sentence coverage: 98.2% d) analysis of
-				 * data coverage.
+				 * foreign path c) analysis of sentence coverage: 98.2% d)
+				 * analysis of data coverage - se intenta eliminar segment1
+				 * siendo brotherhood2.
 				 */
 				{ 0, "brotherhood2", 0, 0.0, 0.0, 0, 0, segmentIdForDelete,
-						java.lang.IllegalArgumentException.class }
-				};
+						java.lang.IllegalArgumentException.class } };
 
 		for (int i = 0; i < testingData.length; i++)
 			try {

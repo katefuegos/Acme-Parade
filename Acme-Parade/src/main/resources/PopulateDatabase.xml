@@ -1408,6 +1408,12 @@
 		<property name="pictures"
 			value="http://sevillaciudad.sevilla.abc.es/wp-content/uploads/2014/07/rotanda-bellavista.jpg" />
 	</bean>
+	
+	<bean id="area6" class="domain.Area">
+		<property name="name" value="Santa Justa" />
+		<property name="pictures"
+			value="http://sevillaciudad.sevilla.abc.es/wp-content/uploads/2014/07/rotanda-bellavista.jpg" />
+	</bean>
 
 
 	<!-- REQUEST -->
@@ -1771,7 +1777,7 @@
 	<bean id="legalRecord1" class="domain.LegalRecord">
 		<property name="title" value="titleperiod3" />
 		<property name="description" value="posmubien" />
-		<property name="history" ref="history3" />
+		<property name="history" ref="history1" />
 		<property name="legalName" value="superlegal" />
 		<property name="VATnumber" value="23" />
 		<property name="applicableLaws" value="superley1" />
@@ -1793,14 +1799,14 @@
 	<bean id="linkRecord1" class="domain.LinkRecord">
 		<property name="title" value="link9" />
 		<property name="description" value="posmubien" />
-		<property name="history" ref="history2" />
+		<property name="history" ref="history1" />
 		<property name="brotherhood" ref="brotherhood2" />
 	</bean>
 
 	<bean id="linkRecord2" class="domain.LinkRecord">
 		<property name="title" value="link2" />
 		<property name="description" value="posmubien" />
-		<property name="history" ref="history1" />
+		<property name="history" ref="history2" />
 		<property name="brotherhood" ref="brotherhood3" />
 	</bean>
 

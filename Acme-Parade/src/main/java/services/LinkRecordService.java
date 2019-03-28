@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.Collection;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.LinkRecordRepository;
+import security.LoginService;
+import domain.Brotherhood;
 import domain.LinkRecord;
 
 @Service
@@ -19,10 +20,12 @@ public class LinkRecordService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private LinkRecordRepository	linkRecordRepository;
-
+	private LinkRecordRepository linkRecordRepository;
 
 	// Services-------------------------------------------------
+
+	@Autowired
+	private BrotherhoodService brotherhoodService;
 
 	// Constructor----------------------------------------------
 
@@ -60,12 +63,18 @@ public class LinkRecordService {
 
 	public LinkRecord save(final LinkRecord linkRecord) {
 		Assert.notNull(linkRecord);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Assert.isTrue(linkRecord.getHistory().getBrotherhood().equals(b));
 		final LinkRecord saved = this.linkRecordRepository.save(linkRecord);
 		return saved;
 	}
 
 	public void delete(final LinkRecord linkRecord) {
 		Assert.notNull(linkRecord);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Assert.isTrue(linkRecord.getHistory().getBrotherhood().equals(b));
 		this.linkRecordRepository.delete(linkRecord);
 	}
 
