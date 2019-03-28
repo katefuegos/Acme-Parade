@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.Collection;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.MiscellaneousRecordRepository;
+import security.LoginService;
+import domain.Brotherhood;
 import domain.MiscellaneousRecord;
 
 @Service
@@ -19,10 +20,12 @@ public class MiscellaneousRecordService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private MiscellaneousRecordRepository	miscellaneousRecordRepository;
-
+	private MiscellaneousRecordRepository miscellaneousRecordRepository;
 
 	// Services-------------------------------------------------
+
+	@Autowired
+	private BrotherhoodService brotherhoodService;
 
 	// Constructor----------------------------------------------
 
@@ -54,24 +57,36 @@ public class MiscellaneousRecordService {
 
 	public MiscellaneousRecord findOne(final Integer miscellaneousRecordId) {
 		MiscellaneousRecord miscellaneousRecord;
-		miscellaneousRecord = this.miscellaneousRecordRepository.findOne(miscellaneousRecordId);
+		miscellaneousRecord = this.miscellaneousRecordRepository
+				.findOne(miscellaneousRecordId);
 		return miscellaneousRecord;
 	}
 
-	public MiscellaneousRecord save(final MiscellaneousRecord miscellaneousRecord) {
+	public MiscellaneousRecord save(
+			final MiscellaneousRecord miscellaneousRecord) {
 		Assert.notNull(miscellaneousRecord);
-		final MiscellaneousRecord saved = this.miscellaneousRecordRepository.save(miscellaneousRecord);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Assert.isTrue(miscellaneousRecord.getHistory().getBrotherhood()
+				.equals(b));
+		final MiscellaneousRecord saved = this.miscellaneousRecordRepository
+				.save(miscellaneousRecord);
 		return saved;
 	}
 
 	public void delete(final MiscellaneousRecord miscellaneousRecord) {
 		Assert.notNull(miscellaneousRecord);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Assert.isTrue(miscellaneousRecord.getHistory().getBrotherhood().equals(b));
 		this.miscellaneousRecordRepository.delete(miscellaneousRecord);
 	}
 
-	public Collection<MiscellaneousRecord> findMiscellaneousRecordByHistoryId(final int historyId) {
+	public Collection<MiscellaneousRecord> findMiscellaneousRecordByHistoryId(
+			final int historyId) {
 		Assert.notNull(historyId);
-		return this.miscellaneousRecordRepository.findMiscellaneousRecordByHistoryId(historyId);
+		return this.miscellaneousRecordRepository
+				.findMiscellaneousRecordByHistoryId(historyId);
 	}
 
 	public void flush() {

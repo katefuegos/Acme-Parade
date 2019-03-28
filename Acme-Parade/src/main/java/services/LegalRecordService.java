@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.Collection;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.LegalRecordRepository;
+import security.LoginService;
+import domain.Brotherhood;
 import domain.LegalRecord;
 
 @Service
@@ -19,10 +20,12 @@ public class LegalRecordService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private LegalRecordRepository	legalRecordRepository;
-
+	private LegalRecordRepository legalRecordRepository;
 
 	// Services-------------------------------------------------
+
+	@Autowired
+	private BrotherhoodService brotherhoodService;
 
 	// Constructor----------------------------------------------
 
@@ -67,19 +70,27 @@ public class LegalRecordService {
 
 	public LegalRecord save(final LegalRecord legalRecord) {
 		Assert.notNull(legalRecord);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Assert.isTrue(legalRecord.getHistory().getBrotherhood().equals(b));
 		final LegalRecord saved = this.legalRecordRepository.save(legalRecord);
 		return saved;
 	}
 
 	public void delete(final LegalRecord legalRecord) {
 		Assert.notNull(legalRecord);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Assert.isTrue(legalRecord.getHistory().getBrotherhood().equals(b));
 		this.legalRecordRepository.delete(legalRecord);
 	}
 
-	public Collection<LegalRecord> findLegalRecordByHistoryId(final int historyId) {
+	public Collection<LegalRecord> findLegalRecordByHistoryId(
+			final int historyId) {
 		Assert.notNull(historyId);
 		return this.legalRecordRepository.findLegalRecordByHistoryId(historyId);
 	}
+
 	public void flush() {
 		this.legalRecordRepository.flush();
 	}

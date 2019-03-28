@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.Collection;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.PeriodRecordRepository;
+import security.LoginService;
+import domain.Brotherhood;
 import domain.History;
 import domain.PeriodRecord;
 
@@ -20,10 +21,12 @@ public class PeriodRecordService {
 	// Repository-----------------------------------------------
 
 	@Autowired
-	private PeriodRecordRepository	periodRecordRepository;
-
+	private PeriodRecordRepository periodRecordRepository;
 
 	// Services-------------------------------------------------
+
+	@Autowired
+	private BrotherhoodService brotherhoodService;
 
 	// Constructor----------------------------------------------
 
@@ -69,22 +72,32 @@ public class PeriodRecordService {
 
 	public PeriodRecord save(final PeriodRecord periodRecord) {
 		Assert.notNull(periodRecord);
-		//periodRecord.setHistory(this.findHistoryByBrotherhoodId(LoginService.getPrincipal().getId()));
-		final PeriodRecord saved = this.periodRecordRepository.save(periodRecord);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Assert.isTrue(periodRecord.getHistory().getBrotherhood().equals(b));
+		final PeriodRecord saved = this.periodRecordRepository
+				.save(periodRecord);
 		return saved;
 	}
 
 	public void delete(final PeriodRecord periodRecord) {
 		Assert.notNull(periodRecord);
+		Assert.notNull(periodRecord);
+		Brotherhood b = brotherhoodService.findByUserAccountId(LoginService
+				.getPrincipal().getId());
+		Assert.isTrue(periodRecord.getHistory().getBrotherhood().equals(b));
 		this.periodRecordRepository.delete(periodRecord);
 	}
 
-	public Collection<PeriodRecord> findPeriodRecordByHistoryId(final int historyId) {
-		return this.periodRecordRepository.findPeriodRecordByHistoryId(historyId);
+	public Collection<PeriodRecord> findPeriodRecordByHistoryId(
+			final int historyId) {
+		return this.periodRecordRepository
+				.findPeriodRecordByHistoryId(historyId);
 	}
 
 	public History findHistoryByBrotherhoodId(final int brotherhoodId) {
-		return this.periodRecordRepository.findHistoryByBrotherhoodId(brotherhoodId);
+		return this.periodRecordRepository
+				.findHistoryByBrotherhoodId(brotherhoodId);
 	}
 
 	public void flush() {
