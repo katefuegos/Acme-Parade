@@ -1,4 +1,3 @@
-
 package controllers;
 
 import java.util.ArrayList;
@@ -31,20 +30,20 @@ public class RegisterController extends AbstractController {
 	// Services-----------------------------------------------------------
 
 	@Autowired
-	private ActorService			actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private AreaService				areaService;
+	private AreaService areaService;
 
 	@Autowired
-	private ConfigurationService	configurationService;
-
+	private ConfigurationService configurationService;
 
 	// Constructor---------------------------------------------------------
 
-	//		Register Admin, Brotherhood and member
+	// Register Admin, Brotherhood and member
 	@RequestMapping(value = "/actor", method = RequestMethod.GET)
-	public ModelAndView createBrotherhoodAndMember(@RequestParam(required = false, defaultValue = "default") final String authority) {
+	public ModelAndView createBrotherhoodAndMember(
+			@RequestParam(required = false, defaultValue = "default") final String authority) {
 		ModelAndView modelAndView;
 		final ActorForm actorForm = new ActorForm();
 		final UserAccount userAccount = new UserAccount();
@@ -55,12 +54,12 @@ public class RegisterController extends AbstractController {
 		try {
 			switch (authority) {
 			case "BROTHERHOOD":
-				//actor = this.actorService.create("BROTHERHOOD");
+				// actor = this.actorService.create("BROTHERHOOD");
 				a.setAuthority(Authority.BROTHERHOOD);
 				actorForm.setAuth("BROTHERHOOD");
 				break;
 			case "MEMBER":
-				//actor = this.actorService.create("MEMBER");
+				// actor = this.actorService.create("MEMBER");
 				a.setAuthority(Authority.MEMBER);
 				actorForm.setAuth("MEMBER");
 				actorForm.setTitle("---");
@@ -70,7 +69,7 @@ public class RegisterController extends AbstractController {
 				break;
 
 			case "CHAPTER":
-				//actor = this.actorService.create("MEMBER");
+				// actor = this.actorService.create("MEMBER");
 				a.setAuthority(Authority.CHAPTER);
 				actorForm.setAuth("CHAPTER");
 				actorForm.setPictures("http://www.pictures.com");
@@ -92,9 +91,11 @@ public class RegisterController extends AbstractController {
 		}
 		return modelAndView;
 	}
+
 	// Save
 	@RequestMapping(value = "/actor", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final ActorForm actorForm, final BindingResult binding) {
+	public ModelAndView save(@Valid final ActorForm actorForm,
+			final BindingResult binding) {
 
 		ModelAndView result;
 
@@ -102,36 +103,48 @@ public class RegisterController extends AbstractController {
 			result = this.createEditModelAndView(actorForm);
 		else
 			try {
-				final Collection<domain.Area> areas = this.areaService.findAreasNotAssigned();
-
-				Assert.notNull(areas, "actor.chapter.error.area");
-				Assert.isTrue(!areas.isEmpty(), "actor.chapter.error.area");
+				if (actorForm.getAuth().equals("CHAPTER")) {
+					final Collection<domain.Area> areas = this.areaService
+							.findAreasNotAssigned();
+					Assert.notNull(areas, "actor.chapter.error.area");
+					Assert.isTrue(!areas.isEmpty(), "actor.chapter.error.area");
+				}
 
 				Assert.isTrue(actorForm.getCheckTerms(), "actor.check.true");
 				if (actorForm.getAuth() == "BROTHERHOOD")
 					Assert.notNull(actorForm.getArea(), "actor.area.notNull");
 				final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-				actorForm.getUserAccount().setPassword(encoder.encodePassword(actorForm.getUserAccount().getPassword(), null));
+				actorForm.getUserAccount().setPassword(
+						encoder.encodePassword(actorForm.getUserAccount()
+								.getPassword(), null));
 				this.actorService.update(actorForm);
 
 				result = new ModelAndView("redirect:/welcome/index.do");
 			} catch (final Throwable oops) {
-				final Actor test = this.actorService.findActorByUsername(actorForm.getUserAccount().getUsername());
+				final Actor test = this.actorService
+						.findActorByUsername(actorForm.getUserAccount()
+								.getUsername());
 
 				if (test != null)
-					result = this.createEditModelAndView(actorForm, "actor.userExists");
+					result = this.createEditModelAndView(actorForm,
+							"actor.userExists");
 				else if (oops.getMessage() == "actor.check.true")
-					result = this.createEditModelAndView(actorForm, oops.getMessage());
+					result = this.createEditModelAndView(actorForm,
+							oops.getMessage());
 				else if (oops.getMessage() == "actor.area.notNull")
-					result = this.createEditModelAndView(actorForm, oops.getMessage());
+					result = this.createEditModelAndView(actorForm,
+							oops.getMessage());
 				else if (oops.getMessage() == "actor.chapter.error.area")
-					result = this.createEditModelAndView(actorForm, "actor.chapter.error.area");
+					result = this.createEditModelAndView(actorForm,
+							"actor.chapter.error.area");
 				else
-					result = this.createEditModelAndView(actorForm, "message.commit.error");
+					result = this.createEditModelAndView(actorForm,
+							"message.commit.error");
 
 			}
 		return result;
 	}
+
 	// CreateModelAndView
 	protected ModelAndView createEditModelAndView(final ActorForm actorForm) {
 		ModelAndView result;
@@ -142,19 +155,21 @@ public class RegisterController extends AbstractController {
 
 	}
 
-	protected ModelAndView createEditModelAndView(final ActorForm actorForm, final String message) {
+	protected ModelAndView createEditModelAndView(final ActorForm actorForm,
+			final String message) {
 		ModelAndView result = null;
 
 		// TODO faltan actores
-		final Collection<Authority> authorities = actorForm.getUserAccount().getAuthorities();
+		final Collection<Authority> authorities = actorForm.getUserAccount()
+				.getAuthorities();
 		final Authority brotherhood = new Authority();
 		brotherhood.setAuthority("BROTHERHOOD");
 		final Authority member = new Authority();
 		member.setAuthority("MEMBER");
 		final Authority chapter = new Authority();
 		chapter.setAuthority("CHAPTER");
-		//		final Authority admin = new Authority();
-		//		admin.setAuthority("ADMIN");
+		// final Authority admin = new Authority();
+		// admin.setAuthority("ADMIN");
 
 		if (authorities.contains(brotherhood)) {
 			result = new ModelAndView("register/brotherhood");
@@ -172,8 +187,10 @@ public class RegisterController extends AbstractController {
 
 		result.addObject("message", message);
 		result.addObject("isRead", false);
-		result.addObject("banner", this.configurationService.findAll().iterator().next().getBanner());
-		result.addObject("systemName", this.configurationService.findAll().iterator().next().getSystemName());
+		result.addObject("banner", this.configurationService.findAll()
+				.iterator().next().getBanner());
+		result.addObject("systemName", this.configurationService.findAll()
+				.iterator().next().getSystemName());
 		return result;
 	}
 

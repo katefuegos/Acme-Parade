@@ -95,6 +95,9 @@
 						<li><a
 							href="message/administrator/broadcastMessageBrotherhoods.do"><spring:message
 									code="master.page.message.notifyBrotherhoods" /></a></li>
+									<li><a
+							href="message/administrator/broadcastMessageChapters.do"><spring:message
+									code="master.page.message.notifyChapters" /></a></li>
 					</security:authorize>
 
 				</ul></li>
