@@ -74,4 +74,8 @@ public class LinkRecordService {
 		return this.linkRecordRepository.findLinkRecordByHistoryId(historyId);
 	}
 
+	public void flush() {
+		this.linkRecordRepository.flush();
+	}
+
 }

@@ -87,4 +87,8 @@ public class PeriodRecordService {
 		return this.periodRecordRepository.findHistoryByBrotherhoodId(brotherhoodId);
 	}
 
+	public void flush() {
+		this.periodRecordRepository.flush();
+	}
+
 }

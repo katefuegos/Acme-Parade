@@ -80,5 +80,8 @@ public class LegalRecordService {
 		Assert.notNull(historyId);
 		return this.legalRecordRepository.findLegalRecordByHistoryId(historyId);
 	}
+	public void flush() {
+		this.legalRecordRepository.flush();
+	}
 
 }
