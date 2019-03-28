@@ -110,11 +110,14 @@ public class AreaController extends AbstractController {
 	public ModelAndView delete(final Area area, final BindingResult binding) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(areaService.findAll().size()>1);
 			this.areaService.delete(area);
 			result = new ModelAndView("redirect:/area/list.do");
 		} catch (final Throwable oops) {
 			if (oops.getMessage() == "area.error.used")
 				result = this.createEditModelAndView(area, oops.getMessage());
+			else if(areaService.findAll().size()<=1)
+				result = this.createEditModelAndView(area, "area.commit.error.almost1");
 			else
 				result = this.createEditModelAndView(area, "area.commit.error");
 		}

@@ -53,14 +53,6 @@ public class AreaServiceTest extends AbstractTest {
 		{ areaId, 0, "admin", null },
 
 		/*
-		 * // * a) Functional requirements - 22.1 Manage Area - Edit b) Negative
-		 * // * tests - Business rule: It can not be created by a no admin user.
-		 * c) // * analysis of sentence coverage: 95% d) analysis of data
-		 * coverage - // * se intenta editar un area siendo brotherhood1. //
-		 */
-		{ areaId, 0, "brotherhood1", IllegalArgumentException.class },
-
-		/*
 		 * a) Functional requirements - 22.1 Manage Area - Delete b) Positive
 		 * tests c) analysis of sentence coverage: 95% d) analysis of data
 		 * coverage - se elimina area1 siendo admin.

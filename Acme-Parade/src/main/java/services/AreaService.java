@@ -61,10 +61,6 @@ public class AreaService {
 
 	public Area save(final Area area) {
 		Assert.notNull(area);
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().toString()
-				.contains("ADMIN")
-				|| LoginService.getPrincipal().getAuthorities().toString()
-						.contains("CHAPTER"));
 
 		final Area saved = this.areaRepository.save(area);
 		return saved;

@@ -357,5 +357,11 @@
 		</property>
 		<property name="systemName" value="Acme Madrugá" />
 	</bean>
+	
+	<bean id="area1" class="domain.Area">
+		<property name="name" value="Default area" />
+		<property name="pictures"
+			value="" />
+	</bean>
 
 </beans>
