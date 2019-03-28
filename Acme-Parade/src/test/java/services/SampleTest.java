@@ -55,7 +55,7 @@ public class SampleTest extends AbstractTest {
 			}, {
 				"userAccount3", super.getEntityId("userAccount3"), null
 			}, {
-				"non-existent", 0, AssertionError.class
+				"non-existent", 0, NumberFormatException.class
 			}
 		};
 
