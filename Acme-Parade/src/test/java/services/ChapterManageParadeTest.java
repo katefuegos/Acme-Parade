@@ -47,6 +47,8 @@ public class ChapterManageParadeTest extends AbstractTest {
 			 * b) Positive tests -
 			 * c) analysis of sentence coverage: 89.2%
 			 * d) analysis of data coverage.
+			 * The parade parade1 is being modified with the following data: status = "ACCEPTED", draft mode = "false"
+			 * The actor in charge is: chapter1
 			 */
 			{
 				"parade1", "chapter1", null
@@ -57,6 +59,8 @@ public class ChapterManageParadeTest extends AbstractTest {
 			 * b) Negative tests - Business rule: It can not be modified by another chapter.
 			 * c) analysis of sentence coverage: 89.2%
 			 * d) analysis of data coverage.
+			 * The parade parade1 is being modified with the following data: status = "ACCEPTED", draft mode = "false"
+			 * The actor in charge is: chapter2
 			 */
 			{
 				"parade1", "chapter2", IllegalArgumentException.class
@@ -67,6 +71,8 @@ public class ChapterManageParadeTest extends AbstractTest {
 			 * b) Negative tests - Business rule: It can not be modified by another chapter.
 			 * c) analysis of sentence coverage: 89.2%
 			 * d) analysis of data coverage.
+			 * The parade parade1 is being modified with the following data: status = "ACCEPTED", draft mode = "false"
+			 * The actor in charge is: brotherhood2
 			 */
 			{
 				"parade1", "brotherhood2", IllegalArgumentException.class

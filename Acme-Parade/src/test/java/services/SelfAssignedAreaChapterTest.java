@@ -57,6 +57,8 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 			 * b) Positive tests
 			 * c) analysis of sentence coverage: 85.9%
 			 * d) analysis of data coverage.
+			 * The area1 is being modified with the following data: chapter = chapter3
+			 * The actor in charge is: chapter3
 			 */
 			{
 				"chapter3", "area1", null
@@ -66,6 +68,8 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 			 * b) Negative tests - Business rule: it cannot be changed.
 			 * c) analysis of sentence coverage: 85.9%
 			 * d) analysis of data coverage.
+			 * The area1 is being modified with the following data: chapter = chapter4
+			 * The actor in charge is: chapter4
 			 */
 			{
 				"chapter4", "area1", IllegalArgumentException.class
@@ -138,6 +142,8 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 			 * b) Positive case
 			 * c) analysis of sentence coverage: 92%
 			 * d) analysis of data coverage.
+			 * A new chapter has been assigned to area4
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormC1, null, "area4", null
@@ -147,6 +153,8 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 			 * b) Case of negative tests - Business rule: Only a chapter can manage an specific area.
 			 * c) analysis of sentence coverage: 92%
 			 * d) analysis of data coverage.
+			 * A new chapter has been assigned to area1, area1 already had an administrator assigned.
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormC3, null, "area1", javax.validation.ConstraintViolationException.class

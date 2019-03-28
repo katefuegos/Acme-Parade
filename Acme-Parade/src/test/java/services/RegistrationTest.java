@@ -68,6 +68,8 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Positive tests
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The actor brotherhood1 is being modified with the following data: area=area1
+			 * The actor in charge is: brotherhood1
 			 */
 			{
 				actorForm1, "brotherhood1", "area1", null
@@ -77,6 +79,8 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Negative tests - Business rule: Attribute title must not be null
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The actor brotherhood1 is being modified with the following data: area=area1, title=null
+			 * The actor in charge is: brotherhood1
 			 */
 			{
 				actorForm2, "brotherhood1", "area1", javax.validation.ConstraintViolationException.class
@@ -115,6 +119,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Positive tests
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new brotherhood is being modified with the following data: useraccount.username=Joseph, useraccount.password=jojo12345, useraccount.authority=BROTHERHOOD,name="Joseph",middleName="Joestar",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123",title= "JoJo's Bizarre Adventure",picture= "http://www.picture.com"
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormB1, null, "area1", null
@@ -124,6 +131,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Negative tests - Business rule: Attribute title must not be null
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new brotherhood is being modified with the following data: useraccount.username=Joseph, useraccount.password=jojo12345, useraccount.authority=BROTHERHOOD,name="Joseph",middleName="Joestar",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123",title= null,picture= "http://www.picture.com"
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormB2, null, "area1", javax.validation.ConstraintViolationException.class
@@ -134,6 +144,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Negative tests - Business rule: Attribute picture must not be null
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new brotherhood is being modified with the following data: useraccount.username=Joseph, useraccount.password=jojo12345, useraccount.authority=BROTHERHOOD,name="Joseph",middleName="Joestar",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123",title= "JoJo's Bizarre Adventure",picture= null
+			 * The actor in charge is: unauthenticate
 			 */{
 				actorFormB3, null, "area1", javax.validation.ConstraintViolationException.class
 			}
@@ -173,6 +186,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Positive tests
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new member is being modified with the following data: useraccount.username=Jotaro, useraccount.password=jojo12345, useraccount.authority=MEMBER,name="Jotaro",middleName="Joestar",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123"
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormM1, null, null, null
@@ -182,6 +198,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Negative tests - Business rule: Attribute name must not be null
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new member is being modified with the following data: useraccount.username=Jotaro, useraccount.password=jojo12345, useraccount.authority=MEMBER,name=null,middleName="Joestar",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123"
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormM2, null, null, javax.validation.ConstraintViolationException.class
@@ -192,6 +211,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Negative tests - Business rule: Attribute photo must be a url
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new member is being modified with the following data: useraccount.username=Jotaro, useraccount.password=jojo12345, useraccount.authority=MEMBER,name="Jotaro",middleName="Joestar",surname= "Joestar",photo=
+			 * "photo",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123"
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormM3, null, null, javax.validation.ConstraintViolationException.class
@@ -232,6 +254,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Positive tests
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new admin is being modified with the following data: useraccount.username=Jonathan, useraccount.password=jojo12345, useraccount.authority=ADMIN,name="Jonathan",middleName="Joestar",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123"
+			 * The actor in charge is: admin
 			 */
 			{
 				actorFormA1, "admin", null, null
@@ -241,6 +266,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Negative tests - Business rule: You must be authenticate as a administrator.
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new admin is being modified with the following data: useraccount.username=Jonathan, useraccount.password=jojo12345, useraccount.authority=ADMIN,name="Jonathan",middleName="Joestar",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123"
+			 * The actor in charge is: unauthenticate
 			 */
 
 			{
@@ -251,6 +279,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Negative tests - Business rule: Attribute photo must be a url
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new admin is being modified with the following data: useraccount.username=Jonathan, useraccount.password=jojo12345, useraccount.authority=ADMIN,name="Jonathan",middleName="Joestar",surname= "Joestar",photo=
+			 * "uno dos tres cuatro",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123"
+			 * The actor in charge is: admin
 			 */
 			{
 				actorFormA3, "admin", null, javax.validation.ConstraintViolationException.class
@@ -291,6 +322,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Positive case
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new chapter is being modified with the following data: useraccount.username=Josuke, useraccount.password=jojo12345, useraccount.authority=ADMIN,name="Dio",middleName="Josuke",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123", title="JoJo's Bizarre Adventure"
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormC1, null, "area4", null
@@ -300,6 +334,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Case of negative tests - Business rule: Name of actor must not be null.
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new chapter is being modified with the following data: useraccount.username=Josuke, useraccount.password=jojo12345, useraccount.authority=ADMIN,name=null,middleName="Josuke",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123", title=null
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormC2, null, "area4", javax.validation.ConstraintViolationException.class
@@ -309,6 +346,9 @@ public class RegistrationTest extends AbstractTest {
 			 * b) Case of negative tests - Business rule: Title of actor must not be null.
 			 * c) analysis of sentence coverage: 93% with eclemma
 			 * d) analysis of data coverage.
+			 * The new chapter is being modified with the following data: useraccount.username=Josuke, useraccount.password=jojo12345, useraccount.authority=ADMIN,name="Dio",middleName="Josuke",surname= "Joestar",photo=
+			 * "http://www.photo.com",email= "jojo@hotmail.com",phone= "654789321",address= "Calle falsa 123", title=null
+			 * The actor in charge is: unauthenticate
 			 */
 			{
 				actorFormC3, null, "area4", javax.validation.ConstraintViolationException.class

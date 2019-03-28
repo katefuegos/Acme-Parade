@@ -56,7 +56,11 @@ public class EnrolTest extends AbstractTest {
 			 * b) Positive tests
 			 * c) analysis of sentence coverage: 92.3%
 			 * d) analysis of data coverage.
+			 * The new enrolment is being modified with the following data: momentDropOut=null,accepted=true,
+			 * momentEnrol= current Time, position=position1, Brotherhood = brotherhood2, member=member1
+			 * The actor in charge is: brotherhood2
 			 */
+
 			{
 				enrolmentCreated, "brotherhood2", "member1", true, moment, "position1", null
 			},
@@ -65,6 +69,9 @@ public class EnrolTest extends AbstractTest {
 			 * b) Negative tests - Business rule: When a member is enrolled, a position must be selected by the brotherhood.
 			 * c) analysis of sentence coverage: 92.3%
 			 * d) analysis of data coverage.
+			 * The new enrolment is being modified with the following data: momentDropOut=null,accepted=true,
+			 * momentEnrol= current Time, position=null, Brotherhood = brotherhood2, member=member1
+			 * The actor in charge is: brotherhood2
 			 */
 			{
 				enrolmentCreated, "brotherhood2", "member1", true, moment, null, IllegalArgumentException.class
@@ -82,7 +89,6 @@ public class EnrolTest extends AbstractTest {
 				super.rollbackTransaction();
 			}
 	}
-
 	// Ancillary methods ------------------------------------------------------
 
 	protected void templateEnrol(final domain.Enrolment enrolment, final String username, final String nambeMember, final Boolean accepted, final Date momentEnrol, final String position, final Class<?> expected) {
