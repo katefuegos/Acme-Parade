@@ -2,6 +2,7 @@
 package services;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -26,6 +27,9 @@ public class EnrolmentService {
 	// Services-------------------------------------------------
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
+
+	@Autowired
+	private MemberService		memberService;
 
 
 	// Constructor----------------------------------------------
@@ -72,6 +76,21 @@ public class EnrolmentService {
 	}
 
 	// Other Methods--------------------------------------------
+
+	public Enrolment dropout(final Enrolment enrolment) {
+		Assert.notNull(enrolment);
+		final domain.Member member = this.memberService.findByUserAccountId(LoginService.getPrincipal().getId());
+		Assert.notNull(member);
+		Assert.isTrue(member.getEnrolments().contains(enrolment));
+		Assert.isTrue(enrolment.isAccepted());
+
+		enrolment.setMomentEnrol(null);
+		enrolment.setPosition(null);
+		enrolment.setAccepted(false);
+		enrolment.setMomentDropOut(new Date(System.currentTimeMillis() - 1000));
+
+		return this.enrolmentRepository.save(enrolment);
+	}
 
 	public Collection<Enrolment> findByBrotherhoodAndAccepted(final int brotherhoodId) {
 		Assert.notNull(brotherhoodId);
