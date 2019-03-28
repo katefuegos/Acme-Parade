@@ -29,15 +29,16 @@ public class BrotherhoodCopyParadeTest extends AbstractTest {
 		final Object testingData[][] = {
 		/*
 		 * a) Functional requirements - 3.2 Make a copy of one of their parades.
-		 * b) Positive test c) analysis of sentence coverage: 89.6%
-		 * d) analysis of data coverage.
+		 * b) Positive test c) analysis of sentence coverage: 89.6% d) analysis
+		 * of data coverage - se copia parade1 siendo brotherhood1.
 		 */
 		{ paradeId, "brotherhood1", null },
 		/*
 		 * a) Functional requirements - 3.2 Make a copy of one of their parades.
 		 * b) Negative test - Business rule: It can not be copied if it's not
-		 * from the brotherhood. c) analysis of sentence coverage: 89.6%
-		 * d) analysis of data coverage.
+		 * from the brotherhood. c) analysis of sentence coverage: 89.6% d)
+		 * analysis of data coverage se intenta copiar parade1 siendo
+		 * brotherhood2.
 		 */
 		{ paradeId, "brotherhood2", java.lang.IllegalArgumentException.class } };
 

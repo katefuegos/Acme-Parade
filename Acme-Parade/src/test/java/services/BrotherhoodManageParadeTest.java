@@ -22,9 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import utilities.AbstractTest;
 
-@ContextConfiguration(locations = {
-	"classpath:spring/junit.xml"
-})
+@ContextConfiguration(locations = { "classpath:spring/junit.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class BrotherhoodManageParadeTest extends AbstractTest {
@@ -32,8 +30,7 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 	// System Under Test ------------------------------------------------------
 
 	@Autowired
-	private ParadeService	paradeService;
-
+	private ParadeService paradeService;
 
 	@Autowired
 	// Tests ------------------------------------------------------------------
@@ -43,51 +40,54 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 		final domain.Parade paradeCreated = this.paradeService.create();
 
 		final Object testingData[][] = {
-			/*
-			 * a) Functional requirements - 10.2 Manage Parade - Create a Parade
-			 * b) Positive tests
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				null, paradeCreated, "brotherhood1", "new title", null
-			},
-			/*
-			 * a) Functional requirements - 10.2 Manage Parade - Create a Parade
-			 * b) Negative tests - Business rule: It can not be modified by another brotherhood.
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				null, paradeCreated, "brotherhood2", "new title", IllegalArgumentException.class
-			},
+				/*
+				 * a) Functional requirements - 10.2 Manage Parade - Create a
+				 * Parade b) Positive tests c) analysis of sentence coverage:
+				 * 92.3% d) analysis of data coverage - se crea Parade con
+				 * atributos title="new title", description="description1",
+				 * moment=fecha actual + valor aleatorio. Los demás atributos se
+				 * generan automáticamente con el método create siendo
+				 * brotherhood1.
+				 */
+				{ null, paradeCreated, "brotherhood1", "new title", null },
+				/*
+				 * a) Functional requirements - 10.2 Manage Parade - Create a
+				 * Parade b) Negative tests - Business rule: It can not be
+				 * modified by another brotherhood. c) analysis of sentence
+				 * coverage: 92.3% d) analysis of data coverage - se intenta
+				 * crear Parade siendo brotherhood2.
+				 */
+				{ null, paradeCreated, "brotherhood2", "new title",
+						IllegalArgumentException.class },
 
-			/*
-			 * a) Functional requirements - 10.2 Manage Parade - Edit a Parade
-			 * b) Positive tests -
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				"parade1", null, "brotherhood1", "new title", null
-			},
+				/*
+				 * a) Functional requirements - 10.2 Manage Parade - Edit a
+				 * Parade b) Positive tests - c) analysis of sentence coverage:
+				 * 92.3% d) analysis of data coverage - se edita el title de
+				 * parade1 con el valor "new title" siendo brotherhood1.
+				 */
+				{ "parade1", null, "brotherhood1", "new title", null },
 
-			/*
-			 * a) Functional requirements - 10.2 Manage Parade - Edit a Parade
-			 * b) Negative tests - Business rule: It can not be modified by another brotherhood.
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				"parade1", null, "brotherhood2", "new title", IllegalArgumentException.class
-			},
+				/*
+				 * a) Functional requirements - 10.2 Manage Parade - Edit a
+				 * Parade b) Negative tests - Business rule: It can not be
+				 * modified by another brotherhood. c) analysis of sentence
+				 * coverage: 92.3% d) analysis of data coverage - se intenta
+				 * editar el title de parade1 con el valor "new title" siendo
+				 * brotherhood2.
+				 */
+				{ "parade1", null, "brotherhood2", "new title",
+						IllegalArgumentException.class },
 
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.templateManage((String) testingData[i][0], (domain.Parade) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
+				this.templateManage((String) testingData[i][0],
+						(domain.Parade) testingData[i][1],
+						(String) testingData[i][2], (String) testingData[i][3],
+						(Class<?>) testingData[i][4]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -97,7 +97,9 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateManage(final String nameParade, final domain.Parade newParade, final String username, final String newTitle, final Class<?> expected) {
+	protected void templateManage(final String nameParade,
+			final domain.Parade newParade, final String username,
+			final String newTitle, final Class<?> expected) {
 		Class<?> caught;
 		final int paradeId;
 
@@ -137,32 +139,29 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 
 		final Object testingData[][] = {
 
-			/*
-			 * a) Functional requirements - 12.2 Manage Position - Delete a parade
-			 * b) Positive tests -
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				"parade5", "brotherhood1", null
-			},
+		/*
+		 * a) Functional requirements - 12.2 Manage Position - Delete a parade
+		 * b) Positive tests - c) analysis of sentence coverage: 92.3% d)
+		 * analysis of data coverage - se elimina parade5 siendo brotherhood1.
+		 */
+		{ "parade5", "brotherhood1", null },
 
-			/*
-			 * a) Functional requirements - 12.2 Manage Position - Delete a parade
-			 * b) Negative tests - Business rule: Only brotherhood can delete it.
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 */
-			{
-				"parade5", "admin", IllegalArgumentException.class
-			},
+		/*
+		 * a) Functional requirements - 12.2 Manage Position - Delete a parade
+		 * b) Negative tests - Business rule: Only brotherhood can delete it. c)
+		 * analysis of sentence coverage: 92.3% d) analysis of data coverage se
+		 * intenta eliminar parade5 siendo admin.
+		 */
+		{ "parade5", "admin", IllegalArgumentException.class },
 
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.templateDelete((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+				this.templateDelete((String) testingData[i][0],
+						(String) testingData[i][1],
+						(Class<?>) testingData[i][2]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -172,7 +171,8 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateDelete(final String nameParade, final String username, final Class<?> expected) {
+	protected void templateDelete(final String nameParade,
+			final String username, final Class<?> expected) {
 		Class<?> caught;
 
 		caught = null;
@@ -182,7 +182,8 @@ public class BrotherhoodManageParadeTest extends AbstractTest {
 			else
 				super.unauthenticate();
 
-			final domain.Parade parade = this.paradeService.findOne(super.getEntityId(nameParade));
+			final domain.Parade parade = this.paradeService.findOne(super
+					.getEntityId(nameParade));
 
 			this.paradeService.delete(parade);
 

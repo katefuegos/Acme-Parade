@@ -24,9 +24,7 @@ import security.UserAccountService;
 import utilities.AbstractTest;
 import forms.ActorForm;
 
-@ContextConfiguration(locations = {
-	"classpath:spring/junit.xml"
-})
+@ContextConfiguration(locations = { "classpath:spring/junit.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class SelfAssignedAreaChapterTest extends AbstractTest {
@@ -34,17 +32,16 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 	// System Under Test ------------------------------------------------------
 
 	@Autowired
-	private ChapterService		chapterService;
+	private ChapterService chapterService;
 
 	@Autowired
-	private ActorService		actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private UserAccountService	accountService;
+	private UserAccountService accountService;
 
 	@Autowired
-	private AreaService			areaService;
-
+	private AreaService areaService;
 
 	// Tests ------------------------------------------------------------------
 
@@ -52,35 +49,30 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 	public void driverChangeArea() {
 
 		final Object testingData[][] = {
-			/*
-			 * a) Functional requirements - Self-assigned area
-			 * b) Positive tests
-			 * c) analysis of sentence coverage: 85.9%
-			 * d) analysis of data coverage.
-			 * The area1 is being modified with the following data: chapter = chapter3
-			 * The actor in charge is: chapter3
-			 */
-			{
-				"chapter3", "area1", null
-			},
-			/*
-			 * a) Functional requirements - Self-assigned area
-			 * b) Negative tests - Business rule: it cannot be changed.
-			 * c) analysis of sentence coverage: 85.9%
-			 * d) analysis of data coverage.
-			 * The area1 is being modified with the following data: chapter = chapter4
-			 * The actor in charge is: chapter4
-			 */
-			{
-				"chapter4", "area1", IllegalArgumentException.class
-			},
+		/*
+		 * a) Functional requirements - Self-assigned area b) Positive tests c)
+		 * analysis of sentence coverage: 85.9% d) analysis of data coverage.
+		 * The area1 is being modified with the following data: chapter =
+		 * chapter3 The actor in charge is: chapter3
+		 */
+		{ "chapter3", "area1", null },
+		/*
+		 * a) Functional requirements - Self-assigned area b) Negative tests -
+		 * Business rule: it cannot be changed. c) analysis of sentence
+		 * coverage: 85.9% d) analysis of data coverage. The area1 is being
+		 * modified with the following data: chapter = chapter4 The actor in
+		 * charge is: chapter4
+		 */
+		{ "chapter4", "area1", IllegalArgumentException.class },
 
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.templateChangeArea((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+				this.templateChangeArea((String) testingData[i][0],
+						(String) testingData[i][1],
+						(Class<?>) testingData[i][2]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -90,7 +82,8 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateChangeArea(final String nameChapter, final String nameArea, final Class<?> expected) {
+	protected void templateChangeArea(final String nameChapter,
+			final String nameArea, final Class<?> expected) {
 		Class<?> caught;
 		final int areaId;
 		final int chapterId;
@@ -106,7 +99,8 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 			chapterId = this.getEntityId(nameChapter);
 
 			final domain.Area area = this.areaService.findOne(areaId);
-			final domain.Chapter chapter = this.chapterService.findOne(chapterId);
+			final domain.Chapter chapter = this.chapterService
+					.findOne(chapterId);
 
 			area.setChapter(chapter);
 
@@ -128,52 +122,58 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
 		UserAccount userAccount = null;
 
-		//Chapter
-		userAccount = this.accountService.create("Josuke", encoder.encodePassword("jojo12345", null), "CHAPTER");
-		final ActorForm actorFormC1 = this.constructActor(userAccount, "CHAPTER", "Dio", "Josuke", "Joestar", "http://www.photo.com", "jojo@hotmail.com", "654789321", "Calle falsa 123", "JoJo's Bizarre Adventure", null);
+		// Chapter
+		userAccount = this.accountService.create("Josuke",
+				encoder.encodePassword("jojo12345", null), "CHAPTER");
+		final ActorForm actorFormC1 = this.constructActor(userAccount,
+				"CHAPTER", "Dio", "Josuke", "Joestar", "http://www.photo.com",
+				"jojo@hotmail.com", "654789321", "Calle falsa 123",
+				"JoJo's Bizarre Adventure", null);
 
-		userAccount = this.accountService.create("Josuke", encoder.encodePassword("jojo12345", null), "CHAPTER");
-		final ActorForm actorFormC3 = this.constructActor(userAccount, "CHAPTER", "Dio", "Josuke", "Joestar", "http://photo.com", "jojo@hotmail.com", "uno dos tres cuatro", "Calle falsa 123", null, null);
+		userAccount = this.accountService.create("Josuke",
+				encoder.encodePassword("jojo12345", null), "CHAPTER");
+		final ActorForm actorFormC3 = this.constructActor(userAccount,
+				"CHAPTER", "Dio", "Josuke", "Joestar", "http://photo.com",
+				"jojo@hotmail.com", "uno dos tres cuatro", "Calle falsa 123",
+				null, null);
 
 		final Object testingData[][] = {
 
-			/*
-			 * a) Functional requirements 2.1 Self-assigned area
-			 * b) Positive case
-			 * c) analysis of sentence coverage: 92%
-			 * d) analysis of data coverage.
-			 * A new chapter has been assigned to area4
-			 * The actor in charge is: unauthenticate
-			 */
-			{
-				actorFormC1, null, "area4", null
-			},
-			/*
-			 * a) Functional requirements 2.1 self-assigned area
-			 * b) Case of negative tests - Business rule: Only a chapter can manage an specific area.
-			 * c) analysis of sentence coverage: 92%
-			 * d) analysis of data coverage.
-			 * A new chapter has been assigned to area1, area1 already had an administrator assigned.
-			 * The actor in charge is: unauthenticate
-			 */
-			{
-				actorFormC3, null, "area1", javax.validation.ConstraintViolationException.class
-			}
-		};
+				/*
+				 * a) Functional requirements 2.1 Self-assigned area b) Positive
+				 * case c) analysis of sentence coverage: 92% d) analysis of
+				 * data coverage. A new chapter has been assigned to area4 The
+				 * actor in charge is: unauthenticate
+				 */
+				{ actorFormC1, null, "area4", null },
+				/*
+				 * a) Functional requirements 2.1 self-assigned area b) Case of
+				 * negative tests - Business rule: Only a chapter can manage an
+				 * specific area. c) analysis of sentence coverage: 92% d)
+				 * analysis of data coverage. A new chapter has been assigned to
+				 * area1, area1 already had an administrator assigned. The actor
+				 * in charge is: unauthenticate
+				 */
+				{ actorFormC3, null, "area1",
+						javax.validation.ConstraintViolationException.class } };
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.template((ActorForm) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Class<?>) testingData[i][3]);
+				this.template((ActorForm) testingData[i][0],
+						(String) testingData[i][1], (String) testingData[i][2],
+						(Class<?>) testingData[i][3]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
 				super.rollbackTransaction();
 			}
 	}
+
 	// Ancillary methods ------------------------------------------------------
 
-	protected void template(final ActorForm actor, final String username, final String area, final Class<?> expected) {
+	protected void template(final ActorForm actor, final String username,
+			final String area, final Class<?> expected) {
 		Class<?> caught;
 		final int areaId;
 
@@ -201,8 +201,11 @@ public class SelfAssignedAreaChapterTest extends AbstractTest {
 		super.checkExceptions(expected, caught);
 	}
 
-	private ActorForm constructActor(final UserAccount userAccount, final String auth, final String name, final String middleName, final String surname, final String photo, final String email, final String phone, final String address, final String title,
-		final String pictures) {
+	private ActorForm constructActor(final UserAccount userAccount,
+			final String auth, final String name, final String middleName,
+			final String surname, final String photo, final String email,
+			final String phone, final String address, final String title,
+			final String pictures) {
 		final ActorForm result = new ActorForm();
 
 		final int id = 0;

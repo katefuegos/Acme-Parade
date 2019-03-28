@@ -24,9 +24,7 @@ import utilities.AbstractTest;
 import domain.Enrolment;
 import domain.Member;
 
-@ContextConfiguration(locations = {
-	"classpath:spring/junit.xml"
-})
+@ContextConfiguration(locations = { "classpath:spring/junit.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class EnrolTest extends AbstractTest {
@@ -34,64 +32,71 @@ public class EnrolTest extends AbstractTest {
 	// System Under Test ------------------------------------------------------
 
 	@Autowired
-	private EnrolmentService	enrolmentService;
+	private EnrolmentService enrolmentService;
 
 	@Autowired
-	private MemberService		memberService;
+	private MemberService memberService;
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 	@Autowired
-	private PositionService		positionService;
-
+	private PositionService positionService;
 
 	// Tests ------------------------------------------------------------------
 	@Test
 	public void driverManageParade() {
 		this.authenticate("brotherhood2");
-		final domain.Enrolment enrolmentCreated = this.enrolmentService.create();
+		final domain.Enrolment enrolmentCreated = this.enrolmentService
+				.create();
 		final Date moment = new Date(System.currentTimeMillis() - 1000);
 		final Object testingData[][] = {
-			/*
-			 * a) Functional requirements - Manage enrolments brotherhood
-			 * b) Positive tests
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 * The new enrolment is being modified with the following data: momentDropOut=null,accepted=true,
-			 * momentEnrol= current Time, position=position1, Brotherhood = brotherhood2, member=member1
-			 * The actor in charge is: brotherhood2
-			 */
+				/*
+				 * a) Functional requirements - Manage enrolments brotherhood b)
+				 * Positive tests c) analysis of sentence coverage: 92.3% d)
+				 * analysis of data coverage. The new enrolment is being
+				 * modified with the following data:
+				 * momentDropOut=null,accepted=true, momentEnrol= current Time,
+				 * position=position1, Brotherhood = brotherhood2,
+				 * member=member1 The actor in charge is: brotherhood2
+				 */
 
-			{
-				enrolmentCreated, "brotherhood2", "member1", true, moment, "position1", null
-			},
-			/*
-			 * a) Functional requirements - Manage enrolments brotherhood
-			 * b) Negative tests - Business rule: When a member is enrolled, a position must be selected by the brotherhood.
-			 * c) analysis of sentence coverage: 92.3%
-			 * d) analysis of data coverage.
-			 * The new enrolment is being modified with the following data: momentDropOut=null,accepted=true,
-			 * momentEnrol= current Time, position=null, Brotherhood = brotherhood2, member=member1
-			 * The actor in charge is: brotherhood2
-			 */
-			{
-				enrolmentCreated, "brotherhood2", "member1", true, moment, null, IllegalArgumentException.class
-			},
+				{ enrolmentCreated, "brotherhood2", "member1", true, moment,
+						"position1", null },
+				/*
+				 * a) Functional requirements - Manage enrolments brotherhood b)
+				 * Negative tests - Business rule: When a member is enrolled, a
+				 * position must be selected by the brotherhood. c) analysis of
+				 * sentence coverage: 92.3% d) analysis of data coverage. The
+				 * new enrolment is being modified with the following data:
+				 * momentDropOut=null,accepted=true, momentEnrol= current Time,
+				 * position=null, Brotherhood = brotherhood2, member=member1 The
+				 * actor in charge is: brotherhood2
+				 */
+				{ enrolmentCreated, "brotherhood2", "member1", true, moment,
+						null, IllegalArgumentException.class },
 
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.templateEnrol((domain.Enrolment) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Boolean) testingData[i][3], (Date) testingData[i][4], (String) testingData[i][5], (Class<?>) testingData[i][6]);
+				this.templateEnrol((domain.Enrolment) testingData[i][0],
+						(String) testingData[i][1], (String) testingData[i][2],
+						(Boolean) testingData[i][3], (Date) testingData[i][4],
+						(String) testingData[i][5],
+						(Class<?>) testingData[i][6]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
 				super.rollbackTransaction();
 			}
 	}
+
 	// Ancillary methods ------------------------------------------------------
 
-	protected void templateEnrol(final domain.Enrolment enrolment, final String username, final String nambeMember, final Boolean accepted, final Date momentEnrol, final String position, final Class<?> expected) {
+	protected void templateEnrol(final domain.Enrolment enrolment,
+			final String username, final String nambeMember,
+			final Boolean accepted, final Date momentEnrol,
+			final String position, final Class<?> expected) {
 		Class<?> caught;
 
 		caught = null;
@@ -104,12 +109,15 @@ public class EnrolTest extends AbstractTest {
 			enrolment.setMomentDropOut(null);
 			enrolment.setAccepted(true);
 			enrolment.setMomentEnrol(momentEnrol);
-			enrolment.setPosition(this.positionService.findOne(this.getEntityId(position)));
-			enrolment.setBrotherhood(this.brotherhoodService.findOne(this.getEntityId(username)));
+			enrolment.setPosition(this.positionService.findOne(this
+					.getEntityId(position)));
+			enrolment.setBrotherhood(this.brotherhoodService.findOne(this
+					.getEntityId(username)));
 
 			final Enrolment enrolment2 = this.enrolmentService.save(enrolment);
 
-			final Member member = this.memberService.findOne(this.getEntityId("member1"));
+			final Member member = this.memberService.findOne(this
+					.getEntityId("member1"));
 			member.getEnrolments().add(enrolment2);
 			this.memberService.save(member);
 			super.unauthenticate();
